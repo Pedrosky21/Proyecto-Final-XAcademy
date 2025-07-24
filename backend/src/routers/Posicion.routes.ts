@@ -1,7 +1,8 @@
 import {Router} from 'express';
-import { getAllPosiciones } from '../modules/posiciones/adapters/controllers/Posicion.controller';
+import { PosicionController } from '../modules/posiciones/adapters/controllers/Posicion.controller';
 
 const router = Router();
-router.get('/', getAllPosiciones);
+const posicionController= new PosicionController()
+router.get('/', posicionController.getAllPosiciones);
 
 export default router;
