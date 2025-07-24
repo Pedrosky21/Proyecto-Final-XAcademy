@@ -10,7 +10,7 @@ Usuario.init({
         autoIncrement: true
     },
     email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    passwd: DataTypes.STRING,
 }, {
     sequelize,
     modelName: 'Usuario',

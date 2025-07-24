@@ -6,7 +6,7 @@ USE `padel`;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `padel`.`usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `password` VARCHAR(255) NULL,
+  `passwd` VARCHAR(255) NULL,
   `email` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;

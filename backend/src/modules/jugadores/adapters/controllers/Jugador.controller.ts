@@ -4,21 +4,23 @@ import Usuario from "../../../usuarios/core/models/Usuario.model";
 import Posicion from "../../../posiciones/core/models/Posicion.model";
 import Categoria from "../../../categorias/core/models/Categoria.model";
 
-
 // Obtener jugadores
 export const getAllJugadores = async (req: Request, res: Response) => {
   try {
     const jugadores = await Jugador.findAll({
-      include: [{ model: Usuario }],
+      include: [
+        {
+          model: Usuario,
+          as: "usuario",
+        },
+      ],
     });
     res.json(jugadores);
-
   } catch (error) {
     console.error("Error fetching jugadores:", error);
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
-
 
 // Crear jugador
 export const createJugador = async (req: Request, res: Response) => {
@@ -70,4 +72,3 @@ export const createJugador = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 };
-

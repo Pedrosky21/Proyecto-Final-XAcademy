@@ -47,9 +47,9 @@ Jugador.init({
     timestamps: false
 });
 
-Jugador.belongsTo(Usuario, {foreignKey: 'usuario_id', as: 'usuario_id'});
-Jugador.belongsTo(Categoria, {foreignKey: 'categoria_id', as: 'categoria_id'});
-Jugador.belongsTo(Posicion, {foreignKey: 'posicion_id', as: 'posicion_id'});
+Jugador.belongsTo(Usuario, {foreignKey: 'usuario_id', as: 'usuario'});
+Jugador.belongsTo(Categoria, {foreignKey: 'categoria_id', as: 'categoria'});
+Jugador.belongsTo(Posicion, {foreignKey: 'posicion_id', as: 'posicion'});
 
 Usuario.hasOne(Jugador, {foreignKey: 'usuario_id'});
 Categoria.hasMany(Jugador, {foreignKey: 'categoria_id'});
