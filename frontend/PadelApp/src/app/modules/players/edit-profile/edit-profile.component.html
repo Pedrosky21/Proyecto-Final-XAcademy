@@ -1,4 +1,4 @@
-<div class="pt-16 bg-[#011738]">
+<div class="pt-16 bg-primary">
   <div>
     <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
       Configurar <span class="text-[#D6FF1D]">Perfil.</span>
@@ -8,45 +8,159 @@
     </h3>
   </div>
 
-  <section class="px-4 py-6 sm:px-8 sm:py-12">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div *ngFor="let item of EditItems" class="flex flex-col">
-        <label [for]="item.name" class="text-sm text-white font-medium mb-4">
-          {{ item.name }}
-        </label>
-
-        <ng-container [ngSwitch]="item.type">
-          <input
-            *ngSwitchDefault
-            [id]="item.name"
-            [type]="item.type"
-            class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-          />
-
-          <select
-            *ngSwitchCase="'select'"
-            [id]="item.name"
-            class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+  <section class="px-4 py-6 sm:px-8 sm:py-12 font-roboto">
+    <form [formGroup]="form">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div *ngFor="let item of EditItems" class="flex flex-col">
+          <label
+            [for]="getControlName(item.name)"
+            class="text-sm text-white font-medium mb-2"
           >
-            <option class="bg-[#011738] text-white" value="" disabled selected>
-              Seleccione {{ item.name }}
-            </option>
-            <option
-              class="bg-[#011738] text-white"
-              *ngFor="let option of item.options"
-              [value]="option"
-            >
-              {{ option }}
-            </option>
-          </select>
-        </ng-container>
-      </div>
-    </div>
+            {{ item.name }}
+          </label>
 
+          <ng-container [ngSwitch]="item.type">
+            <!-- Input -->
+            <input
+              *ngSwitchDefault
+              [id]="getControlName(item.name)"
+              [type]="item.type"
+              [formControlName]="getControlName(item.name)"
+              class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
+
+            <!-- Select -->
+            <select
+              *ngSwitchCase="'select'"
+              [id]="getControlName(item.name)"
+              [formControlName]="getControlName(item.name)"
+              class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              <option class="bg-[#011738] text-white" value="" disabled>
+                Seleccione {{ item.name }}
+              </option>
+              <option
+                class="bg-[#011738] text-white"
+                *ngFor="let option of item.options"
+                [value]="option"
+              >
+                {{ option }}
+              </option>
+            </select>
+          </ng-container>
+
+          <!-- Validación -->
+          <small
+            *ngIf="
+              form.get(getControlName(item.name))?.invalid &&
+              form.get(getControlName(item.name))?.touched
+            "
+            class="text-red-400 text-xs mt-1"
+          >
+            Este campo es obligatorio.
+          </small>
+        </div>
+      </div>
+    </form>
+
+    <!-- Botón Confirmar -->
     <button
       class="bg-[#EBFF00] rounded-md w-64 h-10 mt-5 font-bold block mx-auto ring-2"
+      (click)="openModal()"
     >
       Confirmar
     </button>
+
+    <!-- Modal Confirmar Configuracion -->
+    <div
+      *ngIf="isModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300"
+    >
+      <div
+        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg transform transition-all scale-100"
+      >
+        <h2 class="text-xl font-bold mb-4 text-center text-white font-raleway">
+          Confirmar Configuracion
+        </h2>
+        <p class="text-white text-center">
+          ¿Desea guardar la configuracion ingresada?
+          <br />
+          Podra modificarla en cualquier momento.
+        </p>
+        <div class="mt-6 flex justify-center gap-2">
+          <button
+            class="bg-secondary text-black px-6 py-2 rounded-md font-semibold"
+            (click)="confirmChanges()"
+          >
+            Confirmar
+          </button>
+          <button
+            (click)="closeModal()"
+            class="bg-transparent text-white px-6 py-2 rounded-md font-semibold border border-secondary"
+          >
+            Seguir editando
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Carga -->
+    <div
+      *ngIf="isLoading"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        class="bg-transparent rounded-lg p-6 w-11/12 max-w-xs shadow-lg flex flex-col items-center"
+      >
+        <div
+          class="w-48 h-48 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"
+        ></div>
+        <p class="text-white font-bold">Guardando cambios...</p>
+      </div>
+    </div>
+
+    <!-- Modal de Éxito -->
+    <div
+      *ngIf="isSuccessModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center"
+      >
+        <i class="fa-solid fa-circle-check text-[28px] text-secondary"></i>
+        <h2 class="text-xl font-bold text-white mb-4">Cambios guardados</h2>
+        <p class="text-white">Se han guardado los cambios con exito.</p>
+        <div class="mt-6">
+          <button
+            (click)="closeSuccessModal()"
+            class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Error -->
+    <div
+      *ngIf="isErrorModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center text-white"
+      >
+        <i class="fa-solid fa-circle-xmark text-[28px] mb-2 text-error"></i>
+        <h2 class="text-xl font-bold mb-2">Error en el formulario</h2>
+        <p>{{ errorMessage }}</p>
+        <div class="mt-6">
+          <button
+            (click)="closeErrorModal()"
+            class="bg-secondary text-black px-6 py-2 rounded-md font-semibold"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
