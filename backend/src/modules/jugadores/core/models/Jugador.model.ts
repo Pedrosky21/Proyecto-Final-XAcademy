@@ -9,7 +9,7 @@ import Posicion from '../../../posiciones/core/models/Posicion.model';
 class Jugador extends Model {};
 
 Jugador.init({
-    idjugadores: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -19,25 +19,25 @@ Jugador.init({
     fechaNac: DataTypes.DATEONLY,
     telefono: DataTypes.STRING,
     urlFoto: DataTypes.STRING,
-    usuarios_idusuarios: {
+    usuario_id: {
         type: DataTypes.INTEGER,
         references: {
             model: 'Usuario',
             key: 'id'
         }
     },
-    categoria_idcategoria: {
+    categoria_id: {
         type: DataTypes.INTEGER,
         references: {
             model: 'Categoria',
-            key: 'idcategoria'
+            key: 'id'
         }
     },
-    posicion_idposicion: {
+    posicion_id: {
         type: DataTypes.INTEGER,
         references: {
             model: 'Posicion',
-            key: 'idposicion'
+            key: 'id'
         }
     }
 }, {
@@ -47,12 +47,12 @@ Jugador.init({
     timestamps: false
 });
 
-Jugador.belongsTo(Usuario, {foreignKey: 'usuario_idusuarios', as: 'usuario_idusuarios'});
-Jugador.belongsTo(Categoria, {foreignKey: 'categoria_idcategoria', as: 'categoria_idcategoria'});
-Jugador.belongsTo(Posicion, {foreignKey: 'posicion_idposicion', as: 'posicion_idposicion'});
+Jugador.belongsTo(Usuario, {foreignKey: 'usuario_id', as: 'usuario_id'});
+Jugador.belongsTo(Categoria, {foreignKey: 'categoria_id', as: 'categoria_id'});
+Jugador.belongsTo(Posicion, {foreignKey: 'posicion_id', as: 'posicion_id'});
 
-Usuario.hasOne(Jugador, {foreignKey: 'usuario_idusuarios'});
-Categoria.hasMany(Jugador, {foreignKey: 'categoria_idcategoria'});
-Posicion.hasMany(Jugador, {foreignKey: 'posicion_idposicion'});
+Usuario.hasOne(Jugador, {foreignKey: 'usuario_id'});
+Categoria.hasMany(Jugador, {foreignKey: 'categoria_id'});
+Posicion.hasMany(Jugador, {foreignKey: 'posicion_id'});
 
 export default Jugador;

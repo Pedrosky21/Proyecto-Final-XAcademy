@@ -14,7 +14,7 @@ Usuario.init({
 }, {
     sequelize,
     modelName: 'Usuario',
-    tableName: 'Usuario',
+    tableName: 'usuario',
     timestamps: false
 });
 

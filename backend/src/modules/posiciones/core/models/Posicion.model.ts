@@ -4,7 +4,7 @@ import sequelize from '../../../../config/db.config';
 class Posicion extends Model {}
 
 Posicion.init({
-  idposicion: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,

@@ -4,7 +4,7 @@ import sequelize from '../../../../config/db.config';
 class Categoria extends Model {};
 
 Categoria.init({
-    idcategoria: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
