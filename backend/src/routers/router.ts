@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import categoriaRoutes from './Categoria.routes';
-import posicionRoutes from './Posicion.routes';
-import jugadorRoutes from './Jugador.routes';
 import clubRoutes from './Club.routes';
+import categoryRouter from '../modules/categories/adapters/CategoryRouter';
+import positionRouter from '../modules/positions/adapters/PositionsRouter';
+import playerRouter from '../modules/players/adapters/PlayerRouter';
 
 const router = Router();
 
-router.use('/categorias', categoriaRoutes);
-router.use('/posiciones', posicionRoutes);
-router.use('/jugadores', jugadorRoutes);
+router.use('/categories',categoryRouter);
+router.use('/positions', positionRouter);
+router.use('/players', playerRouter);
 router.use('/clubes', clubRoutes);
 
 export default router;

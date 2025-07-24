@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import router from './routers/router';
+import { ErrorHandler } from './middleware/errorHandlerMiddleware';
 
 dotenv.config();
 
@@ -9,7 +10,7 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: '*',
   credentials: true,
 }));
 
@@ -18,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', router);
-
+app.use(ErrorHandler)
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 app.listen(PORT, () => {
