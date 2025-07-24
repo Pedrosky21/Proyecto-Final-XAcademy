@@ -1,0 +1,52 @@
+<div class="pt-16 bg-[#011738]">
+  <div>
+    <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
+      Configurar <span class="text-[#D6FF1D]">Perfil.</span>
+    </h1>
+    <h3 class="font-raleway font-bold text-white text-center pt-4">
+      Complete la siguiente informacion para usar la aplicacion.
+    </h3>
+  </div>
+
+  <section class="px-4 py-6 sm:px-8 sm:py-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div *ngFor="let item of EditItems" class="flex flex-col">
+        <label [for]="item.name" class="text-sm text-white font-medium mb-4">
+          {{ item.name }}
+        </label>
+
+        <ng-container [ngSwitch]="item.type">
+          <input
+            *ngSwitchDefault
+            [id]="item.name"
+            [type]="item.type"
+            class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+
+          <select
+            *ngSwitchCase="'select'"
+            [id]="item.name"
+            class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          >
+            <option class="bg-[#011738] text-white" value="" disabled selected>
+              Seleccione {{ item.name }}
+            </option>
+            <option
+              class="bg-[#011738] text-white"
+              *ngFor="let option of item.options"
+              [value]="option"
+            >
+              {{ option }}
+            </option>
+          </select>
+        </ng-container>
+      </div>
+    </div>
+
+    <button
+      class="bg-[#EBFF00] rounded-md w-64 h-10 mt-5 font-bold block mx-auto ring-2"
+    >
+      Confirmar
+    </button>
+  </section>
+</div>

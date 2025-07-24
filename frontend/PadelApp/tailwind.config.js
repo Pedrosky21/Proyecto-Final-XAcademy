@@ -1,9 +1,12 @@
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ["./src/**/*.{html,ts}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        raleway: ["Raleway", "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
+      },
+    },
+    plugins: [],
   },
-  plugins: [],
-}
+};
