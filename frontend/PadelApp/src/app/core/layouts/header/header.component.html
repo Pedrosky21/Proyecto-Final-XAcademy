@@ -11,13 +11,13 @@
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">
             <i
-              class="fa-solid fa-table-tennis-paddle-ball pt-2 fa-2x text-white"
+              class="fa-solid fa-table-tennis-paddle-ball pt-2 fa-2x text-white hover:text-secondary"
             ></i>
 
             <a
               *ngFor="let item of menuItems"
               [routerLink]="item.route"
-              class="px-3 py-2 text-xl font-bold text-white hover:text-[#D6FF1D]"
+              class="px-3 py-2 text-xl font-bold text-white hover:text-secondary"
             >
               {{ item.text }}
             </a>
@@ -67,7 +67,7 @@
 
         <div class="relative">
           <span
-            class="relative flex text-md text-white font-bold ml-3"
+            class="relative flex text-md text-white font-bold ml-3 hover:text-secondary"
             id=""
             type="button"
           >
@@ -91,16 +91,16 @@
         *ngFor="let item of menuItems"
         [routerLink]="item.route"
         aria-current="page"
-        class="block rounded-md px-3 py-2 font-bold text-white hover:text-black flex items-center gap-2"
+        class="block rounded-md px-3 py-2 font-bold text-white hover:text-secondary flex items-center gap-2"
       >
         <span *ngIf="item.icon" [innerHTML]="sanitizeIcon(item.icon)"></span>
         {{ item.text }}
       </a>
     </div>
-    <div class="space-y-1 px-2 pt-2 pb-3">
+    <div class="space-y-1 px-2 pt-2 pb-3 hover:text-secondary">
       <a
         href=""
-        class="flex items-center gap-2 rounded-md px-3 py-2 font-bold text-white hover:text-black"
+        class="flex items-center gap-2 rounded-md px-3 py-2 font-bold text-white hover:text-secondary"
       >
         <i class="fa-solid text-white fa-power-off"></i>
         Cerrar Sesión

@@ -1,0 +1,23 @@
+<div
+  *ngIf="message"
+  class="fixed inset-0 z-[1000] flex flex-col items-center justify-center backdrop-blur bg-white/10 rounded-lg"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="w-[20vw] h-[20vh] text-app-text-color animate-spin"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    stroke-width="2"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M12 4v1m0 14v1m7.07-7.07h1M4.93 12H4m12.02 4.95l.71.71M6.34 6.34l-.71-.71m12.02 0l-.71.71M6.34 17.66l.71.71"
+    />
+  </svg>
+
+  <p class="text-center font-sans text-5xl text-app-text-color mt-6">
+    {{ message }}
+  </p>
+</div>
