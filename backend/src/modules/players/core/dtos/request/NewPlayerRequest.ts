@@ -37,7 +37,7 @@ export class NewPlayerRequest{
       if(!this.pictureUrl || typeof(this.pictureUrl)!=="string"){
         return "El pictureUrl es un campo obligatorio y debe ser un string"
       }
-      if(!this.userId || typeof(this.userId)!=="string"){
+      if(!this.userId || typeof(this.userId)!=="number"){
         return "El userId es un campo obligatorio y debe ser un numero"
       }
       if(!this.positionId || typeof(this.positionId)!=="number"){
