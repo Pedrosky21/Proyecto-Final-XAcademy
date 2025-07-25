@@ -3,6 +3,10 @@ import { UserService } from "../../services/UserService";
 import { NewUserRequest } from "../../core/dtos/request/NewUserRequest";
 import { BadRequestError } from "../../../../errors/BadRequestError";
 
+// No se si lo de jwt va en el controller o service
+import bcrypt from 'bcrypt';
+
+
 export class UserController {
   userService = new UserService();
 
@@ -17,6 +21,10 @@ export class UserController {
       const error: string | null = newUserRequest.validate();
 
       if (error) throw new BadRequestError(error);
+
+      // encriptacion password
+      const hashedPassword = await bcrypt.hash(newUserRequest.password, 10);
+      newUserRequest.password = hashedPassword;
 
       const newUser = await this.userService.createUser(
         newUserRequest
