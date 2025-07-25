@@ -5,8 +5,6 @@ import { Router, RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [NgFor, CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -43,12 +41,11 @@ export class HeaderComponent {
   }
   goToSettings() {
     this.dropdownOpen = false;
-    this.router.navigate(['/edit-profile']);
+    this.router.navigate(['players/edit-profile']);
   }
 
   logout() {
     this.dropdownOpen = false;
-    // TODO: Trigger logout
     console.log('Logged out');
   }
 }
