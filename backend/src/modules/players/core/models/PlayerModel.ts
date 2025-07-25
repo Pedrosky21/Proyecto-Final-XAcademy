@@ -1,6 +1,6 @@
 import {Model, DataTypes} from 'sequelize';
 import sequelize from '../../../../config/db.config';
-import Usuario from '../../../usuarios/core/models/Usuario.model';
+import Usuario from '../../../users/core/models/UserModel';
 import Category from '../../../categories/core/models/CategoryModel';
 import Position from '../../../positions/core/models/PositionModel';
 
@@ -11,7 +11,7 @@ Player.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        field:'idjugador',
+        field:'idjugadores',
         autoIncrement: true
     },
     firstName:{
@@ -37,7 +37,7 @@ Player.init({
     },
     userId: {
         type: DataTypes.INTEGER,
-        field: 'usuario_idusuario',
+        field: 'usuarios_idusuarios',
         references: {
             model: Usuario,
             key: 'id'
@@ -62,15 +62,15 @@ Player.init({
 }, {
     sequelize,
     modelName: 'Jugador',
-    tableName: 'jugador',
+    tableName: 'jugadores',
     timestamps: false
 });
 
-Player.belongsTo(Usuario, { foreignKey: 'usuario_idusuario', as: 'usuario' });
+Player.belongsTo(Usuario, { foreignKey: 'usuarios_idusuarios', as: 'usuario' });
 Player.belongsTo(Category, { foreignKey: 'categoria_idcategoria', as: 'categoria' });
 Player.belongsTo(Position, { foreignKey: 'posicion_idposicion', as: 'posicion' });
 
-Usuario.hasOne(Player, { foreignKey: 'usuario_idusuario' }); 
+Usuario.hasOne(Player, { foreignKey: 'usuarios_idusuarios' }); 
 Category.hasOne(Player, { foreignKey: 'categoria_idcategoria' }); 
 Position.hasOne(Player, { foreignKey: 'posicion_idposicion' });
 

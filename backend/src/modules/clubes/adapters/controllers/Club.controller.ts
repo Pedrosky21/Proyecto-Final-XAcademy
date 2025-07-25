@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Club from "../../core/models/Club.model";
-import Usuario from "../../../usuarios/core/models/Usuario.model";
+import Usuario from "../../../users/core/models/UserModel";
 
 // Obtener todos los clubes
 export const getAllClubes = async (req: Request, res: Response) => {
