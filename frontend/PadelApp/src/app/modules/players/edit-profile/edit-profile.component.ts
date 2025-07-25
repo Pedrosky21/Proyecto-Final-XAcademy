@@ -79,9 +79,15 @@ export class EditProfileComponent {
   confirmChanges() {
     if (this.form.invalid) {
       this.isModalOpen = false;
-      this.errorMessage = 'Revise los cambios ingresados antes de continuar.';
-      this.isErrorModalOpen = true;
-      this.form.markAllAsTouched();
+      this.isLoading = true;
+
+      setTimeout(() => {
+        this.isLoading = false;
+        this.errorMessage = 'Por favor complete todos los campos obligatorios.';
+        this.isErrorModalOpen = true;
+        this.form.markAllAsTouched();
+      }, 1000);
+
       return;
     }
 

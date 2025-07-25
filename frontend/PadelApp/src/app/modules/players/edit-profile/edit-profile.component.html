@@ -1,4 +1,4 @@
-<div class="pt-16 bg-primary">
+<div class="pt-16 bg-primary min-h-[calc(100vh-68px)] w-full">
   <div>
     <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
       Configurar <span class="text-[#D6FF1D]">Perfil.</span>
@@ -20,7 +20,6 @@
           </label>
 
           <ng-container [ngSwitch]="item.type">
-            <!-- Input -->
             <input
               *ngSwitchDefault
               [id]="getControlName(item.name)"
@@ -29,7 +28,6 @@
               class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
             />
 
-            <!-- Select -->
             <select
               *ngSwitchCase="'select'"
               [id]="getControlName(item.name)"
