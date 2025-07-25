@@ -27,7 +27,7 @@ export class EditProfileComponent {
     { name: 'Apellido', type: 'text' },
     { name: 'Fecha de Nacimiento', type: 'date' },
     { name: 'Telefono', type: 'tel' },
-    { name: 'Imagen de Perfil ', type: 'file' },
+    { name: 'Imagen de Perfil ', type: 'text' },
 
     {
       name: 'Posicion',
