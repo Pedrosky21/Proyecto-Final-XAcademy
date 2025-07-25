@@ -7,7 +7,7 @@ export class PlayerRepository{
   
   createPlayer= async (newPlayer:NewPlayerRequest):Promise<Player>=>{
     const createdPlayer = await Player.create({
-      name: newPlayer.firstName,
+      firstName: newPlayer.firstName,
       lastName: newPlayer.lastName,
       birthDate: newPlayer.birthDate,
       cellNumber: newPlayer.cellNumber,

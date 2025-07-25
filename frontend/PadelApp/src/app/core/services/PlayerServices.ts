@@ -6,47 +6,28 @@ import { Observable } from "rxjs";
   providedIn: 'root'
 })
 export class PlayerService {
-    private apiUrl = 'http://localhost:3000/api/players';
+    private readonly apiUrl = 'http://localhost:3000/api';
 
-    constructor (private http: HttpClient) {}
+    constructor (private readonly http: HttpClient) {}
 
     getPlayers(): Observable<any> {
-        return this.http.get(this.apiUrl);
+        return this.http.get(this.apiUrl+"/players");
     }
 
     getPlayerById(id: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/${id}`);
+        return this.http.get(`${this.apiUrl}/players/${id}`);
     }
 
     createPlayer(player: any): Observable<any> {
-        return this.http.post(this.apiUrl, player);
+        return this.http.post(this.apiUrl+"/players", player);
     }
-
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class CategoryService {
-    private apiUrl = 'http://localhost:3000/api/categories';
-
-    constructor (private http: HttpClient) {}
-
-    getCategories(): Observable<any> {
-        return this.http.get(this.apiUrl);
-    }
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class PositionService {
-    private apiUrl = 'http://localhost:3000/api/positions';
-
-    constructor (private http: HttpClient) {}
-
     getPositions(): Observable<any> {
-        return this.http.get(this.apiUrl);
+        return this.http.get(this.apiUrl+"/positions");
     }
+    getCategories(): Observable<any> {
+        return this.http.get(this.apiUrl+"/categories");
+    }
+
 }
+
 
