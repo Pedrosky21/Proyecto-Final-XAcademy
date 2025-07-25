@@ -22,28 +22,28 @@ export class NewPlayerRequest{
     }
 
     public validate():string|null{
-      if(!this.firstName || typeof(this.firstName)==="string"){
+      if(!this.firstName || typeof(this.firstName)!=="string"){
         return "El firstName es un campo obligatorio y debe ser un string"
       }
-      if(!this.lastName || typeof(this.lastName)==="string"){
+      if(!this.lastName || typeof(this.lastName)!=="string"){
         return "El lastName es un campo obligatorio y debe ser un string"
       }
       if(!this.birthDate){
         return "El birthDate es un campo obligatorio y debe ser un date"
       }
-      if(!this.cellNumber || typeof(this.cellNumber)==="number"){
+      if(!this.cellNumber || typeof(this.cellNumber)!=="number"){
         return "El cellNumber es un campo obligatorio y debe ser un número"
       }
-      if(!this.pictureUrl || typeof(this.pictureUrl)==="string"){
+      if(!this.pictureUrl || typeof(this.pictureUrl)!=="string"){
         return "El pictureUrl es un campo obligatorio y debe ser un string"
       }
-      if(!this.userId || typeof(this.userId)==="string"){
+      if(!this.userId || typeof(this.userId)!=="string"){
         return "El userId es un campo obligatorio y debe ser un numero"
       }
-      if(!this.positionId || typeof(this.positionId)==="number"){
+      if(!this.positionId || typeof(this.positionId)!=="number"){
         return "El positionId es un campo obligatorio y debe ser un numero"
       }
-      if(!this.categoryId || typeof(this.categoryId)==="number"){
+      if(!this.categoryId || typeof(this.categoryId)!=="number"){
         return "El categoryId es un campo obligatorio y debe ser un numero"
       }
       return null

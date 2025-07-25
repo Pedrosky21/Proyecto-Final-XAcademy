@@ -1,21 +1,22 @@
 import {Model, DataTypes} from 'sequelize';
 import sequelize from '../../../../config/db.config';
 
-class Usuario extends Model {};
+class User extends Model {};
 
-Usuario.init({
+User.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        field:'idusuarios',
         autoIncrement: true
     },
     email: DataTypes.STRING,
-    passwd: DataTypes.STRING,
+    password: DataTypes.STRING,
 }, {
     sequelize,
-    modelName: 'Usuario',
-    tableName: 'usuario',
+    modelName: 'usuarios',
+    tableName: 'usuarios',
     timestamps: false
 });
 
-export default Usuario;
+export default User;

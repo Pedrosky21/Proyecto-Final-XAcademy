@@ -18,4 +18,12 @@ export class PlayerRepository{
     });
     return createdPlayer;
   }
+
+  getAllPlayers = async ():Promise<Player[]> => {
+    return await Player.findAll()
+  }
+
+  getPlayerById = async (id:number):Promise<Player|null> => {
+    return await Player.findByPk(id)
+  }
 }
