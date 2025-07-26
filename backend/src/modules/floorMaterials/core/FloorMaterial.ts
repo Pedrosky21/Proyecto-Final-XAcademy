@@ -7,7 +7,7 @@ FloorMaterial.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        field:'idmaterialpared',
+        field:'idmaterialsuelo',
         autoIncrement: true
     },name: {
     type: DataTypes.STRING,
@@ -15,8 +15,8 @@ FloorMaterial.init({
     },
 },{
     sequelize,
-    modelName: 'MaterialPared',
-    tableName: 'materialpared',
+    modelName: 'MaterialSuelo',
+    tableName: 'materialSuelo',
     timestamps: false
 });
 
