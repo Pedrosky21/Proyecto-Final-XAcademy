@@ -1,7 +1,26 @@
-import { Request, Response } from "express";
-import Club from "../../core/models/Club.model";
+import { NextFunction, Request, Response } from "express";
+import Club from "../../core/models/Club";
 import Usuario from "../../../users/core/models/UserModel";
+import { ClubService } from "../../services/ClubService";
+import { NotFoundError } from "../../../../errors/NotFoundError";
 
+
+export class ClubController{
+  clubService = new ClubService();
+
+  getClubById = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    try {
+      const club = await this.clubService.getClubById(Number(id));
+      if(!club){
+        throw new NotFoundError("Club no encontrado")
+      }
+      res.status(201).json(club);
+    } catch (error) {
+      next(error)
+    }
+  };
+}
 // Obtener todos los clubes
 export const getAllClubes = async (req: Request, res: Response) => {
   try {
