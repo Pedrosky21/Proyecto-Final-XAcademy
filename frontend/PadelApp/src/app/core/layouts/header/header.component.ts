@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MenuItem } from '../../../model/menu-items';
-import { CommonModule, NgFor } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
@@ -10,6 +10,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class HeaderComponent {
   dropdownOpen = false;
+  isAuthenticated = true;
   menuItems: MenuItem[] = [
     {
       text: 'Inicio',
@@ -47,5 +48,10 @@ export class HeaderComponent {
   logout() {
     this.dropdownOpen = false;
     console.log('Logged out');
+  }
+
+  login() {
+    this.dropdownOpen = false;
+    this.router.navigate(['login']);
   }
 }

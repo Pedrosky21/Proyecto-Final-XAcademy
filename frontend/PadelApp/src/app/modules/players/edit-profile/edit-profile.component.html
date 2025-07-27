@@ -9,67 +9,177 @@
   </div>
 
   <section class="px-4 py-6 sm:px-8 sm:py-12 font-roboto">
-    <form [formGroup]="form">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div *ngFor="let item of EditItems" class="flex flex-col">
-          <label
-            [for]="getControlName(item.name)"
-            class="text-sm text-white font-medium mb-2"
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+    >
+      <!-- Nombre -->
+      <div class="flex flex-col">
+        <label for="nombre" class="text-sm text-white font-medium mb-2"
+          >Nombre</label
+        >
+        <input
+          id="nombre"
+          type="text"
+          formControlName="nombre"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <small
+          *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched"
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
+
+      <!-- Apellido -->
+      <div class="flex flex-col">
+        <label for="apellido" class="text-sm text-white font-medium mb-2"
+          >Apellido</label
+        >
+        <input
+          id="apellido"
+          type="text"
+          formControlName="apellido"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <small
+          *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched"
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
+
+      <!-- Fecha de Nacimiento -->
+      <div class="flex flex-col">
+        <label for="fechaNacimiento" class="text-sm text-white font-medium mb-2"
+          >Fecha de Nacimiento</label
+        >
+        <input
+          id="fechaNacimiento"
+          type="date"
+          formControlName="fechaNacimiento"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <small
+          *ngIf="
+            form.get('fechaNacimiento')?.invalid &&
+            form.get('fechaNacimiento')?.touched
+          "
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
+
+      <!-- Teléfono -->
+      <div class="flex flex-col">
+        <label for="telefono" class="text-sm text-white font-medium mb-2"
+          >Teléfono</label
+        >
+        <input
+          id="telefono"
+          type="tel"
+          formControlName="telefono"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <small
+          *ngIf="form.get('telefono')?.invalid && form.get('telefono')?.touched"
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
+
+      <!-- Imagen de Perfil -->
+      <div class="flex flex-col">
+        <label for="imagenPerfil" class="text-sm text-white font-medium mb-2"
+          >URL Imagen de Perfil</label
+        >
+        <input
+          id="imagenPerfil"
+          type="text"
+          formControlName="imagenPerfil"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 file:text-black file:bg-white"
+        />
+        <small
+          *ngIf="
+            form.get('imagenPerfil')?.invalid &&
+            form.get('imagenPerfil')?.touched
+          "
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
+
+      <!-- Posición -->
+      <div class="flex flex-col">
+        <label for="posicion" class="text-sm text-white font-medium mb-2"
+          >Posición</label
+        >
+        <select
+          id="posicion"
+          formControlName="posicion"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2"
+        >
+          <option class="bg-[#011738] text-white" value="" disabled selected>
+            Seleccione Posición
+          </option>
+          <option
+            *ngFor="let option of posiciones"
+            [value]="option.value"
+            class="bg-primary text-white"
           >
-            {{ item.name }}
-          </label>
+            {{ option.label }}
+          </option>
+        </select>
+        <small
+          *ngIf="form.get('posicion')?.invalid && form.get('posicion')?.touched"
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
 
-          <ng-container [ngSwitch]="item.type">
-            <input
-              *ngSwitchDefault
-              [id]="getControlName(item.name)"
-              [type]="item.type"
-              [formControlName]="getControlName(item.name)"
-              class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-
-            <select
-              *ngSwitchCase="'select'"
-              [id]="getControlName(item.name)"
-              [formControlName]="getControlName(item.name)"
-              class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
-            >
-              <option class="bg-[#011738] text-white" value="" disabled>
-                Seleccione {{ item.name }}
-              </option>
-              <option
-                class="bg-[#011738] text-white"
-                *ngFor="let option of item.options"
-                [value]="option"
-              >
-                {{ option }}
-              </option>
-            </select>
-          </ng-container>
-
-          <!-- Validación -->
-          <small
-            *ngIf="
-              form.get(getControlName(item.name))?.invalid &&
-              form.get(getControlName(item.name))?.touched
-            "
-            class="text-red-400 text-xs mt-1"
+      <!-- Categoría -->
+      <div class="flex flex-col">
+        <label for="categoria" class="text-sm text-white font-medium mb-2"
+          >Categoría</label
+        >
+        <select
+          id="categoria"
+          formControlName="categoria"
+          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2"
+        >
+          <option class="bg-[#011738] text-white" value="" disabled selected>
+            Seleccione Categoría
+          </option>
+          <option
+            *ngFor="let option of categorias"
+            [value]="option.value"
+            class="bg-[#011738] text-white"
           >
-            Este campo es obligatorio.
-          </small>
-        </div>
+            {{ option.label }}
+          </option>
+        </select>
+        <small
+          *ngIf="
+            form.get('categoria')?.invalid && form.get('categoria')?.touched
+          "
+          class="text-red-400 text-xs mt-1"
+          >Este campo es obligatorio.</small
+        >
+      </div>
+
+      <div
+        class="col-span-1 md:col-span-2 lg:col-span-4 flex justify-center mt-4"
+      >
+        <button
+          type="submit"
+          class="bg-[#EBFF00] text-black font-bold w-64 h-10 rounded-md ring-2"
+        >
+          Confirmar
+        </button>
       </div>
     </form>
 
-    <!-- Botón Confirmar -->
-    <button
-      class="bg-[#EBFF00] rounded-md w-64 h-10 mt-5 font-bold block mx-auto ring-2"
-      (click)="openModal()"
-    >
-      Confirmar
-    </button>
-
-    
     <!-- Modal de Carga -->
     <div
       *ngIf="isLoading"
@@ -84,6 +194,49 @@
         <p class="text-white font-bold">Guardando cambios...</p>
       </div>
     </div>
-   
+
+    <!-- Modal de Éxito -->
+    <div
+      *ngIf="isSuccessModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center"
+      >
+        <i class="fa-solid fa-circle-check text-[28px] text-secondary"></i>
+        <h2 class="text-xl font-bold text-white mb-4">Cambios guardados</h2>
+        <p class="text-white">Se han guardado los cambios con exito.</p>
+        <div class="mt-6">
+          <button
+            (click)="closeSuccessModal()"
+            class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Error -->
+    <div
+      *ngIf="isErrorModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center text-white"
+      >
+        <i class="fa-solid fa-circle-xmark text-[28px] mb-2 text-error"></i>
+        <h2 class="text-xl font-bold mb-2">Error en el formulario</h2>
+        <p>{{ errorMessage }}</p>
+        <div class="mt-6">
+          <button
+            (click)="closeErrorModal()"
+            class="bg-secondary text-black px-6 py-2 rounded-md font-semibold"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
