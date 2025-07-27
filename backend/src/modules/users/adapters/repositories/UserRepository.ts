@@ -16,5 +16,9 @@ export class UserRepository {
 
   getUserById = async (id:number):Promise<User|null> => {
     return await User.findByPk(id)
-  } 
+  }
+
+  getUserByEmail = async (email:string):Promise<User|null> => {
+    return await User.findOne({where: {email}})
+  }
 }
