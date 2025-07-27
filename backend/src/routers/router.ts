@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import authRouter from '../modules/auth/adapters/AuthRoutes';
 import clubRoutes from './Club.routes';
 import categoryRouter from '../modules/categories/adapters/CategoryRouter';
 import positionRouter from '../modules/positions/adapters/PositionsRouter';
@@ -9,6 +10,7 @@ import WallMaterialRouter from '../modules/wallMaterials/adapters/WallMaterialRo
 
 const router = Router();
 
+router.use('/auth', authRouter);
 router.use('/categories',categoryRouter);
 router.use('/floor-materials',floorMaterialRouter);
 router.use('/wall-materials',WallMaterialRouter);
