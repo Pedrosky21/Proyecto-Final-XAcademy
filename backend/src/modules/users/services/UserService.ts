@@ -9,6 +9,10 @@ export class UserService {
     return await this.userRepository.createUser(newUser);
   };
 
+  setUserType = async (id:number, userType: 'Jugador'|'Club'): Promise<any> => {
+    return await this.userRepository.setUserType(id, userType);
+  }
+
   getAllUsers = async (): Promise<any> => {
     return await this.userRepository.getAllUsers();
   };

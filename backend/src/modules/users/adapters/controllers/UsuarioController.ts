@@ -1,40 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import { UserService } from "../../services/UserService";
-import { NewUserRequest } from "../../core/dtos/request/NewUserRequest";
-import { BadRequestError } from "../../../../errors/BadRequestError";
-
-// No se si lo de jwt va en el controller o service
-import bcrypt from 'bcrypt';
 
 
 export class UserController {
   userService = new UserService();
 
-  createUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> => {
+  setUserType = async (req:Request, res:Response, next:NextFunction):Promise<void> => {
     try {
-      const newUserRequest = new NewUserRequest(req.body);
+      const {id, userType} = req.body;
+      const user = await this.userService.setUserType(id, userType);
 
-      const error: string | null = newUserRequest.validate();
+      res.json(user);
 
-      if (error) throw new BadRequestError(error);
-
-      // encriptacion password
-      const hashedPassword = await bcrypt.hash(newUserRequest.password, 10);
-      newUserRequest.password = hashedPassword;
-
-      const newUser = await this.userService.createUser(
-        newUserRequest
-      );
-
-      res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }
-  };
+  }
 
   getAllUsers = async (req:Request, res:Response, next:NextFunction):Promise<void> => {
     try {
