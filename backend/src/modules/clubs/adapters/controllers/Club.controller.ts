@@ -3,6 +3,8 @@ import Club from "../../core/models/Club";
 import Usuario from "../../../users/core/models/UserModel";
 import { ClubService } from "../../services/ClubService";
 import { NotFoundError } from "../../../../errors/NotFoundError";
+import { NewClubRequest } from "../../core/dtos/request/NewClubRequest";
+import { BadRequestError } from "../../../../errors/BadRequestError";
 
 
 export class ClubController{
@@ -20,6 +22,23 @@ export class ClubController{
       next(error)
     }
   };
+  
+  createClub = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newClubRequest= new NewClubRequest(req.body)
+      
+      const validationError= newClubRequest.válidate()
+      if (validationError) {
+        throw new BadRequestError(validationError);
+      }
+
+      const newClub=await this.clubService.createClub(newClubRequest)
+      res.status(201).send(newClub)
+
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 // Obtener todos los clubes
 export const getAllClubes = async (req: Request, res: Response) => {
@@ -33,66 +52,6 @@ export const getAllClubes = async (req: Request, res: Response) => {
       ],
     });
     res.json(clubes);
-  } catch (error) {
-    console.error("Error fetching jugadores:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
-  }
-};
-
-// Crear un club
-export const createClub = async (req: Request, res: Response) => {
-  try {
-    const {
-      nombre,
-      horaInicio,
-      horaCierre,
-      nombreResponsable,
-      apellidoResponsable,
-      telefonoClub,
-      precioTurno,
-      reglaCancelacion,
-      reglaAdmision,
-      cantCanchas,
-      usuario_id,
-      direccion,
-    } = req.body;
-
-    if (
-      !nombre ||
-      !horaInicio ||
-      !horaCierre ||
-      !nombreResponsable ||
-      !apellidoResponsable ||
-      !telefonoClub ||
-      !precioTurno ||
-      !reglaCancelacion ||
-      !reglaAdmision ||
-      !cantCanchas ||
-      !usuario_id ||
-      !direccion
-    ) {
-      return res.status(400).json({ message: "Faltan datos obligatorios" });
-    }
-
-    const usuario = await Usuario.findByPk(usuario_id);
-    if (!usuario) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
-    }
-
-    const nuevoClub = await Club.create({
-      nombre,
-      horaInicio,
-      horaCierre,
-      nombreResponsable,
-      apellidoResponsable,
-      telefonoClub,
-      precioTurno,
-      reglaCancelacion,
-      reglaAdmision,
-      cantCanchas,
-      usuario_id,
-      direccion,
-    });
   } catch (error) {
     console.error("Error fetching jugadores:", error);
     res.status(500).json({ message: "Error interno del servidor" });

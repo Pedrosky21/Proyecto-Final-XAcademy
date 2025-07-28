@@ -1,9 +1,10 @@
 import {Router} from 'express';
-import { ClubController } from './controllers/Club.controller';
+import { ClubController, getAllClubes } from './controllers/Club.controller';
 
 
 const clubRouter = Router();
 const clubController= new ClubController()
-clubRouter.get('/:id', clubController.getClubById);
+clubRouter.get('/', getAllClubes);
+clubRouter.post("/", clubController.createClub)
 
 export default clubRouter;
