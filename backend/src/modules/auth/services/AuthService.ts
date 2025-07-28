@@ -24,7 +24,7 @@ export class AuthService {
 
         const hashedPassword = await bcrypt.hash(password, 10);
         // necesito el validate si o si por NewUserRequest, capaz convendria usar sequelize ya que lo puse en el modelo
-        const newUser = await this.userRepository.createUser({email: email, password: hashedPassword, validate: () => null});
+        const newUser = await this.userRepository.createUser({email: email, password: hashedPassword, userType:'Pendiente', validate: () => null});
 
         const token = this.generateToken(newUser.id, newUser.email);
 

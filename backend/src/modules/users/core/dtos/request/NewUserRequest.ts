@@ -1,10 +1,12 @@
 export class NewUserRequest {
     email: string
     password: string
+    userType: 'Jugador' | 'Club' | 'Pendiente';
 
     constructor(data: any) {
         this.email = data.email
         this.password = data.password
+        this.userType = 'Pendiente'
     }
 
     public validate():string|null{

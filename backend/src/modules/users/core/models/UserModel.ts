@@ -5,6 +5,7 @@ interface UserAttributes {
   id: number;
   email: string;
   password: string;
+  userType: string;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
@@ -13,6 +14,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public id!: number;
   public email!: string;
   public password!: string;
+  public userType!: string;
 }
 
 User.init({
@@ -24,6 +26,11 @@ User.init({
     },
     email: DataTypes.STRING,
     password: DataTypes.STRING,
+    userType: {
+      type: DataTypes.ENUM('Jugador', 'Club', 'Pendiente'),
+      allowNull: false,
+      defaultValue: 'Pendiente'
+    }
 }, {
     sequelize,
     modelName: 'usuarios',
