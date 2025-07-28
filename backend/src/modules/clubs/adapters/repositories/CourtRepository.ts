@@ -7,10 +7,10 @@ export class CourtRepository{
   createCourt=async(newCourt: NewCourt, idClub:number, courtNumber:number, transaction: Transaction):Promise<Court>=>{
     return await Court.create({
       number: courtNumber,
-      idClub: idClub,
+      clubId: idClub, 
       wallMaterialId: newCourt.wallMaterialId,
       floorMaterialId: newCourt.floorMaterialId,
-      roofted: newCourt.roofted
+      roofed: newCourt.roofted
     }, {transaction})
   }
 }

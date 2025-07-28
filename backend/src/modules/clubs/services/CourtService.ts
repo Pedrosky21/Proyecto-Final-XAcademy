@@ -4,6 +4,7 @@ import { WallMaterialService } from "../../wallMaterials/services/WallMaterialSe
 import Court from "../core/models/Courts";
 import { NewCourt } from "../core/models/NewCourt";
 import { CourtRepository } from "../adapters/repositories/CourtRepository";
+import { BadRequestError } from "../../../errors/BadRequestError";
 
 
 export class CourtService{
@@ -12,6 +13,17 @@ export class CourtService{
   floorMaterialService= new FloorMaterialService()
 
   createCourt=async(court:NewCourt, idClub: number,courtNumber:number, transaction: Transaction):Promise<Court>=>{
+    
+    const wallMaterial= await this.wallMaterialService.getWallMaterialById(court.wallMaterialId)
+    if(!wallMaterial){
+      throw new BadRequestError("Todas las canchas deben tener un material de pared existente")
+    }
+     const floorMaterial= await this.floorMaterialService.getFloorMaterialById(court.floorMaterialId)
+     console.log(floorMaterial)
+     console.log(court.floorMaterialId)
+    if(!floorMaterial){
+      throw new BadRequestError("Todas las canchas deben tener un material de suelo existente")
+    }
     return await this.courtRepository.createCourt(court,idClub,courtNumber,transaction)
   }
 }

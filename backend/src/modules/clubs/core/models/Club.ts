@@ -57,8 +57,8 @@ Club.init({
         type: DataTypes.INTEGER,
         field:"usuarios_idusuarios",
         references: {
-            model: 'Usuario',
-            key: 'id'
+            model: Usuario,
+            key: 'idusuarios'
         }
     }
 },{
@@ -69,7 +69,6 @@ Club.init({
 })
 
 
-Club.belongsTo(Usuario, {foreignKey: 'usuario_id', as: 'usuario'});
-Usuario.hasOne(Club, {foreignKey: 'usuario_id'});
-
+Club.belongsTo(Usuario, { foreignKey: 'usuarios_idusuarios', as: 'usuario' });
+Usuario.hasOne(Club, { foreignKey: 'usuarios_idusuarios' });
 export default Club;

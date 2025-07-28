@@ -27,6 +27,10 @@ export class ClubService{
     if(!user){
       throw new BadRequestError("Usuario no existente")
     }
+    const userClub=await this.getClubByUserId(newClub.userId)
+    if(userClub){
+      throw new BadRequestError("El usuario ya posee un club")
+    }
     const transaction= await sequelize.transaction();
 
     try{
@@ -46,7 +50,7 @@ export class ClubService{
       }
     }catch(error: any){
       await transaction.rollback();
-      throw new AppError(error.message)
+      throw error
     }
   }
 }

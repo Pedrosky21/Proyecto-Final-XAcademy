@@ -10,7 +10,7 @@ export class ClubRepository{
 
   getClubByUserId=async(userId:number):Promise<Club|null>=>{
     return await Club.findOne({
-      where: { usuario_id: userId }
+      where: { userId }
     });
   }
 
@@ -28,6 +28,6 @@ export class ClubRepository{
       cancelationRules: newClubRequest.cancelationRules,
       userId: newClubRequest.userId,
     },{transaction})
-
   }
+
 }

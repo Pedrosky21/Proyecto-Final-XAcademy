@@ -19,7 +19,7 @@ Court.init({
     },
     clubId: {
         type: DataTypes.INTEGER,
-        field: "clubes_clubid",
+        field: "clubes_idclubes",
         references: {
             model: Club,
             key: 'id'

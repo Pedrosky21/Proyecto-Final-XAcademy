@@ -39,21 +39,5 @@ export class ClubController{
       next(error)
     }
   }
+  
 }
-// Obtener todos los clubes
-export const getAllClubes = async (req: Request, res: Response) => {
-  try {
-    const clubes = await Club.findAll({
-      include: [
-        {
-          model: Usuario,
-          as: "usuario",
-        },
-      ],
-    });
-    res.json(clubes);
-  } catch (error) {
-    console.error("Error fetching jugadores:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
-  }
-};
