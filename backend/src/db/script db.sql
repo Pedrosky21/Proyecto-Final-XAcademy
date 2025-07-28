@@ -139,9 +139,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`cancha` (
   `número` INT NOT NULL,
-  `techada` TINYINT NOT NULL,
+  `techada` TINYINT NOT NULL DEFAULT 1,
   `clubes_idclubes` INT NOT NULL,
-  `idcancha` VARCHAR(45) NOT NULL,
+  `idcancha` INT NOT NULL AUTO_INCREMENT,
   `materialPared_idmaterialpared` INT NOT NULL,
   `materialSuelo_idmaterialSuelo` INT NOT NULL,
   PRIMARY KEY (`idcancha`),
@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`turno` (
   `turnocol` VARCHAR(45) NULL,
   `idturno` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
-  `cancha_idcancha` VARCHAR(45) NOT NULL,
+  `cancha_idcancha` INT NOT NULL,
   `estadoturno_idestadoturno` INT NOT NULL,
   PRIMARY KEY (`idturno`),
   INDEX `fk_turno_cancha1_idx` (`cancha_idcancha` ASC) VISIBLE,

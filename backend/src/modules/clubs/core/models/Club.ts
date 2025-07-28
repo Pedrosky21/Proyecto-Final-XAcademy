@@ -10,36 +10,65 @@ Club.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        field:"idclubes",
+        autoIncrement: true,
     },
-    nombre: DataTypes.STRING,
-    direccion: DataTypes.STRING,
-    horaInicio: DataTypes.TIME,
-    horaCierre: DataTypes.TIME,
-    nombreResponsable: DataTypes.STRING,
-    apellidoResponsable: DataTypes.STRING,
-    telefonoClub: DataTypes.STRING,
-    precioTurno: DataTypes.INTEGER,
-    reglaCancelacion: DataTypes.STRING,
-    reglaAdmision: DataTypes.STRING,
-    cantCanchas: DataTypes.INTEGER,
-    usuario_id: {
+    name: {
+        type: DataTypes.STRING,
+        field: "nombre"
+    },
+    address: {
+        type: DataTypes.STRING,
+        field: "direccion"
+    },
+    openningTime: {
+        type: DataTypes.TIME,
+        field: "horaInicio"
+    },
+    closingTimeTime: {
+        type: DataTypes.TIME,
+        field: "horaCierre"
+    },
+    responsableFirstName: {
+        type: DataTypes.STRING,
+        field: "nombreResponsable"
+    },
+    responsableLastName: {
+        type: DataTypes.STRING,
+        field: "apellidoResponsable"
+    },
+    cellNumber:{
+        type: DataTypes.STRING,
+        field: "telefonoClub"
+    },
+    turnPrice:{
         type: DataTypes.INTEGER,
+        field: "precioTurno"
+    },
+    admisionRules: {
+        type: DataTypes.STRING,
+        field: "reglaAdmision"
+    },
+    cancelationRules: {
+        type: DataTypes.STRING,
+        field: "reglacancelacion"
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        field:"usuarios_idusuarios",
         references: {
-            model: 'Usuario',
-            key: 'id'
+            model: Usuario,
+            key: 'idusuarios'
         }
     }
 },{
     sequelize,
-    modelName: 'Club',
-    tableName: 'club',
+    modelName: 'Clubes',
+    tableName: 'clubes',
     timestamps: false
 })
 
 
-Club.belongsTo(Usuario, {foreignKey: 'usuario_id', as: 'usuario'});
-
-Usuario.hasOne(Club, {foreignKey: 'usuario_id'});
-
+Club.belongsTo(Usuario, { foreignKey: 'usuarios_idusuarios', as: 'usuario' });
+Usuario.hasOne(Club, { foreignKey: 'usuarios_idusuarios' });
 export default Club;

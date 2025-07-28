@@ -4,6 +4,6 @@ import { ClubController } from './controllers/Club.controller';
 
 const clubRouter = Router();
 const clubController= new ClubController()
-clubRouter.get('/:id', clubController.getClubById);
+clubRouter.post("/", clubController.createClub)
 
 export default clubRouter;

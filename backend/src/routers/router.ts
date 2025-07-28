@@ -17,6 +17,6 @@ router.use('/wall-materials',WallMaterialRouter);
 router.use('/positions', positionRouter);
 router.use('/players', playerRouter);
 router.use('/users', userRouter);
-router.use('/clubes', clubRouter);
+router.use('/clubs', clubRouter);
 
 export default router;

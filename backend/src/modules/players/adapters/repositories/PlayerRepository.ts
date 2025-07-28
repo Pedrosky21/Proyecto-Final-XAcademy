@@ -26,4 +26,10 @@ export class PlayerRepository{
   getPlayerById = async (id:number):Promise<Player|null> => {
     return await Player.findByPk(id)
   }
+
+  getPlayerByUserId = async (userId:number): Promise<Player|null>=>{
+    return await Player.findOne({
+      where: { userId: userId }
+    });
+  }
 }
