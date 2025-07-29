@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MenuItem } from '../../../model/menu-items';
 
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -11,6 +12,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class HeaderComponent {
   dropdownOpen = false;
   isAuthenticated = true;
+  userEmail = '';
   menuItems: MenuItem[] = [
     {
       text: 'Inicio',
@@ -35,19 +37,47 @@ export class HeaderComponent {
     },
   ];
 
-  constructor(private sanitizer: DomSanitizer, private router: Router) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('token');
+      this.isAuthenticated = !!token;
+
+      if (this.isAuthenticated) {
+        const userJson = localStorage.getItem('user');
+        if (userJson) {
+          const user = JSON.parse(userJson);
+          this.userEmail = user.email;
+        }
+      }
+    }
+  }
   sanitizeIcon(svg: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
+
   goToSettings() {
     this.dropdownOpen = false;
     this.router.navigate(['players/edit-profile']);
   }
 
+  register() {
+    this.router.navigate(['register']);
+  }
+
   logout() {
-    this.dropdownOpen = false;
-    console.log('Logged out');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    this.isAuthenticated = false;
+    this.userEmail = '';
+    this.router.navigate(['/login']);
   }
 
   login() {
