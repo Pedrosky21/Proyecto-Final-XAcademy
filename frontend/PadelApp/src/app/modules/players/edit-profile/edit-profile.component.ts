@@ -5,6 +5,8 @@ import { ConfirmationModalService } from '../../../core/layouts/confirmation-mod
 import { loadingScreenService } from '../../../core/layouts/loading-screen/service/loadingService';
 import { ModalIconEnum } from '../../../core/layouts/confirmation-modal/models/ModalProps';
 import { PlayerService } from '../../../core/services/PlayerServices';
+import { AuthService } from '../../../core/services/AuthService';
+import { UserService } from '../../../core/services/UserService';
 
 @Component({
   selector: 'app-edit-profile',
@@ -26,7 +28,9 @@ export class EditProfileComponent {
     private readonly fb: FormBuilder,
     private readonly confirmationModalService: ConfirmationModalService,
     private readonly loadingScreenService: loadingScreenService,
-    private readonly playerService: PlayerService
+    private readonly playerService: PlayerService,
+    private readonly userService: UserService,
+    private readonly authService: AuthService
   ) {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -105,34 +109,61 @@ export class EditProfileComponent {
           this.confirmationModalService.closeModal();
           this.loadingScreenService.showLoadingScreen('Guardando cambios...');
 
+          const userId = this.authService.getLoggedInUser()?.id;
+
           const dataToSend = {
             firstName: this.form.value.nombre,
             lastName: this.form.value.apellido,
             birthDate: this.form.value.fechaNacimiento,
             cellNumber: Number(this.form.value.telefono),
             pictureUrl: this.form.value.imagenPerfil,
-            userId: 1,
+            userId: Number(userId),
             categoryId: Number(this.form.value.categoria),
             positionId: Number(this.form.value.posicion),
           };
 
           this.playerService.createPlayer(dataToSend).subscribe({
             next: () => {
-              this.loadingScreenService.showLoadingScreen(null);
-              this.confirmationModalService.openModal({
-                icon: ModalIconEnum.ok,
-                title: 'Cambios guardados',
-                message: 'Se ha guardado la configuración correctamente',
-                accept: {
-                  title: 'Aceptar',
-                  action: () => {
-                    this.confirmationModalService.closeModal();
-                  },
+              // Update userType to "Jugador"
+              console.log('userId before calling setUserType', userId);
+              this.userService.setUserType(userId, 'Jugador').subscribe({
+                next: (updatedUser) => {
+                  // Update user in localStorage
+                  localStorage.setItem('user', JSON.stringify(updatedUser));
+
+                  this.loadingScreenService.showLoadingScreen(null);
+                  this.confirmationModalService.openModal({
+                    icon: ModalIconEnum.ok,
+                    title: 'Cambios guardados',
+                    message: 'Se ha guardado la configuración correctamente',
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        this.confirmationModalService.closeModal();
+                      },
+                    },
+                  });
+                },
+                error: () => {
+                  this.loadingScreenService.showLoadingScreen(null);
+                  this.confirmationModalService.openModal({
+                    icon: ModalIconEnum.error,
+                    title: 'Error al cambiar rol',
+                    message:
+                      'El jugador fue creado pero no se pudo actualizar su rol.',
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        this.confirmationModalService.closeModal();
+                      },
+                    },
+                  });
                 },
               });
             },
             error: () => {
               this.loadingScreenService.showLoadingScreen(null);
+              console.error('Error updating user role:', this.errorMessage);
               this.confirmationModalService.openModal({
                 icon: ModalIconEnum.error,
                 title: 'Error al guardar',
@@ -151,6 +182,7 @@ export class EditProfileComponent {
       },
     });
   }
+
   closeErrorModal(): void {
     this.isErrorModalOpen = false;
   }
