@@ -4,11 +4,12 @@ import { HeaderComponent } from './core/layouts/header/header.component';
 import { CommonModule, NgIf } from '@angular/common';
 import { LayoutModule } from './core/layouts/layout.index';
 import { PlayersModule } from './modules/players/player.module';
+import { ClubModule } from './modules/clubs/club.module';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [LayoutModule,CommonModule,RouterOutlet,PlayersModule],
+  imports: [LayoutModule,CommonModule,RouterOutlet,PlayersModule,ClubModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
