@@ -12,6 +12,10 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/players/player-routing.module').then(m => m.PlayersRoutingModule),
   },
   {
+    path: 'clubs',
+    loadChildren: () => import('./modules/clubs/club-routing.module').then(m => m.ClubRoutingModule),
+  },
+  {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full',
