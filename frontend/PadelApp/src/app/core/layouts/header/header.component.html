@@ -48,12 +48,6 @@
             >
               <button
                 class="block w-full px-4 py-2 text-left text-sm text-black"
-                (click)="goToSettings()"
-              >
-                Configurar Perfil
-              </button>
-              <button
-                class="block w-full px-4 py-2 text-left text-sm text-black"
                 (click)="logout()"
               >
                 Cerrar sesión
@@ -63,7 +57,7 @@
 
           <!-- Nombre del usuario -->
           <span class="text-white font-bold hidden sm:inline">{{
-            userEmail
+            userName || userEmail
           }}</span>
         </ng-container>
 

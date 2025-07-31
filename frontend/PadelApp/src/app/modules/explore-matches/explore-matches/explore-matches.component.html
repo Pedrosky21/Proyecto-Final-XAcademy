@@ -1,0 +1,26 @@
+<div class="pt-6 bg-primary min-h-[calc(100vh-68px)] w-full">
+  <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
+    Mis Part<span class="text-secondary">idos</span>
+  </h1>
+  <h3 class="font-raleway font-bold text-white text-center pt-3">
+    Aquí apareceran los partidos publicados para jugar.<br />
+    Recorda que tenes que se parte de un equipo para poder jugar
+  </h3>
+  <section class="pl-3 mt-3">
+    <button
+      type="button"
+      class="bg-secondary text-black font-bold w-36 h-10 rounded-md"
+    >
+      <i class="fa-solid fa-plus text-black"></i>
+      Crear Equipo
+    </button>
+    <button
+      type="button"
+      class="bg-secondary text-black font-bold w-36 h-10 rounded-md ml-3"
+      (click)="openCreateMatchModal()"
+    >
+      <i class="fa-solid fa-plus text-black"></i>
+      Crear Partido
+    </button>
+  </section>
+</div>

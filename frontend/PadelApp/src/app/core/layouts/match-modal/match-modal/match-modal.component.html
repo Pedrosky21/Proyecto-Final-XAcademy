@@ -1,0 +1,94 @@
+<div
+  *ngIf="modalProps"
+  class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
+>
+  <div
+    class="bg-primary rounded-xl p-4 sm:p-6 text-white w-full max-w-[750px] max-h-[90vh] overflow-y-auto relative"
+  >
+    <!-- Title and Close -->
+    <h2 class="text-center text-xl sm:text-2xl font-bold mb-4">
+      {{ modalProps.title }}
+    </h2>
+    <button
+      class="absolute top-3 right-4 text-white text-xl font-bold"
+      (click)="handleRejectClick()"
+    >
+      ×
+    </button>
+
+    <!-- Message -->
+    <p class="text-sm text-white mb-4 text-center">
+      {{ modalProps.message }}
+    </p>
+
+    <!-- Select Team -->
+    <section class="flex flex-col sm:flex-row items-start mb-4 gap-4 sm:gap-6">
+      <div class="w-full sm:w-auto">
+        <label class="block mb-1 font-bold text-white">Buscar equipo</label>
+        <select
+          [(ngModel)]="formData.selectedTeam"
+          class="w-full sm:w-64 bg-transparent border-2 border-secondary text-white p-2 mb-2 sm:mb-4 rounded"
+        >
+          <option
+            class="bg-primary"
+            *ngFor="let team of modalProps?.teams"
+            [value]="team"
+          >
+            {{ team }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Team Info -->
+      <div class="mb-4 text-sm text-white">
+        <p><strong>Nombre: </strong> Miguel</p>
+        <p><strong>Compañero: </strong> Jorge</p>
+      </div>
+    </section>
+
+    <!-- Material Inputs -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-3 pb-3">
+      <div>
+        <label class="block mb-1 text-white font-bold">Material Piso</label>
+        <select
+          [(ngModel)]="formData.floorMaterial"
+          class="w-full bg-transparent border-2 border-secondary p-1 text-white rounded"
+        >
+          <option class="bg-primary">Concreto</option>
+          <option class="bg-primary">Pasto</option>
+        </select>
+      </div>
+      <div>
+        <label class="block mb-1 text-white font-bold">Pared</label>
+        <select
+          [(ngModel)]="formData.wallMaterial"
+          class="w-full bg-transparent border-2 border-secondary p-1 text-white rounded"
+        >
+          <option class="bg-primary">Cualquiera</option>
+          <option class="bg-primary">Ladrillo</option>
+        </select>
+      </div>
+      <div>
+        <label class="block mb-1 text-white font-bold">Techada</label>
+        <select
+          [(ngModel)]="formData.roofed"
+          class="w-full bg-transparent border-2 border-secondary p-1 text-white rounded"
+        >
+          <option class="bg-primary">Cualquiera</option>
+          <option class="bg-primary">Sí</option>
+          <option class="bg-primary">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Confirm -->
+    <div class="text-center mt-4">
+      <button
+        (click)="handleConfirmClick()"
+        class="bg-secondary text-black font-bold px-6 py-2 rounded"
+      >
+        {{ modalProps.accept.title }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -125,7 +125,7 @@ export class EditProfileComponent {
           this.playerService.createPlayer(dataToSend).subscribe({
             next: () => {
               // Update userType to "Jugador"
-              console.log('userId before calling setUserType', userId);
+
               this.userService.setUserType(userId, 'Jugador').subscribe({
                 next: (updatedUser) => {
                   // Update user in localStorage

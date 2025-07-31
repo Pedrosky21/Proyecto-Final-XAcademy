@@ -3,6 +3,7 @@ import { LandingPageComponent } from './modules/landing-page/landing-page.compon
 import { LoginPageComponent } from './modules/login/login-page/login-page.component';
 import { SelectRolComponent } from './modules/select-rol/select-rol.component';
 import { RegisterPageComponent } from './modules/register-page/register-page/register-page.component';
+import { ExploreMatchesComponent } from './modules/explore-matches/explore-matches/explore-matches.component';
 
 export const routes: Routes = [
   {
@@ -32,5 +33,9 @@ export const routes: Routes = [
   {
     path: 'select-role',
     component: SelectRolComponent,
+  },
+  {
+    path: 'explore-matches',
+    component: ExploreMatchesComponent,
   },
 ];
