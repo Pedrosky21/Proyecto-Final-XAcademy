@@ -29,10 +29,10 @@
 
         </div>
         <h2 class="text-xl font-bold mb-4 text-center text-white font-raleway">
-          {{modalProps?.title}}
+          {{modalProps.title!}}
         </h2>
         <p class="text-white text-center">
-          {{modalProps?.message}}
+          {{modalProps.message!}}
         </p>
         <div [ngClass]="getFooterClass()"
         class="mt-6 flex justify-center gap-2">
@@ -40,14 +40,14 @@
             (click)="handleRejectClick()"
             class="bg-transparent text-white px-6 py-2 rounded-md font-semibold border border-secondary"
           >
-            {{modalProps?.reject?.title}}
+            {{modalProps.reject!.title!}}
           </button>
 
           <button
             class="bg-secondary text-black px-6 py-2 rounded-md font-semibold"
             (click)="handleConfirmClick()"
           >
-            {{modalProps?.accept?.title}}
+            {{modalProps.accept.title!}}
           </button>
         </div>
       </div>

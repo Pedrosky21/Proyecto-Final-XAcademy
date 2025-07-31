@@ -8,6 +8,7 @@ import AppError from "../../../errors/AppError";
 import Court from "../core/models/Courts";
 import { UserService } from "../../users/services/UserService";
 import { BadRequestError } from "../../../errors/BadRequestError";
+import { NotFoundError } from "../../../errors/NotFoundError";
 
 export class ClubService{
   clubRepository = new ClubRepository();
@@ -16,10 +17,6 @@ export class ClubService{
 
   getClubById = async (id: number): Promise<Club | null> => {
     return await this.clubRepository.getClubById(id);
-  }
-
-  getClubByUserId = async (userId: number): Promise<Club | null> => { 
-    return await this.clubRepository.getClubByUserId(userId);
   }
 
   createClub = async(newClub:NewClubRequest):Promise<any>=>{
@@ -52,5 +49,15 @@ export class ClubService{
       await transaction.rollback();
       throw error
     }
+  }
+
+  getClubByUserId=async(userId:number):Promise<any>=>{
+    const user=await this.userService.getUserById(userId)
+    if(!user){
+      throw new NotFoundError("Usuario no existente")
+    }
+    
+    return await this.clubRepository.getClubByUserId(userId)
+
   }
 }

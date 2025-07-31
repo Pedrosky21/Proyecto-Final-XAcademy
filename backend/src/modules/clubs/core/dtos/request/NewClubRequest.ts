@@ -64,7 +64,7 @@ export class NewClubRequest{
       return "El admisionRules debe ser un string"
     }
     if(this.cancelationRules && typeof(this.cancelationRules)!=="string"){
-      return "El admisionRules debe ser un string"
+      return "El cancelationRules debe ser un string"
     }
     if(this.courts.length===0){
       return "Se debe registrar al menos 1 cancha para registrar un club"
