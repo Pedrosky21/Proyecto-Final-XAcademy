@@ -4,7 +4,6 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from './loading-screen/loading-screen.component';
-import { MatchModalComponent } from './match-modal/match-modal/match-modal.component';
 
 @NgModule({
   declarations: [

@@ -4,18 +4,11 @@ import { HeaderComponent } from './core/layouts/header/header.component';
 import { CommonModule, NgIf } from '@angular/common';
 import { LayoutModule } from './core/layouts/layout.index';
 import { PlayersModule } from './modules/players/player.module';
-import { MatchModalComponent } from './core/layouts/match-modal/match-modal/match-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    LayoutModule,
-    CommonModule,
-    RouterOutlet,
-    PlayersModule,
-    MatchModalComponent,
-  ],
+  imports: [LayoutModule, CommonModule, RouterOutlet, PlayersModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
