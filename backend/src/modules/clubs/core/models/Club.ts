@@ -2,6 +2,7 @@ import {Model, DataTypes} from 'sequelize';
 import sequelize from '../../../../config/db.config';
 
 import Usuario from '../../../users/core/models/UserModel';
+import Court from './Courts';
 
 
 class Club extends Model {};
@@ -25,7 +26,7 @@ Club.init({
         type: DataTypes.TIME,
         field: "horaInicio"
     },
-    closingTimeTime: {
+    closingTime: {
         type: DataTypes.TIME,
         field: "horaCierre"
     },
@@ -71,4 +72,5 @@ Club.init({
 
 Club.belongsTo(Usuario, { foreignKey: 'usuarios_idusuarios', as: 'usuario' });
 Usuario.hasOne(Club, { foreignKey: 'usuarios_idusuarios' });
+Club.hasMany(Court, { foreignKey: 'clubId',as: 'courts'});
 export default Club;

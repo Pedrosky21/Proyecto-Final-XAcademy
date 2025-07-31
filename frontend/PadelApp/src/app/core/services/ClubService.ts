@@ -23,6 +23,14 @@ export class ClubService {
       return this.http.post(this.apiUrl+"/clubs",info)
     }
 
+    getClubByUserId():Observable<any>{
+    
+      const params={
+        "userId":2
+      }
+      return this.http.get(this.apiUrl+"/clubs",{params})
+    }
+
 }
 
 

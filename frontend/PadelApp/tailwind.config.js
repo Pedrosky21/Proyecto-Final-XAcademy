@@ -8,9 +8,11 @@ module.exports = {
         loginbg: "url('/imgs/POP_Tennis_paddle.jpg')",
       },
       colors: {
+        
         primary: "#011738",
         secondary: "#D6FF1D",
         error: "#FF94AF",
+
       },
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],

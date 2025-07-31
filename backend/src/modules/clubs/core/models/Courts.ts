@@ -3,6 +3,7 @@ import sequelize from '../../../../config/db.config';
 import Club from "./Club";
 import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
 import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
+import Turn from "../../../turns/models/Turn";
 
 class Court extends Model {};
 
@@ -47,12 +48,13 @@ Court.init({
     },
 },{
     sequelize,
-    modelName: 'Cancha',
+    modelName: 'cancha',
     tableName: 'cancha',
     timestamps: false
 })
 
-Court.belongsTo(Club, { foreignKey: 'clubId', as: 'club' });
 Court.belongsTo(FloorMaterial, { foreignKey: 'floorMaterialId', as: 'floorMaterial' });
 Court.belongsTo(WallMaterial, { foreignKey: 'wallMaterialId', as: 'wallMaterial' });
+Court.hasMany(Turn, { foreignKey: 'courtId', as: 'turns' });
+
 export default Court;
