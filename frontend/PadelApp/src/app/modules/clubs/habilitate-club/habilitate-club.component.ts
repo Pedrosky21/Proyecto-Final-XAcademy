@@ -78,7 +78,7 @@ export class HabilitateClubComponent implements OnInit {
   }
 
   deleteRow(event: { index: number }) {
-    const middleCourts:Court[]=this.newCourts.slice(event.index, 1);
+    const middleCourts:Court[]=this.newCourts.slice(event.index);
     this.newCourts = middleCourts.map((row, i) => {
       return {
         ...row,
@@ -139,7 +139,7 @@ export class HabilitateClubComponent implements OnInit {
                   this.loadingScreenService.showLoadingScreen(null);
                   this.confirmationModalService.openModal({
                     icon: ModalIconEnum.ok,
-                    title: 'Jugador actualizado',
+                    title: 'Club configurado con éxito',
                     message: 'Se ha guardado la nueva información con éxito',
                     accept: {
                       title: 'Aceptar',
