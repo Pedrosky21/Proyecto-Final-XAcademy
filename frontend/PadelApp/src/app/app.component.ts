@@ -9,7 +9,13 @@ import { ClubModule } from './modules/clubs/club.module';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [LayoutModule,CommonModule,RouterOutlet,PlayersModule,ClubModule],
+  imports: [
+    LayoutModule,
+    CommonModule,
+    RouterOutlet,
+    PlayersModule,
+    ClubModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
