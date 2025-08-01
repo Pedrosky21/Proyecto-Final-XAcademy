@@ -21,9 +21,9 @@ export class NewClubRequest{
     this.responsableFirstName = data.responsableFirstName;
     this.responsableLastName = data.responsableLastName;
     this.turnPrice = data.turnPrice;
-    this.openningTime = data.openningTime;
+    this.openningTime = data.openingTime;
     this.closingTime = data.closingTime;
-    this.admisionRules = data.closingTime;
+    this.admisionRules = data.admisionRules;
     this.cancelationRules = data.cancelationRules;
     this.userId=data.userId
     this.courts = data.courts? data.courts.map((court:any)=>new NewCourt(court)):[];
@@ -60,14 +60,11 @@ export class NewClubRequest{
     if(this.closingTime<=this.openningTime){
       return "El openingTime debe ser menor al closingTime"
     }
-    if(this.closingTime<=this.openningTime){
-      return "El openingTime debe ser menor al closingTime"
-    }
     if(this.admisionRules && typeof(this.admisionRules)!=="string"){
       return "El admisionRules debe ser un string"
     }
     if(this.cancelationRules && typeof(this.cancelationRules)!=="string"){
-      return "El admisionRules debe ser un string"
+      return "El cancelationRules debe ser un string"
     }
     if(this.courts.length===0){
       return "Se debe registrar al menos 1 cancha para registrar un club"
@@ -83,6 +80,7 @@ export class NewClubRequest{
     return null
   }
   verifyHours(hours:string):boolean{
+    console.log(hours)
     const splitedHour=hours.split(":")
     const isInvalid:boolean=Number(splitedHour[0])<0 ||Number(splitedHour[0])>24||
     Number(splitedHour[1])<0|| Number(splitedHour[1])>59

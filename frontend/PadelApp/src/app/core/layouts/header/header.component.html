@@ -48,12 +48,6 @@
             >
               <button
                 class="block w-full px-4 py-2 text-left text-sm text-black"
-                (click)="goToSettings()"
-              >
-                Configurar Perfil
-              </button>
-              <button
-                class="block w-full px-4 py-2 text-left text-sm text-black"
                 (click)="logout()"
               >
                 Cerrar sesión
@@ -62,9 +56,9 @@
           </div>
 
           <!-- Nombre del usuario -->
-          <span class="text-white font-bold hidden sm:inline"
-            >Miguel San Martin</span
-          >
+          <span class="text-white font-bold hidden sm:inline">{{
+            userName || userEmail
+          }}</span>
         </ng-container>
 
         <!-- Vista para usuarios no autenticados -->
@@ -76,8 +70,8 @@
             Iniciar Sesión
           </button>
           <button
-            class="bg-secondary text-black px-3 py-1 rounded-md font-bold text-sm border-2"
-            (click)="login()"
+            class="bg-secondary text-black px-3 py-1 rounded-md font-bold text-sm border-2 border-primary"
+            (click)="register()"
           >
             Registrarse
           </button>

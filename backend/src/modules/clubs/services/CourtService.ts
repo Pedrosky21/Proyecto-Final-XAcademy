@@ -19,8 +19,6 @@ export class CourtService{
       throw new BadRequestError("Todas las canchas deben tener un material de pared existente")
     }
      const floorMaterial= await this.floorMaterialService.getFloorMaterialById(court.floorMaterialId)
-     console.log(floorMaterial)
-     console.log(court.floorMaterialId)
     if(!floorMaterial){
       throw new BadRequestError("Todas las canchas deben tener un material de suelo existente")
     }

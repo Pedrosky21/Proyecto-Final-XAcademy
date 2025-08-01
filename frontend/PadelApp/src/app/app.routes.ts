@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
 import { LandingPageComponent } from './modules/landing-page/landing-page.component';
 import { LoginPageComponent } from './modules/login/login-page/login-page.component';
+import { SelectRolComponent } from './modules/select-rol/select-rol.component';
+import { RegisterPageComponent } from './modules/register-page/register-page/register-page.component';
+import { ExploreMatchesComponent } from './modules/explore-matches/explore-matches/explore-matches.component';
 
 export const routes: Routes = [
   {
@@ -9,7 +12,14 @@ export const routes: Routes = [
   },
   {
     path: 'players',
-    loadChildren: () => import('./modules/players/player-routing.module').then(m => m.PlayersRoutingModule),
+    loadChildren: () =>
+      import('./modules/players/player-routing.module').then(
+        (m) => m.PlayersRoutingModule
+      ),
+  },
+  {
+    path: 'clubs',
+    loadChildren: () => import('./modules/clubs/club-routing.module').then(m => m.ClubRoutingModule),
   },
   {
     path: '',
@@ -19,5 +29,17 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterPageComponent,
+  },
+  {
+    path: 'select-role',
+    component: SelectRolComponent,
+  },
+  {
+    path: 'explore-matches',
+    component: ExploreMatchesComponent,
   },
 ];

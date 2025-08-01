@@ -6,9 +6,9 @@ export class NewCourt{
   roofted:boolean
 
   constructor(data:any){
-    this.floorMaterialId = data.floorMaterialId;
-    this.wallMaterialId = data.wallMaterialId;
-    this.roofted = data.roofted;
+    this.floorMaterialId = Number(data.floorMaterialId);
+    this.wallMaterialId = Number(data.wallMaterialId);
+    this.roofted = data.roofted === "true"?true:false;
   }
 
   validate(){
