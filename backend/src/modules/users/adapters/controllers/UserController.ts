@@ -7,8 +7,9 @@ export class UserController {
 
   setUserType = async (req:Request, res:Response, next:NextFunction):Promise<void> => {
     try {
-      const {id, userType} = req.body;
-      const user = await this.userService.setUserType(id, userType);
+      const {id} = req.params
+      const {userType} = req.body;
+      const user = await this.userService.setUserType(Number(id), userType);
 
       res.json(user);
 

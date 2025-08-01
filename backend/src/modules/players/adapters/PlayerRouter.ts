@@ -7,5 +7,6 @@ const playerController= new PlayerController();
 playerRouter.post('/', playerController.createPlayer);
 playerRouter.get('/', playerController.getAllPlayers);
 playerRouter.get('/:id', playerController.getPlayerById);
+playerRouter.get('/search/by-name', playerController.getPlayersByName);
 
 export default playerRouter;

@@ -27,4 +27,12 @@ export class PlayerService{
   getPlayerById = async (id:number):Promise<any> => {
     return await this.playerRepository.getPlayerById(id);
   }
+
+  getPlayersByName = async (fullName:string):Promise<any>=> {
+    return await this.playerRepository.getPlayersByName(fullName);
+  }
+
+  getPlayerByUserId = async (userId:number):Promise<any> => {
+    return await this.playerRepository.getPlayerByUserId(userId);
+  }
 }

@@ -13,7 +13,7 @@ export class AuthService {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) throw new Error('Contraseña incorrecta');
 
-        const token = this.generateToken(user.id, user.password);
+        const token = this.generateToken(user.id, user.email);
 
         return { token, user };
     }
@@ -23,7 +23,7 @@ export class AuthService {
         if (existingUser) throw new Error('El usuario ya existe');
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        // necesito el validate si o si por NewUserRequest, capaz convendria usar sequelize ya que lo puse en el modelo
+        // necesito el validate si o si por NewUserRequest
         const newUser = await this.userRepository.createUser({email: email, password: hashedPassword, userType:'Pendiente', validate: () => null});
 
         const token = this.generateToken(newUser.id, newUser.email);
