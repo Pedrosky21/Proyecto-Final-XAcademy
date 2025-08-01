@@ -7,6 +7,9 @@ import userRouter from '../modules/users/adapters/UserRouter';
 import floorMaterialRouter from '../modules/floorMaterials/adapters/MaterialFloorRouter';
 import WallMaterialRouter from '../modules/wallMaterials/adapters/WallMaterialRouter';
 import clubRouter from '../modules/clubs/adapters/Club.routes';
+import teamRouter from '../modules/teams/TeamRoutes';
+import playersTeamsRouter from '../modules/playersXTeams/PXTRoutes';
+import { verifyToken } from '../middleware/authMiddleware';
 
 const router = Router();
 
@@ -18,5 +21,7 @@ router.use('/positions', positionRouter);
 router.use('/players', playerRouter);
 router.use('/users', userRouter);
 router.use('/clubs', clubRouter);
+router.use('/teams', verifyToken, teamRouter);
+router.use('/players-teams', playersTeamsRouter);
 
 export default router;

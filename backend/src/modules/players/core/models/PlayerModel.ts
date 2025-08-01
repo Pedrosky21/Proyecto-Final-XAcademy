@@ -66,12 +66,12 @@ Player.init({
     timestamps: false
 });
 
-Player.belongsTo(Usuario, { foreignKey: 'usuarios_idusuarios', as: 'usuario' });
-Player.belongsTo(Category, { foreignKey: 'categoria_idcategoria', as: 'categoria' });
-Player.belongsTo(Position, { foreignKey: 'posicion_idposicion', as: 'posicion' });
+Player.belongsTo(Usuario, { foreignKey: 'userId', as: 'user' });
+Player.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
+Player.belongsTo(Position, { foreignKey: 'positionId', as: 'position' });
 
-Usuario.hasOne(Player, { foreignKey: 'usuarios_idusuarios' }); 
-Category.hasOne(Player, { foreignKey: 'categoria_idcategoria' }); 
-Position.hasOne(Player, { foreignKey: 'posicion_idposicion' });
+Usuario.hasOne(Player, { foreignKey: 'userId' }); 
+Category.hasOne(Player, { foreignKey: 'categoryId' }); 
+Position.hasOne(Player, { foreignKey: 'positionId' });
 
 export default Player;

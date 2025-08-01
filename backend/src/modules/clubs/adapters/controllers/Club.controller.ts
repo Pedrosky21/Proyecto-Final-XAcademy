@@ -31,11 +31,24 @@ export class ClubController{
       if (validationError) {
         throw new BadRequestError(validationError);
       }
+      console.log(req.body)
+      console.log(newClubRequest)
 
       const newClub=await this.clubService.createClub(newClubRequest)
       res.status(201).send(newClub)
 
     } catch (error) {
+      next(error)
+    }
+  }
+
+  getClubByUserId = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+      const {userId}= req.query
+      const club=await this.clubService.getClubByUserId(Number(userId))
+      console.log(club)
+      res.status(200).send(club)
+    }catch(error){
       next(error)
     }
   }

@@ -26,7 +26,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY) as AuthPayload;
-    req.user = decoded; // Esto ya no da error si hiciste la declaración de tipos
+    req.user = decoded;
     next();
   } catch (error) {
     return res.status(403).json({ message: "Token inválido o expirado" });

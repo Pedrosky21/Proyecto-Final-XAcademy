@@ -4,10 +4,11 @@ export class Court{
   wallMaterialId:number
   floorMaterialId:number
   roofted: boolean
-
+  
+  
   constructor(data:any){
     this.id=data.id
-    this.index=data.index
+    this.index=data.number
     this.wallMaterialId=data.wallMaterialId
     this.floorMaterialId = data.floorMaterialId
     this.roofted= data.roofed

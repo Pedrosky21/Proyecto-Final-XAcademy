@@ -192,7 +192,6 @@ export class HabilitateClubComponent implements OnInit {
         this.selectableFloorMaterial = floorMaterial.map(
           (element) => new FloorMaterial(element)
         );
-        console.log(this.selectableFloorMaterial);
       },
       error: (err) => {
         console.error('Error al cargar categorías', err);

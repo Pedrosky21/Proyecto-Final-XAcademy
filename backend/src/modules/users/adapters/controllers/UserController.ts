@@ -10,8 +10,8 @@ export class UserController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { id } = req.params;
-      const { userType } = req.body;
+      const {id} = req.params
+      const {userType} = req.body;
       const user = await this.userService.setUserType(Number(id), userType);
 
       res.json(user);

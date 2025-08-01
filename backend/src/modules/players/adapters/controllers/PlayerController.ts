@@ -40,4 +40,14 @@ export class PlayerController{
       next(error);
     }
   }
+
+  getPlayersByName = async(req:Request, res:Response, next:NextFunction):Promise<void> => {
+    try {
+      const {fullName} = req.body
+      const players = await this.playerService.getPlayersByName(fullName);
+      res.json(players);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
