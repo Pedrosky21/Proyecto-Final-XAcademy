@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExploreMatchesComponent } from './explore-matches/explore-matches.component';
 import { ModalCreateTeamComponent } from './explore-matches/modal-create-team/modal-create-team.component';
 import { ModalCreateMatchComponent } from './explore-matches/modal-create-match/modal-create-match.component';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,6 @@ import { ModalCreateMatchComponent } from './explore-matches/modal-create-match/
     ModalCreateTeamComponent,
     ModalCreateMatchComponent,
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ComponentsModule],
 })
 export class PlayersModule {}
