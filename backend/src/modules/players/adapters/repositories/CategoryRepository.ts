@@ -1,7 +1,6 @@
 import Category from "../../core/models/CategoryModel";
 
 
-
 export class CategoryRepository {
   getAllCategories=async():Promise<Category[]> => {
        return await Category.findAll();

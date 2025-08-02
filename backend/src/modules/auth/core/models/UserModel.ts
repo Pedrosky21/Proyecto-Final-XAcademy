@@ -21,7 +21,7 @@ User.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        field:'idusuarios',
+        field:'idusuario',
         autoIncrement: true
     },
     email: DataTypes.STRING,
@@ -33,8 +33,8 @@ User.init({
     }
 }, {
     sequelize,
-    modelName: 'usuarios',
-    tableName: 'usuarios',
+    modelName: 'usuario',
+    tableName: 'usuario',
     timestamps: false
 });
 
