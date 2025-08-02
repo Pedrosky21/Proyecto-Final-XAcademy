@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "../../config/db.config";
-import Team from "../teams/TeamModel";
-import Player from "../players/core/models/PlayerModel";
+import sequelize from "../../../../config/db.config";
+import Team from "./TeamModel";
+import Player from "./PlayerModel";
 
 class PlayersTeams extends Model {}
 
@@ -19,7 +19,7 @@ PlayersTeams.init(
     },
     playerId: {
         type: DataTypes.INTEGER,
-        field: "jugadores_idjugadores",
+        field: "jugador_idjugador",
         references: {
             model: Player,
             key: "id"
@@ -42,10 +42,10 @@ PlayersTeams.init(
   }
 );
 
-PlayersTeams.belongsTo(Player, {foreignKey: "jugadores_idjugadores", as:"player"});
-PlayersTeams.belongsTo(Team, {foreignKey: "equipo_idequipo", as: "team"});
+PlayersTeams.belongsTo(Player, {foreignKey: "playerId", as:"player"});
+PlayersTeams.belongsTo(Team, {foreignKey: "teamId", as: "team"});
 
-Player.hasMany(PlayersTeams, {foreignKey: "jugadores_idjugadores"});
-Team.hasMany(PlayersTeams, {foreignKey: "equipo_idequipo"});
+Player.hasMany(PlayersTeams, {foreignKey: "playerId"});
+Team.hasMany(PlayersTeams, {foreignKey: "teamId"});
 
 export default PlayersTeams;
