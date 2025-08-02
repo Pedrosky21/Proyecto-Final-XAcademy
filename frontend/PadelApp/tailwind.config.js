@@ -6,13 +6,16 @@ module.exports = {
     extend: {
       backgroundImage: {
         loginbg: "url('/imgs/POP_Tennis_paddle.jpg')",
+        splash: "url('/imgs/splash.svg')",
       },
       colors: {
-        
-        primary: "#011738",
-        secondary: "#D6FF1D",
-        error: "#FF94AF",
-
+        appWhiteText: "#FFFFFF",
+        appBlackText: "#141414",
+        appBackground: "#011738",
+        appModalBackground: "#00500B (70%)",
+        appPrimary: "#D6FF1D",
+        appSecondary: "#D1FF1A",
+        appError: "#FF94AF",
       },
       fontFamily: {
         raleway: ["Raleway", "sans-serif"],

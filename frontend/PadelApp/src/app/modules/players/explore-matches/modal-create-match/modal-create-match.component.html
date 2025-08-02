@@ -3,7 +3,7 @@
   class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4"
 >
   <div
-    class="bg-primary rounded-xl p-4 sm:p-6 text-white w-full max-w-[750px] max-h-[90vh] overflow-y-auto relative"
+    class="bg-appBackground rounded-xl p-4 sm:p-6 text-appWhiteText w-full max-w-[750px] max-h-[90vh] overflow-y-auto relative"
   >
     <!-- Title -->
     <h2 class="text-center text-xl sm:text-2xl font-bold mb-4">
@@ -12,7 +12,7 @@
 
     <!-- Close -->
     <button
-      class="absolute top-3 right-4 text-white text-xl font-bold"
+      class="absolute top-3 right-4 text-appWhiteText text-xl font-bold"
       (click)="onClose()"
     >
       ×
@@ -24,7 +24,7 @@
     </p>
 
     <!-- Form -->
-    <form [formGroup]="matchGroup" (ngSubmit)="onConfirm()">
+    <form [formGroup]="matchGroup" (ngSubmit)="handleSubmit($event)">
       <!-- Select Team -->
       <section
         class="flex flex-col sm:flex-row items-start mb-4 gap-4 sm:gap-6"
@@ -34,11 +34,11 @@
           <label class="block mb-1 font-bold">Buscar equipo</label>
           <select
             formControlName="selectedTeam"
-            class="w-full sm:w-64 bg-transparent border-2 border-secondary text-white p-2 rounded"
+            class="w-full sm:w-64 bg-transparent border-2 border-appPrimary text-appWhiteText p-2 rounded"
           >
             <option value="" disabled selected>Seleccione un equipo</option>
             <option
-              class="bg-primary"
+              class="bg-appBackground"
               *ngFor="let club of clubs"
               [value]="club"
             >
@@ -69,11 +69,11 @@
           <label class="block mb-1 font-bold">Material Piso</label>
           <select
             formControlName="floorMaterial"
-            class="w-full bg-transparent border-2 border-secondary p-1 text-white rounded"
+            class="w-full bg-transparent border-2 border-appPrimary p-1 text-appWhiteText rounded"
           >
             <option value="" disabled selected>Seleccione</option>
-            <option class="bg-primary">Concreto</option>
-            <option class="bg-primary">Pasto</option>
+            <option class="bg-appBackground">Concreto</option>
+            <option class="bg-appBackground">Pasto</option>
           </select>
           <div
             *ngIf="
@@ -90,11 +90,11 @@
           <label class="block mb-1 font-bold">Pared</label>
           <select
             formControlName="wallMaterial"
-            class="w-full bg-transparent border-2 border-secondary p-1 text-white rounded"
+            class="w-full bg-transparent border-2 border-appPrimary p-1 text-appWhiteText rounded"
           >
             <option value="" disabled selected>Seleccione</option>
-            <option class="bg-primary">Cualquiera</option>
-            <option class="bg-primary">Ladrillo</option>
+            <option class="bg-appBackground">Cualquiera</option>
+            <option class="bg-appBackground">Ladrillo</option>
           </select>
           <div
             *ngIf="
@@ -111,12 +111,12 @@
           <label class="block mb-1 font-bold">Techada</label>
           <select
             formControlName="roofed"
-            class="w-full bg-transparent border-2 border-secondary p-1 text-white rounded"
+            class="w-full bg-transparent border-2 border-appPrimary p-1 text-appWhiteText rounded"
           >
             <option value="" disabled selected>Seleccione</option>
-            <option class="bg-primary">Cualquiera</option>
-            <option class="bg-primary">Sí</option>
-            <option class="bg-primary">No</option>
+            <option class="bg-appBackground">Cualquiera</option>
+            <option class="bg-appBackground">Sí</option>
+            <option class="bg-appBackground">No</option>
           </select>
           <div
             *ngIf="
@@ -129,12 +129,21 @@
           </div>
         </div>
       </div>
-
+      <div class="overflow-auto mt-3">
+        <app-edit-table
+          [columns]="columnsSettings"
+          [rows]="newTimeSlots"
+          (addRow)="addTimeSlot()"
+          (deleteRow)="deleteRow($event)"
+          (changeRow)="handleRowChange($event)"
+          class="w-full"
+        ></app-edit-table>
+      </div>
       <!-- Confirm -->
       <div class="text-center mt-4">
         <button
           type="submit"
-          class="bg-secondary text-black font-bold px-6 py-2 rounded"
+          class="bg-appPrimary text-black font-bold px-6 py-2 rounded"
         >
           Confirmar
         </button>
