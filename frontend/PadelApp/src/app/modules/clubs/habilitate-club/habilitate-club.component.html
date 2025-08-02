@@ -1,138 +1,147 @@
-<div class="pt-8 bg-primary min-h-[calc(100vh-68px)] w-full">
+<div class="pt-8 bg-appBackground min-h-[calc(100vh-68px)] w-full">
   <div>
-    <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
-      Configurar <span class="text-[#D6FF1D]">Perfil.</span>
+    <h1
+      class="text-5xl font-raleway font-bold text-appWhiteText text-center pt-4"
+    >
+      Configurar <span class="text-appPrimary">Perfil.</span>
     </h1>
-    <h3 class="font-raleway font-bold text-white text-center pt-4">
+    <h3 class="font-raleway font-bold text-appWhiteText text-center pt-4">
       Complete la siguiente informacion para usar la aplicacion.
     </h3>
     <form
       [formGroup]="form"
-    class="mx-[20vw] flex flex-row flex-wrap justify-evenly gap-4"
-    (submit)="handleSubmit($event)">
+      class="mx-[20vw] flex flex-row flex-wrap justify-evenly gap-4"
+      (submit)="handleSubmit($event)"
+    >
       <!-- Nombre -->
       <div class="flex flex-col flex-wrap flex-1 basis-1/4">
-        <label for="nombre" class="text-sm text-white font-medium mb-2"
+        <label for="nombre" class="text-sm text-appWhiteText font-medium mb-2"
           >Nombre</label
         >
         <input
           id="name"
           type="text"
           formControlName="name"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("name")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("name")
+        }}</small>
       </div>
       <div class="flex flex-col flex-wrap flex-1 basis-1/4">
-        <label for="address" class="text-sm text-white font-medium mb-2"
+        <label for="address" class="text-sm text-appWhiteText font-medium mb-2"
           >Dirección</label
         >
         <input
           id="address"
           type="text"
           formControlName="address"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("address")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("address")
+        }}</small>
       </div>
-      <div class="flex flex-col flex-wrap  flex-1 basis-1/4">
-        <label for="cellNumber" class="text-sm text-white font-medium mb-2"
+      <div class="flex flex-col flex-wrap flex-1 basis-1/4">
+        <label
+          for="cellNumber"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Teléfono</label
         >
         <input
           id="cellNumber"
           type="number"
           formControlName="cellNumber"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("cellNumber")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("cellNumber")
+        }}</small>
       </div>
-      <div class="flex flex-col flex-wrap  flex-1 basis-1/4">
-        <label for="responsableFirstName" class="text-sm text-white font-medium mb-2"
+      <div class="flex flex-col flex-wrap flex-1 basis-1/4">
+        <label
+          for="responsableFirstName"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Nombre responsable</label
         >
         <input
           id="responsablFirstName"
           type="text"
           formControlName="responsableFirstName"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("responsableFirstName")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("responsableFirstName")
+        }}</small>
       </div>
-      <div class="flex flex-col flex-wrap  flex-1 basis-1/4">
-        <label for="responsableLastName" class="text-sm text-white font-medium mb-2"
+      <div class="flex flex-col flex-wrap flex-1 basis-1/4">
+        <label
+          for="responsableLastName"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Apellido responsable</label
         >
         <input
           id="responsableLastName"
           type="text"
           formControlName="responsableLastName"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("responsableLastName")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("responsableLastName")
+        }}</small>
       </div>
-      <div class="flex flex-col flex-wrap  flex-1 basis-1/4">
-        <label for="turnPrice" class="text-sm text-white font-medium mb-2"
+      <div class="flex flex-col flex-wrap flex-1 basis-1/4">
+        <label
+          for="turnPrice"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Precio turno</label
         >
         <input
           id="turnPrice"
           type="number"
           formControlName="turnPrice"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("turnPrice")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("turnPrice")
+        }}</small>
       </div>
       <div class="flex flex-col flex-wrap flex-1 basis-1/4">
-        <label for="openingTime" class="text-sm text-white font-medium mb-2"
+        <label
+          for="openingTime"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Hora apertura</label
         >
         <input
           id="openingTime"
           type="time"
           formControlName="openingTime"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("openingTime")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("openingTime")
+        }}</small>
       </div>
       <div class="flex flex-col flex-wrap flex-1 basis-1/4">
-        <label for="closingTime" class="text-sm text-white font-medium mb-2"
+        <label
+          for="closingTime"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Hora Cierre</label
         >
         <input
           id="closingTime"
           type="time"
           formControlName="closingTime"
-          class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("closingTime")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("closingTime")
+        }}</small>
       </div>
       <div class="flex flex-col flex-wrap w-full">
-        <label for="admisionRules" class="text-sm text-white font-medium mb-2"
+        <label
+          for="admisionRules"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Reglas admisión</label
         >
         <textarea
@@ -140,15 +149,16 @@
           type="text"
           formControlName="admisionRules"
           (input)="autoResize($event)"
-          class="w-full border border-[#EBFF00] resize-none bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] resize-none bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         ></textarea>
-        <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("admisionRules")}}</small
-        >
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("admisionRules")
+        }}</small>
       </div>
       <div class="flex flex-col flex-wrap w-full">
-        <label for="cancelationRules" class="text-sm text-white font-medium mb-2"
+        <label
+          for="cancelationRules"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Reglas cancelación</label
         >
         <textarea
@@ -156,30 +166,29 @@
           type="text"
           formControlName="cancelationRules"
           (input)="autoResize($event)"
-          class="w-full border border-[#EBFF00] resize-none bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="w-full border border-[#EBFF00] resize-none bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         ></textarea>
-      <small
-          class="text-red-400 text-xs mt-1"
-          >{{getFieldError("cancelationRules")}}</small>
-
+        <small class="text-appError text-xs mt-1">{{
+          getFieldError("cancelationRules")
+        }}</small>
       </div>
-      <div class="w-3/4 overflow-auto" >
+      <div class="w-3/4 overflow-auto">
         <app-edit-table
-        [rows]="newCourts"
-        [columns]="columnsSettings"
-        (addRow)="addCourt()"
-        (changeRow)="handleRowChange($event)"
-        (deleteRow)="deleteRow($event)"></app-edit-table>
+          [rows]="newCourts"
+          [columns]="columnsSettings"
+          (addRow)="addCourt()"
+          (changeRow)="handleRowChange($event)"
+          (deleteRow)="deleteRow($event)"
+        ></app-edit-table>
       </div>
-        <div class=" flex mt-6 w-full align-middle justify-center">
-          <button
+      <div class="flex mt-6 w-full align-middle justify-center">
+        <button
           type="submit"
-            class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
-          >
-            Confirmar
-          </button>
-        </div>
-
+          class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
+        >
+          Confirmar
+        </button>
+      </div>
     </form>
   </div>
 </div>

@@ -1,9 +1,11 @@
-<div class="pt-16 bg-primary min-h-[calc(100vh-68px)] w-full">
+<div class="pt-16 bg-appBackground min-h-[calc(100vh-68px)] w-full">
   <div>
-    <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
-      Configurar <span class="text-[#D6FF1D]">Perfil.</span>
+    <h1
+      class="text-5xl font-raleway font-bold text-appWhiteText text-center pt-4"
+    >
+      Configurar <span class="text-appPrimary">Perfil.</span>
     </h1>
-    <h3 class="font-raleway font-bold text-white text-center pt-4">
+    <h3 class="font-raleway font-bold text-appWhiteText text-center pt-4">
       Complete la siguiente informacion para usar la aplicacion.
     </h3>
   </div>
@@ -16,145 +18,161 @@
     >
       <!-- Nombre -->
       <div class="flex flex-col">
-        <label for="nombre" class="text-sm text-white font-medium mb-2"
+        <label for="nombre" class="text-sm text-appWhiteText font-medium mb-2"
           >Nombre</label
         >
         <input
           id="nombre"
           type="text"
           formControlName="nombre"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched"
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
 
       <!-- Apellido -->
       <div class="flex flex-col">
-        <label for="apellido" class="text-sm text-white font-medium mb-2"
+        <label for="apellido" class="text-sm text-appWhiteText font-medium mb-2"
           >Apellido</label
         >
         <input
           id="apellido"
           type="text"
           formControlName="apellido"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched"
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
 
       <!-- Fecha de Nacimiento -->
       <div class="flex flex-col">
-        <label for="fechaNacimiento" class="text-sm text-white font-medium mb-2"
+        <label
+          for="fechaNacimiento"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Fecha de Nacimiento</label
         >
         <input
           id="fechaNacimiento"
           type="date"
           formControlName="fechaNacimiento"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="
             form.get('fechaNacimiento')?.invalid &&
             form.get('fechaNacimiento')?.touched
           "
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
 
       <!-- Teléfono -->
       <div class="flex flex-col">
-        <label for="telefono" class="text-sm text-white font-medium mb-2"
+        <label for="telefono" class="text-sm text-appWhiteText font-medium mb-2"
           >Teléfono</label
         >
         <input
           id="telefono"
           type="tel"
           formControlName="telefono"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="form.get('telefono')?.invalid && form.get('telefono')?.touched"
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
 
       <!-- Imagen de Perfil -->
       <div class="flex flex-col">
-        <label for="imagenPerfil" class="text-sm text-white font-medium mb-2"
+        <label
+          for="imagenPerfil"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >URL Imagen de Perfil</label
         >
         <input
           id="imagenPerfil"
           type="text"
           formControlName="imagenPerfil"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2 file:text-black file:bg-white"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 file:text-appBlackText file:bg-white"
         />
         <small
           *ngIf="
             form.get('imagenPerfil')?.invalid &&
             form.get('imagenPerfil')?.touched
           "
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
 
       <!-- Posición -->
       <div class="flex flex-col">
-        <label for="posicion" class="text-sm text-white font-medium mb-2"
+        <label for="posicion" class="text-sm text-appWhiteText font-medium mb-2"
           >Posición</label
         >
         <select
           id="posicion"
           formControlName="posicion"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2"
         >
-          <option class="bg-[#011738] text-white" value="" disabled selected>
+          <option
+            class="bg-[#011738] text-appWhiteText"
+            value=""
+            disabled
+            selected
+          >
             Seleccione Posición
           </option>
           <option
             *ngFor="let option of posiciones"
             [value]="option.value"
-            class="bg-primary text-white"
+            class="bg-appBackground text-appWhiteText"
           >
             {{ option.label }}
           </option>
         </select>
         <small
           *ngIf="form.get('posicion')?.invalid && form.get('posicion')?.touched"
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
 
       <!-- Categoría -->
       <div class="flex flex-col">
-        <label for="categoria" class="text-sm text-white font-medium mb-2"
+        <label
+          for="categoria"
+          class="text-sm text-appWhiteText font-medium mb-2"
           >Categoría</label
         >
         <select
           id="categoria"
           formControlName="categoria"
-          class="border border-[#EBFF00] bg-transparent text-white rounded-md px-3 py-2"
+          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2"
         >
-          <option class="bg-[#011738] text-white" value="" disabled selected>
+          <option
+            class="bg-[#011738] text-appWhiteText"
+            value=""
+            disabled
+            selected
+          >
             Seleccione Categoría
           </option>
           <option
             *ngFor="let option of categorias"
             [value]="option.value"
-            class="bg-[#011738] text-white"
+            class="bg-[#011738] text-appWhiteText"
           >
             {{ option.label }}
           </option>
@@ -163,7 +181,7 @@
           *ngIf="
             form.get('categoria')?.invalid && form.get('categoria')?.touched
           "
-          class="text-red-400 text-xs mt-1"
+          class="text-appError text-xs mt-1"
           >Este campo es obligatorio.</small
         >
       </div>
@@ -173,7 +191,7 @@
       >
         <button
           type="submit"
-          class="bg-[#EBFF00] text-black font-bold w-64 h-10 rounded-md ring-2"
+          class="bg-[#EBFF00] text-appBlackText font-bold w-64 h-10 rounded-md ring-2"
         >
           Confirmar
         </button>
@@ -191,7 +209,7 @@
         <div
           class="w-48 h-48 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"
         ></div>
-        <p class="text-white font-bold">Guardando cambios...</p>
+        <p class="text-appWhiteText font-bold">Guardando cambios...</p>
       </div>
     </div>
 
@@ -201,11 +219,13 @@
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     >
       <div
-        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center"
+        class="bg-appBackground rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center"
       >
-        <i class="fa-solid fa-circle-check text-[28px] text-secondary"></i>
-        <h2 class="text-xl font-bold text-white mb-4">Cambios guardados</h2>
-        <p class="text-white">Se han guardado los cambios con exito.</p>
+        <i class="fa-solid fa-circle-check text-[28px] text-appPrimary"></i>
+        <h2 class="text-xl font-bold text-appWhiteText mb-4">
+          Cambios guardados
+        </h2>
+        <p class="text-appWhiteText">Se han guardado los cambios con exito.</p>
         <div class="mt-6">
           <button
             (click)="closeSuccessModal()"
@@ -223,7 +243,7 @@
       class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     >
       <div
-        class="bg-primary rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center text-white"
+        class="bg-appBackground rounded-lg p-6 w-11/12 max-w-md shadow-lg text-center text-appWhiteText"
       >
         <i class="fa-solid fa-circle-xmark text-[28px] mb-2 text-error"></i>
         <h2 class="text-xl font-bold mb-2">Error en el formulario</h2>
@@ -231,7 +251,7 @@
         <div class="mt-6">
           <button
             (click)="closeErrorModal()"
-            class="bg-secondary text-black px-6 py-2 rounded-md font-semibold"
+            class="bg-appPrimary text-appBlackText px-6 py-2 rounded-md font-semibold"
           >
             Aceptar
           </button>

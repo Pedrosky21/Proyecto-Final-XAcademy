@@ -6,7 +6,7 @@ import { CourtService } from "./CourtService";
 import sequelize from '../../../config/db.config'; 
 import AppError from "../../../errors/AppError";
 import Court from "../core/models/Courts";
-import { UserService } from "../../users/services/UserService";
+import { UserService } from "../../auth/services/UserService";
 import { BadRequestError } from "../../../errors/BadRequestError";
 import { NotFoundError } from "../../../errors/NotFoundError";
 

@@ -1,0 +1,20 @@
+:host ::ng-deep app-edit-table input[type="time"],
+:host ::ng-deep app-edit-table input[type="date"] {
+  background-color: #011738 !important;
+  color: white !important;
+  border: 1px solid #ebff00;
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 0.25rem 0.5rem;
+}
+
+/* Make the icons white */
+:host
+  ::ng-deep
+  app-edit-table
+  input[type="time"]::-webkit-calendar-picker-indicator,
+:host
+  ::ng-deep
+  app-edit-table
+  input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

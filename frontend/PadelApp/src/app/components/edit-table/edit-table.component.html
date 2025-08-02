@@ -1,10 +1,10 @@
 <div class="flex flex-col justify-center align-middle">
   <table class="overflow-auto">
     <thead>
-      <tr class="bg-secondary">
+      <tr class="bg-appPrimary">
         <td
           *ngFor="let column of columns"
-          class="py-1 px-3 text-center align-middle text-wrap text-primary font-roboto font-bold"
+          class="py-1 px-3 text-center align-middle text-wrap text-appBlackText font-roboto font-bold"
         >
           {{ column.title }}
         </td>
@@ -18,22 +18,27 @@
           class="h-full p-2 text-center align-middle"
         >
           <!-- Campo de solo lectura -->
-          <span *ngIf="!column.editable" class="font-roboto text-white">{{
-            row[column.key]
-          }}</span>
+          <span
+            *ngIf="!column.editable"
+            class="font-roboto text-appWhiteText"
+            >{{ row[column.key] }}</span
+          >
 
           <!-- Campo de tipo select -->
           <select
-            class="w-full border border-[#EBFF00] bg-transparent text-white rounded-md px-1 py-1 focus:outline-none focus:ring-2 focus:ring-green-400"
+            class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-1 py-1 focus:outline-none focus:ring-2 focus:ring-green-400"
             *ngIf="column.editable && column.type === 'select'"
             [value]="row[column.key]"
             (change)="emitRowChange($event, rowIndex, column.key)"
           >
             <option
-              class="bg-[#011738] text-white" value="" disabled selected
+              class="bg-appBackground text-appWhiteText"
+              value=""
+              disabled
+              selected
             ></option>
             <option
-              class="bg-[#011738] text-white"
+              class="bg-appBackground text-appWhiteText"
               *ngFor="let option of column.options"
               [value]="option.id"
             >

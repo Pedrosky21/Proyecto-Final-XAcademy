@@ -1,0 +1,49 @@
+<div
+  class="pt-6 bg-splash bg-cover appBackground/10 bg-blend-multiply min-h-[calc(100vh-68px)] w-full"
+>
+  <h1
+    class="text-5xl font-raleway font-bold text-appWhiteText text-center pt-4"
+  >
+    Mis Part<span class="text-appPrimary">idos</span>
+  </h1>
+  <h3 class="font-raleway font-bold text-appWhiteText text-center pt-3">
+    Aquí aparecerán los partidos publicados para jugar.<br />
+    Recordá que tenés que ser parte de un equipo para poder jugar
+  </h3>
+
+  <section class="pl-3 mt-6 flex justify-center gap-3">
+    <button
+      type="button"
+      (click)="openCreateTeamModal()"
+      class="bg-appPrimary text-black font-bold w-36 h-10 rounded-md"
+    >
+      <i class="fa-solid fa-plus text-black"></i>
+      Crear Equipo
+    </button>
+
+    <button
+      type="button"
+      class="bg-appPrimary text-black font-bold w-36 h-10 rounded-md ml-3"
+      (click)="openCreateMatchModal()"
+    >
+      <i class="fa-solid fa-plus text-black"></i>
+      Crear Partido
+    </button>
+  </section>
+
+  <app-modal-create-team
+    [showCreateTeamModal]="showCreateTeamModal"
+    [createTeamForm]="createTeamForm"
+    [players]="players"
+    (close)="closeCreateTeamModal()"
+    (confirm)="onConfirmTeamModal()"
+  ></app-modal-create-team>
+
+  <app-modal-create-match
+    [showCreateMatchModal]="showCreateMatchModal"
+    [matchGroup]="matchGroup"
+    [clubs]="clubs"
+    (close)="closeCreateMatchModal()"
+    (confirm)="onConfirmMatchModal()"
+  ></app-modal-create-match>
+</div>

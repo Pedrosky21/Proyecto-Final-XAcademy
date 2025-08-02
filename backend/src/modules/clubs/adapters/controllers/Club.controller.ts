@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import Club from "../../core/models/Club";
-import Usuario from "../../../users/core/models/UserModel";
 import { ClubService } from "../../services/ClubService";
 import { NotFoundError } from "../../../../errors/NotFoundError";
 import { NewClubRequest } from "../../core/dtos/request/NewClubRequest";

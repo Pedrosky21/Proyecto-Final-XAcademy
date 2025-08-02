@@ -64,8 +64,8 @@ export class HabilitateClubComponent implements OnInit {
           this.newCourts.length !== 0
             ? this.newCourts[this.newCourts.length - 1].index + 1
             : 1,
-        wallMaterialId: "",
-        floorMaterialId: "",
+        wallMaterialId: '',
+        floorMaterialId: '',
         roofted: false,
       })
     );
@@ -78,7 +78,7 @@ export class HabilitateClubComponent implements OnInit {
   }
 
   deleteRow(event: { index: number }) {
-    const middleCourts:Court[]=this.newCourts.slice(event.index);
+    const middleCourts: Court[] = this.newCourts.slice(event.index);
     this.newCourts = middleCourts.map((row, i) => {
       return {
         ...row,
@@ -88,20 +88,26 @@ export class HabilitateClubComponent implements OnInit {
     console.log(this.newCourts);
   }
 
-  validateTable():string{
-    const hasIncompleteCourt = this.newCourts.some(court =>
+  validateTable(): string {
+    const hasIncompleteCourt = this.newCourts.some((court) =>
       Object.entries(court).some(
-        ([key, value]) => key !== 'id' && (value === null || value === undefined || value === '')
+        ([key, value]) =>
+          key !== 'id' &&
+          (value === null || value === undefined || value === '')
       )
     );
-    return hasIncompleteCourt?"Todas las chanchas deben tener todos los datos":""
+    return hasIncompleteCourt
+      ? 'Todas las chanchas deben tener todos los datos'
+      : '';
   }
 
   handleSubmit(event: Event) {
     event.preventDefault();
-    const tableMessage=this.validateTable()
-    if (this.form.invalid||tableMessage) {
-      const message:string=this.form.invalid?'Revise los valores ingresados antes de continuar':tableMessage
+    const tableMessage = this.validateTable();
+    if (this.form.invalid || tableMessage) {
+      const message: string = this.form.invalid
+        ? 'Revise los valores ingresados antes de continuar'
+        : tableMessage;
       this.form.markAllAsTouched();
       this.confirmationModalService.openModal({
         icon: ModalIconEnum.error,
