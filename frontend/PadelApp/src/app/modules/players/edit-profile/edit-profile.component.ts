@@ -7,6 +7,8 @@ import { ModalIconEnum } from '../../../core/layouts/confirmation-modal/models/M
 import { PlayerService } from '../../../core/services/PlayerServices';
 import { AuthService } from '../../../core/services/AuthService';
 import { UserService } from '../../../core/services/UserService';
+import { CategoryService } from '../../../core/services/CategoryService';
+import { PositionService } from '../../../core/services/PositionService';
 
 @Component({
   selector: 'app-edit-profile',
@@ -30,7 +32,9 @@ export class EditProfileComponent {
     private readonly loadingScreenService: loadingScreenService,
     private readonly playerService: PlayerService,
     private readonly userService: UserService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly categoryService: CategoryService,
+    private readonly positionService: PositionService
   ) {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -51,11 +55,11 @@ export class EditProfileComponent {
   }
 
   fetchSelectOptions(): void {
-    this.playerService.getCategories().subscribe({
+    this.categoryService.getAllCategories().subscribe({
       next: (categories: any[]) => {
         this.categorias = categories.map((cat) => ({
           label: cat.name,
-          value: cat.id,
+          value: Number(cat.id),
         }));
       },
       error: (err) => {
@@ -63,11 +67,11 @@ export class EditProfileComponent {
       },
     });
 
-    this.playerService.getPositions().subscribe({
+    this.positionService.getAllPositions().subscribe({
       next: (positions: any[]) => {
         this.posiciones = positions.map((pos) => ({
           label: pos.name,
-          value: pos.id,
+          value: Number(pos.id),
         }));
       },
       error: (err) => {

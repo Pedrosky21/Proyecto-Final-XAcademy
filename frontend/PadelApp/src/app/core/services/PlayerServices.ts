@@ -6,20 +6,20 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PlayerService {
-  private readonly apiUrl = 'http://localhost:3000/api';
+  private readonly apiUrl = 'http://localhost:3000/api/players';
 
   constructor(private readonly http: HttpClient) {}
 
   getPlayers(): Observable<any> {
-    return this.http.get(this.apiUrl + '/players');
+    return this.http.get(this.apiUrl);
   }
 
   getPlayerById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/players/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
   createPlayer(player: any): Observable<any> {
-    return this.http.post(this.apiUrl + '/players', player);
+    return this.http.post(this.apiUrl, player);
   }
   getPositions(): Observable<any> {
     return this.http.get(this.apiUrl + '/positions');

@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 import { ModalIconEnum } from '../../../core/layouts/confirmation-modal/models/ModalProps';
 
-import { NgFor, NgIf } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PlayerService } from '../../../core/services/PlayerServices';
 
 import { ConfirmationModalService } from '../../../core/layouts/confirmation-modal/service/confirmationModalService';
 import { loadingScreenService } from '../../../core/layouts/loading-screen/service/loadingService';
+import { TeamService } from '../../../core/services/TeamService';
+import { NewTeamRequest } from '../../../model/NewTeamRequest';
+import { AuthService } from '../../../core/services/AuthService';
 
 @Component({
   selector: 'app-explore-matches',
@@ -24,7 +21,9 @@ export class ExploreMatchesComponent {
     private playerService: PlayerService,
     private readonly fb: FormBuilder,
     private confirmationModalService: ConfirmationModalService,
-    private loadingScreenService: loadingScreenService
+    private loadingScreenService: loadingScreenService,
+    private teamService: TeamService,
+    private authService: AuthService
   ) {
     this.matchGroup = this.fb.group({
       selectedTeam: ['', Validators.required],
@@ -141,6 +140,7 @@ export class ExploreMatchesComponent {
       this.createTeamForm.markAllAsTouched();
       return;
     }
+
     const { selectedPlayer, teamName, teamDescription } =
       this.createTeamForm.value;
 
@@ -156,21 +156,36 @@ export class ExploreMatchesComponent {
           this.confirmationModalService.closeModal();
 
           this.loadingScreenService.showLoadingScreen('Creando Equipo...');
-          // data to send
 
-          setTimeout(() => {
-            this.loadingScreenService.showLoadingScreen(null);
-          }, 2000);
+          const newTeam: NewTeamRequest = {
+            name: teamName,
+            description: teamDescription,
+          };
 
-          this.confirmationModalService.openModal({
-            icon: ModalIconEnum.ok,
-            title: 'Equipo creado con exito',
-            message: 'Se ha creado el equipo Los Imbatibles correctamente.',
-            accept: {
-              title: 'Aceptar',
-              action: () => {
-                this.confirmationModalService.closeModal();
-              },
+          const creatorId = this.authService.getLoggedInUser();
+          console.log('Creator ID:', creatorId);
+          const playerId = selectedPlayer.id;
+          console.log('Sending newTeam:', newTeam);
+
+          this.teamService.createTeam(creatorId, newTeam, playerId).subscribe({
+            next: (team) => {
+              this.loadingScreenService.showLoadingScreen(null);
+
+              this.confirmationModalService.openModal({
+                icon: ModalIconEnum.ok,
+                title: 'Equipo creado con éxito',
+                message: `Se ha creado el equipo ${team.name} correctamente.`,
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    this.confirmationModalService.closeModal();
+                  },
+                },
+              });
+            },
+            error: (err) => {
+              this.loadingScreenService.showLoadingScreen(null);
+              console.error('Error creando el equipo', err);
             },
           });
         },
