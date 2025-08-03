@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -23,6 +24,10 @@ export class AuthService {
   getLoggedInUser(): any {
     const userJson = localStorage.getItem('user');
     return userJson ? JSON.parse(userJson) : null;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
   register(credentials: { email: string; password: string }) {
