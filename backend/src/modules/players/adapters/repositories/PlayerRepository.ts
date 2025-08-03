@@ -5,23 +5,20 @@ import { Op, Transaction } from "sequelize";
 import Position from "../../core/models/PositionModel";
 
 export class PlayerRepository {
-  createPlayer = async (
-    newPlayer: NewPlayerRequest,
-    transaction: Transaction
-  ): Promise<Player> => {
-    const createdPlayer = await Player.create(
-      {
-        firstName: newPlayer.firstName,
-        lastName: newPlayer.lastName,
-        birthDate: newPlayer.birthDate,
-        cellNumber: newPlayer.cellNumber,
-        pictureUrl: newPlayer.pictureUrl,
-        userId: newPlayer.userId,
-        categoryId: newPlayer.categoryId,
-        positionId: newPlayer.positionId,
-      },
-      { transaction }
-    );
+
+  createPlayer = async (newPlayer: NewPlayerRequest, transaction: Transaction): Promise<Player> => {
+    const createdPlayer = await Player.create({
+      firstName: newPlayer.firstName,
+      lastName: newPlayer.lastName,
+      birthDate: newPlayer.birthDate,
+      cellNumber: newPlayer.cellNumber,
+      pictureUrl: newPlayer.pictureUrl,
+      userId: newPlayer.userId,
+      categoryId: newPlayer.categoryId,
+      positionId: newPlayer.positionId,
+    }, {transaction});
+
+
     return createdPlayer;
   };
 
@@ -66,13 +63,19 @@ export class PlayerRepository {
         {
           model: Category,
           as: "category",
-          attributes: ["name"],
+
+          attributes: ["name"]
+
+  
+
         },
         {
           model: Position,
           as: "position",
-          attributes: ["name"],
-        },
+
+          attributes: ["name"]
+        }
+
       ],
       limit: 5,
       order: [

@@ -1,18 +1,22 @@
-import { Model, DataTypes } from "sequelize";
-import sequelize from "../../../../config/db.config";
-import User from "../../../auth/core/models/UserModel";
-import Category from "./CategoryModel";
-import Position from "./PositionModel";
+
+import {Model, DataTypes} from 'sequelize';
+import sequelize from '../../../../config/db.config';
+import User from '../../../auth/core/models/UserModel';
+import Category from './CategoryModel';
+import Position from './PositionModel';
+
 
 class Player extends Model {}
 
 Player.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      field: "idjugador",
-      autoIncrement: true,
+
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        field:'idjugador',
+        autoIncrement: true
+
     },
     firstName: {
       type: DataTypes.STRING,
@@ -35,12 +39,14 @@ Player.init(
       field: "urlFoto",
     },
     userId: {
-      type: DataTypes.INTEGER,
-      field: "usuario_idusuario",
-      references: {
-        model: User,
-        key: "id",
-      },
+
+        type: DataTypes.INTEGER,
+        field: 'usuario_idusuario',
+        references: {
+            model: User,
+            key: 'id'
+        }
+
     },
     categoryId: {
       type: DataTypes.INTEGER,
@@ -61,18 +67,19 @@ Player.init(
   },
   {
     sequelize,
-    modelName: "Jugador",
-    tableName: "jugador",
-    timestamps: false,
-  }
-);
 
-Player.belongsTo(User, { foreignKey: "userId", as: "user" });
-Player.belongsTo(Category, { foreignKey: "categoryId", as: "category" });
-Player.belongsTo(Position, { foreignKey: "positionId", as: "position" });
+    modelName: 'Jugador',
+    tableName: 'jugador',
+    timestamps: false
+});
 
-User.hasOne(Player, { foreignKey: "userId" });
-Category.hasOne(Player, { foreignKey: "categoryId" });
-Position.hasOne(Player, { foreignKey: "positionId" });
+Player.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Player.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
+Player.belongsTo(Position, { foreignKey: 'positionId', as: 'position' });
+
+User.hasOne(Player, { foreignKey: 'userId' }); 
+Category.hasOne(Player, { foreignKey: 'categoryId' }); 
+Position.hasOne(Player, { foreignKey: 'positionId' });
+
 
 export default Player;
