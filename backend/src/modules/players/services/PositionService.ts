@@ -1,7 +1,5 @@
-
-import { PositionRepository } from "../adapters/repositories/Posicion.repository";
+import { PositionRepository } from "../adapters/repositories/PositionRepository";
 import Position from "../core/models/PositionModel";
-
 
 
 export class PositionService{

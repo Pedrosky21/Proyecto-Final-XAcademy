@@ -1,8 +1,8 @@
 import {Model, DataTypes} from 'sequelize';
 import sequelize from '../../../../config/db.config';
 
-import Usuario from '../../../users/core/models/UserModel';
 import Court from './Courts';
+import User from '../../../auth/core/models/UserModel';
 
 
 class Club extends Model {};
@@ -11,7 +11,7 @@ Club.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        field:"idclubes",
+        field:"idclub",
         autoIncrement: true,
     },
     name: {
@@ -56,21 +56,21 @@ Club.init({
     },
     userId: {
         type: DataTypes.INTEGER,
-        field:"usuarios_idusuarios",
+        field:"usuario_idusuario",
         references: {
-            model: Usuario,
-            key: 'idusuarios'
+            model: User,
+            key: 'id'
         }
     }
 },{
     sequelize,
-    modelName: 'Clubes',
-    tableName: 'clubes',
+    modelName: 'Club',
+    tableName: 'club',
     timestamps: false
 })
 
 
-Club.belongsTo(Usuario, { foreignKey: 'usuarios_idusuarios', as: 'usuario' });
-Usuario.hasOne(Club, { foreignKey: 'usuarios_idusuarios' });
+Club.belongsTo(User, { foreignKey: 'usuario_idusuario', as: 'usuario' });
+User.hasOne(Club, { foreignKey: 'usuario_idusuario' });
 Club.hasMany(Court, { foreignKey: 'clubId',as: 'courts'});
 export default Club;

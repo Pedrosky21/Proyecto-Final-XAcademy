@@ -1,11 +1,13 @@
 import Category from "../../../categories/core/models/CategoryModel";
 import Position from "../../../positions/core/models/PositionModel";
 import { NewPlayerRequest } from "../../core/dtos/request/NewPlayerRequest";
+import Category from "../../core/models/CategoryModel";
 import Player from "../../core/models/PlayerModel";
-import { Op } from "sequelize";
+import { Op, Transaction } from "sequelize";
+import Position from "../../core/models/PositionModel";
 
 export class PlayerRepository {
-  createPlayer = async (newPlayer: NewPlayerRequest): Promise<Player> => {
+  createPlayer = async (newPlayer: NewPlayerRequest, transaction: Transaction): Promise<Player> => {
     const createdPlayer = await Player.create({
       firstName: newPlayer.firstName,
       lastName: newPlayer.lastName,
@@ -15,7 +17,7 @@ export class PlayerRepository {
       userId: newPlayer.userId,
       categoryId: newPlayer.categoryId,
       positionId: newPlayer.positionId,
-    });
+    }, {transaction});
     return createdPlayer;
   };
 
@@ -56,6 +58,18 @@ export class PlayerRepository {
       where: {
         [Op.and]: likeConditions,
       },
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name"]
+        },
+        {
+          model: Position,
+          as: "position",
+          attributes: ["name"]
+        }
+      ],
       limit: 5,
       order: [
         ["firstName", "ASC"],
