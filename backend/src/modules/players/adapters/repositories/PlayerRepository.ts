@@ -1,3 +1,5 @@
+import Category from "../../../categories/core/models/CategoryModel";
+import Position from "../../../positions/core/models/PositionModel";
 import { NewPlayerRequest } from "../../core/dtos/request/NewPlayerRequest";
 import Player from "../../core/models/PlayerModel";
 import { Op } from "sequelize";
@@ -18,11 +20,21 @@ export class PlayerRepository {
   };
 
   getAllPlayers = async (): Promise<Player[]> => {
-    return await Player.findAll();
+    return await Player.findAll({
+      include: [
+        { model: Category, as: "category", attributes: ["id", "name"] },
+        { model: Position, as: "position", attributes: ["id", "name"] },
+      ],
+    });
   };
 
   getPlayerById = async (id: number): Promise<Player | null> => {
-    return await Player.findByPk(id);
+    return await Player.findByPk(id, {
+      include: [
+        { model: Category, as: "category", attributes: ["id", "name"] },
+        { model: Position, as: "position", attributes: ["id", "name"] },
+      ],
+    });
   };
 
   getPlayerByUserId = async (userId: number): Promise<Player | null> => {
@@ -45,7 +57,10 @@ export class PlayerRepository {
         [Op.and]: likeConditions,
       },
       limit: 5,
-      order: [['firstName', 'ASC'], ['lastName', 'ASC']]
+      order: [
+        ["firstName", "ASC"],
+        ["lastName", "ASC"],
+      ],
     });
   };
 }

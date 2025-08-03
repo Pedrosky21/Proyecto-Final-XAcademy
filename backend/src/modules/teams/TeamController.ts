@@ -33,12 +33,16 @@ export class TeamController {
     }
   };
 
-  getAllTeams = async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+  getAllTeams = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     try {
-        const teams = this.teamService.getAllTeams();
-        res.json(teams);
+      const teams = this.teamService.getAllTeams();
+      res.json(teams);
     } catch (error) {
-        next(error);
+      next(error);
     }
-  }
+  };
 }
