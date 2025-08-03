@@ -23,17 +23,10 @@ class User
 User.init(
   {
     id: {
-<<<<<<< HEAD:backend/src/modules/users/core/models/UserModel.ts
       type: DataTypes.INTEGER,
       primaryKey: true,
       field: "idusuario",
       autoIncrement: true,
-=======
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        field:'idusuario',
-        autoIncrement: true
->>>>>>> main:backend/src/modules/auth/core/models/UserModel.ts
     },
     email: DataTypes.STRING,
     password: DataTypes.STRING,
@@ -45,17 +38,10 @@ User.init(
   },
   {
     sequelize,
-<<<<<<< HEAD:backend/src/modules/users/core/models/UserModel.ts
     modelName: "usuario",
     tableName: "usuario",
     timestamps: false,
   }
 );
-=======
-    modelName: 'usuario',
-    tableName: 'usuario',
-    timestamps: false
-});
->>>>>>> main:backend/src/modules/auth/core/models/UserModel.ts
 
 export default User;
