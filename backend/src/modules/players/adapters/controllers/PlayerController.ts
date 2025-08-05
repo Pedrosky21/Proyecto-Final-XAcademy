@@ -7,12 +7,15 @@ import { PositionService } from "../../services/PositionService";
 import { TeamService } from "../../services/TeamService";
 import { NewTeamRequest } from "../../core/dtos/request/NewTeamRequest";
 import { UnauhtorizedError } from "../../../../errors/UnauthorizedError";
+import { NewMatchRequest } from "../../../matches/NewMatchRequest";
+import { MatchService } from "../../../matches/MatchService";
 
 export class PlayerController {
   playerService = new PlayerService();
   categoryService = new CategoryService();
   positionService = new PositionService();
   teamService = new TeamService();
+  matchService = new MatchService();
 
   createPlayer = async (
     req: Request,
@@ -40,7 +43,7 @@ export class PlayerController {
   ): Promise<void> => {
     try {
       const players = await this.playerService.getAllPlayers();
-      res.json(players);
+      res.status(200).json(players);
     } catch (error) {
       next(error);
     }
@@ -54,7 +57,7 @@ export class PlayerController {
     try {
       const { id } = req.params;
       const player = await this.playerService.getPlayerById(Number(id));
-      res.json(player);
+      res.status(200).json(player);
     } catch (error) {
       next(error);
     }
@@ -68,7 +71,7 @@ export class PlayerController {
     try {
       const { fullName } = req.body;
       const players = await this.playerService.getPlayersByName(fullName);
-      res.json(players);
+      res.status(200).json(players);
     } catch (error) {
       next(error);
     }
@@ -82,7 +85,7 @@ export class PlayerController {
   ): Promise<void> => {
     try {
       const categories = await this.categoryService.getAllCategories();
-      res.json(categories);
+      res.status(200).json(categories);
     } catch (error) {
       next(error);
     }
@@ -91,12 +94,12 @@ export class PlayerController {
   // Posiciones
   getAllPositions = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const positions = await this.positionService.getAllPositions()
-      res.json(positions);
+      const positions = await this.positionService.getAllPositions();
+      res.status(200).json(positions);
     } catch (error) {
-      next(error)
+      next(error);
     }
-  }
+  };
 
   // Teams
   createTeam = async (
@@ -111,14 +114,9 @@ export class PlayerController {
         throw new UnauhtorizedError("No existe el usuario");
       }
 
-      console.log(creatorId);
-
-      console.log(req.body);
-
-
       const team = new NewTeamRequest(req.body);
 
-      const validationError= team.validate()
+      const validationError = team.validate();
       if (validationError) {
         throw new BadRequestError(validationError);
       }
@@ -134,4 +132,83 @@ export class PlayerController {
     }
   };
 
+  // Teams of the player
+  getTeamsByPlayerId = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const playerId = req.user?.id;
+
+      const teams = await this.playerService.getTeamsByPlayerId(
+        Number(playerId)
+      );
+
+      res.status(200).json(teams);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // Create match
+  createMatch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const creatorTeamId = req.body.teamId;
+
+      const match = new NewMatchRequest({
+        roofed: req.body.roofed,
+        turnId: req.body.turnId,
+        wallMaterialId: req.body.wallMaterialId,
+        floorMaterialId: req.body.floorMaterialId,
+        matchState: 1,
+      });
+
+      const newMatch = await this.matchService.createMatch(creatorTeamId, match);
+
+      res.status(201).json(newMatch);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // Get matches with teams
+  getMatchesWithTeams = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const limit = req.query.limit || 12;
+      const page = req.query.page || 1;
+
+      // Optional filters
+      const roofed =
+        req.query.roofed !== undefined ? Number(req.query.roofed) : null;
+      const wallMaterial =
+        req.query.wallMaterial !== undefined
+          ? Number(req.query.wallMaterial)
+          : null;
+      const floorMaterial =
+        req.query.floorMaterial !== undefined
+          ? Number(req.query.floorMaterial)
+          : null;
+
+      const matches = await this.matchService.getMatchesWithTeams(
+        Number(limit),
+        Number(page),
+        roofed, 
+        wallMaterial, 
+        floorMaterial
+      );
+
+      res.status(200).json(matches);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
