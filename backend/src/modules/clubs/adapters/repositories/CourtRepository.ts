@@ -1,6 +1,6 @@
 import { Transaction } from "sequelize";
-import Court from "../../core/models/Courts";
-import { NewCourt } from "../../core/models/NewCourt";
+import Court from "../../core/models/sequelize/Courts";
+import { NewCourt } from "../../core/models/classes/NewCourt";
 
 export class CourtRepository{
 

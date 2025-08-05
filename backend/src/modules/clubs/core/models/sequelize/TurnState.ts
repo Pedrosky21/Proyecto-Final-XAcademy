@@ -1,8 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import Court from "../../clubs/core/models/Courts";
-import sequelize from '../../../config/db.config';
-import Turn from "./Turn";
-
+import sequelize from '../../../../../config/db.config';
 class TurnState extends Model {};
 
 TurnState.init({

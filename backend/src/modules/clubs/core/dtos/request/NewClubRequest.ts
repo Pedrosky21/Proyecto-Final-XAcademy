@@ -1,4 +1,4 @@
-import { NewCourt } from "../../models/NewCourt"
+import { NewCourt } from "../../models/classes/NewCourt"
 
 export class NewClubRequest{
   name:string
@@ -14,7 +14,7 @@ export class NewClubRequest{
   userId:number
   courts: NewCourt[]
 
-  constructor(data:any){
+  constructor(data:any,userId:number){
     this.name = data.name;
     this.address = data.address;
     this.cellNumber = data.cellNumber;
@@ -25,7 +25,7 @@ export class NewClubRequest{
     this.closingTime = data.closingTime;
     this.admisionRules = data.admisionRules;
     this.cancelationRules = data.cancelationRules;
-    this.userId=data.userId
+    this.userId=userId
     this.courts = data.courts? data.courts.map((court:any)=>new NewCourt(court)):[];
   }
 
@@ -80,7 +80,6 @@ export class NewClubRequest{
     return null
   }
   verifyHours(hours:string):boolean{
-    console.log(hours)
     const splitedHour=hours.split(":")
     const isInvalid:boolean=Number(splitedHour[0])<0 ||Number(splitedHour[0])>24||
     Number(splitedHour[1])<0|| Number(splitedHour[1])>59

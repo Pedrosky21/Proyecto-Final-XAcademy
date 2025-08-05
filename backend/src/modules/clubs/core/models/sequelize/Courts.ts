@@ -1,9 +1,9 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../../../../config/db.config";
+import sequelize from "../../../../../config/db.config";
 import Club from "./Club";
-import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
-import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
-import Turn from "../../../turns/models/Turn";
+import FloorMaterial from "../../../../floorMaterials/core/FloorMaterial";
+import WallMaterial from "../../../../wallMaterials/core/models/WallMaterial";
+import Turn from "./Turn";
 
 class Court extends Model {}
 
@@ -53,8 +53,17 @@ Court.init(
   }
 );
 
-Court.belongsTo(FloorMaterial, { foreignKey: 'floorMaterialId', as: 'floorMaterial' });
-Court.belongsTo(WallMaterial, { foreignKey: 'wallMaterialId', as: 'wallMaterial' });
-//Court.hasMany(Turn, { foreignKey: 'courtId', as: 'turns' });
+Court.belongsTo(FloorMaterial, {
+  foreignKey: "floorMaterialId",
+  as: "floorMaterial",
+});
+Court.belongsTo(WallMaterial, {
+  foreignKey: "wallMaterialId",
+  as: "wallMaterial",
+});
+Court.hasMany(Turn, { foreignKey: "courtId", as: "turns" });
+Court.belongsTo(Club, { foreignKey: 'clubId' });
+
+Club.hasMany(Court, { foreignKey: 'clubId',as: 'courts'})
 
 export default Court;

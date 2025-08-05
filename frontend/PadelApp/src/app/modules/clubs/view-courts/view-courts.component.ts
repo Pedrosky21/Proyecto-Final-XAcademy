@@ -26,8 +26,17 @@ export class ViewCourtsComponent implements OnInit{
     });
   }
 
+  diagramTurnModalOpen:boolean=false
+
+  openDiagramTurnModal(){
+    this.diagramTurnModalOpen=true
+  }
+
+  closeDiagramTurnModal(){
+    this.diagramTurnModalOpen=false
+  }
+
   ngOnInit(): void {
     this.loadClub()
-    console.log(this.club)
   }
 }

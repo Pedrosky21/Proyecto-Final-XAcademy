@@ -9,6 +9,7 @@ import { ModalIconEnum } from '../../../core/layouts/confirmation-modal/models/M
 import { EditTableColumn } from '../../../components/edit-table/models/ColumntSetting';
 import { Court } from '../../../model/Court';
 import { table } from 'console';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-habilitate-club',
@@ -20,12 +21,13 @@ export class HabilitateClubComponent implements OnInit {
   constructor(
     private readonly clubService: ClubService,
     private readonly fb: FormBuilder,
+    private readonly router: Router,
     private readonly loadingScreenService: loadingScreenService,
     private readonly confirmationModalService: ConfirmationModalService
   ) {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(7)]],
-      address: ['', [Validators.required, Validators.minLength(10)]],
+      name: ['', [Validators.required]],
+      address: ['', [Validators.required]],
       cellNumber: ['', [Validators.required]],
       responsableFirstName: ['', [Validators.required]],
       responsableLastName: ['', [Validators.required]],
@@ -46,7 +48,6 @@ export class HabilitateClubComponent implements OnInit {
     //si el campo tiene errores y fue clickeado
     const fieldErrors = this.form.get(field)?.errors;
     if (this.form.get(field)?.touched && fieldErrors) {
-      console.log(fieldErrors);
       if (fieldErrors['required']) return 'Este campo es requerido';
       if (fieldErrors['min'])
         return `Este campo no puede ser menor a ${fieldErrors['min'].min}`;
@@ -61,20 +62,20 @@ export class HabilitateClubComponent implements OnInit {
     this.newCourts.push(
       new Court({
         index:
-          this.newCourts.length !== 0
+          this.newCourts.length !==0
             ? this.newCourts[this.newCourts.length - 1].index + 1
             : 1,
         wallMaterialId: '',
         floorMaterialId: '',
         roofted: false,
       })
+      
     );
-    console.log(this.newCourts);
   }
 
   handleRowChange(event: { index: number; key: keyof Court; value: any }) {
     (this.newCourts[event.index] as any)[event.key] = event.value;
-    console.log(this.newCourts);
+
   }
 
   deleteRow(event: { index: number }) {
@@ -85,7 +86,6 @@ export class HabilitateClubComponent implements OnInit {
         index: i + 1,
       };
     });
-    console.log(this.newCourts);
   }
 
   validateTable(): string {
@@ -109,6 +109,8 @@ export class HabilitateClubComponent implements OnInit {
         ? 'Revise los valores ingresados antes de continuar'
         : tableMessage;
       this.form.markAllAsTouched();
+      console.log(this.form.errors)
+      console.log(tableMessage)
       this.confirmationModalService.openModal({
         icon: ModalIconEnum.error,
         title: 'Error en el formulario',
@@ -150,14 +152,15 @@ export class HabilitateClubComponent implements OnInit {
                     accept: {
                       title: 'Aceptar',
                       action: () => {
+                        
                         this.confirmationModalService.closeModal();
+                        this.router.navigate(["/clubs/view-courts"])
                       },
                     },
                   });
                 }, 1500);
               },
               error: (error) => {
-                console.log(error);
                 this.loadingScreenService.showLoadingScreen(null);
                 this.confirmationModalService.openModal({
                   icon: ModalIconEnum.error,
@@ -248,6 +251,7 @@ export class HabilitateClubComponent implements OnInit {
     this.loadFloorMaterial();
     this.loadWallMaterial();
     this.setColumns();
+    console.log(this.columnsSettings)
   }
 
   autoResize(event: Event): void {
