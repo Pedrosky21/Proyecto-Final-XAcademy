@@ -1,0 +1,37 @@
+export class NewMatchRequest {
+    roofed: number
+    turnId: number
+    wallMaterialId: number
+    floorMaterialId: number
+    matchState: number
+
+    constructor (data: any) {
+        this.roofed = data.roofed
+        this.turnId = data.turnId
+        this.wallMaterialId = data.wallMaterialId
+        this.floorMaterialId = data.floorMaterialId
+        this.matchState = data.matchState
+    }
+
+    public validate(): string | null {
+    if (!this.roofed || typeof this.roofed !== "number") {
+      return "Roofed es un campo obligatorio y debe ser un string";
+    } else if (this.roofed !== 0 && this.roofed !== 1) {
+      return "Roofed debe ser 1 o 0";
+    }
+    if (!this.turnId || typeof this.turnId !== "number") {
+      return "TurnId es un campo obligatorio y debe ser un numero";
+    }
+    if (!this.wallMaterialId || typeof this.wallMaterialId !== "number") {
+      return "WallMaterialId es un campo obligatorio y debe ser un numero";
+    }
+    if (!this.floorMaterialId || typeof this.floorMaterialId !== "number") {
+      return "FloorMaterialId es un campo obligatorio y debe ser un numero";
+    }
+    if (!this.matchState || typeof this.matchState !== "number") {
+      return "MatchState es un campo obligatorio y debe ser un numero";
+    }
+
+    return null;
+  }
+}
