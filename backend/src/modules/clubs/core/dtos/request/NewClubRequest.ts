@@ -1,4 +1,4 @@
-import { NewCourt } from "../../models/NewCourt"
+import { NewCourt } from "../../models/classes/NewCourt"
 
 export class NewClubRequest{
   name:string

@@ -1,9 +1,7 @@
 import {Model, DataTypes} from 'sequelize';
-import sequelize from '../../../../config/db.config';
-
+import sequelize from '../../../../../config/db.config';
+import User from '../../../../auth/core/models/UserModel';
 import Court from './Courts';
-import User from '../../../auth/core/models/UserModel';
-
 
 class Club extends Model {};
 

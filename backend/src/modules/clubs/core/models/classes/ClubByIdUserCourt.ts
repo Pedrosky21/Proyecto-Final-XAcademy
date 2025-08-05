@@ -16,7 +16,7 @@ export class CourtByIdUser{
       this.floorMaterialName=data.floorMaterialName
       this.roofted=data.roofted
       this.availableTurns=data.availableTurns
-      this.reservedTurns=data.reservedTurns,
+      this.reservedTurns=data.reservedTurns
       this.paidTurns=data.paidTurns
     }
   }

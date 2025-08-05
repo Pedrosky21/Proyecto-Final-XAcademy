@@ -1,16 +1,20 @@
 import { Transaction } from "sequelize";
 import { FloorMaterialService } from "../../floorMaterials/services/FloorMaterialService";
 import { WallMaterialService } from "../../wallMaterials/services/WallMaterialService";
-import Court from "../core/models/Courts";
-import { NewCourt } from "../core/models/NewCourt";
+import Court from "../core/models/sequelize/Courts";
+import { NewCourt } from "../core/models/classes/NewCourt";
 import { CourtRepository } from "../adapters/repositories/CourtRepository";
 import { BadRequestError } from "../../../errors/BadRequestError";
+import { DiagramTurnCourt } from "../core/models/classes/DiagramTurnCourts";
+import { TurnService } from "./TurnService";
+import { DiagramTurnRequest } from "../core/dtos/request/DiagramTurnsRequest";
 
 
 export class CourtService{
   courtRepository= new CourtRepository()
   wallMaterialService= new WallMaterialService()
   floorMaterialService= new FloorMaterialService()
+  turnService= new TurnService()
 
   createCourt=async(court:NewCourt, idClub: number,courtNumber:number, transaction: Transaction):Promise<Court>=>{
     
@@ -23,5 +27,13 @@ export class CourtService{
       throw new BadRequestError("Todas las canchas deben tener un material de suelo existente")
     }
     return await this.courtRepository.createCourt(court,idClub,courtNumber,transaction)
+  }
+
+  diagramTurns=async(diagramTurns: DiagramTurnRequest,transaction:Transaction):Promise<any>=>{
+    //agregar control de que no hay turnos para el mes y año ingresados
+    
+    for(const court of diagramTurns.courts){
+      await this.turnService.diagramTurns(court,transaction)
+    }
   }
 }

@@ -1,12 +1,11 @@
 import { Transaction } from "sequelize";
 import { NewClubRequest } from "../../core/dtos/request/NewClubRequest";
-import Club from "../../core/models/Club";
-import { ClubByIdUserResponse } from "../../core/dtos/responses/ClubByIdUserResponse";
-import Court from "../../core/models/Courts";
-import Turn from "../../../turns/models/Turn";
-import TurnState from "../../../turns/models/TurnState";
+import Court from "../../core/models/sequelize/Courts";
+import TurnState from "../../core/models/sequelize/TurnState";
 import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
 import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
+import Turn from "../../core/models/sequelize/Turn";
+import Club from "../../core/models/sequelize/Club";
 
 export class ClubRepository {
   getClubById = async (id: number): Promise<Club | null> => {
@@ -73,4 +72,6 @@ export class ClubRepository {
 
     return club;
   };
+
+  
 }

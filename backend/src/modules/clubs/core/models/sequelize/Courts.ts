@@ -1,9 +1,9 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from '../../../../config/db.config';
+import sequelize from '../../../../../config/db.config';
 import Club from "./Club";
-import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
-import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
-import Turn from "../../../turns/models/Turn";
+import FloorMaterial from "../../../../floorMaterials/core/FloorMaterial";
+import WallMaterial from "../../../../wallMaterials/core/models/WallMaterial";
+import Turn from "./Turn";
 
 class Court extends Model {};
 
