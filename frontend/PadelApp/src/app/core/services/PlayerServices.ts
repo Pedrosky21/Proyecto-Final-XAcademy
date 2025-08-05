@@ -27,4 +27,9 @@ export class PlayerService {
   getCategories(): Observable<any> {
     return this.http.get(this.apiUrl + '/categories');
   }
+  searchPlayersByName(fullName: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/search/by-name`, {
+      params: { fullName },
+    });
+  }
 }

@@ -69,7 +69,15 @@ export class PlayerController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { fullName } = req.body;
+      const { fullName } = req.query as { fullName?: string };
+
+      if (!fullName || fullName.trim() === "") {
+        res
+          .status(400)
+          .json({ message: "fullName query parameter is required" });
+        return;
+      }
+
       const players = await this.playerService.getPlayersByName(fullName);
       res.status(200).json(players);
     } catch (error) {

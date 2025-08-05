@@ -126,48 +126,25 @@ export class EditProfileComponent {
             positionId: Number(this.form.value.posicion),
           };
 
+          // Create player
           this.playerService.createPlayer(dataToSend).subscribe({
             next: () => {
-              // Update userType to "Jugador"
-
-              this.userService.setUserType(userId, 'Jugador').subscribe({
-                next: (updatedUser) => {
-                  // Update user in localStorage
-                  localStorage.setItem('user', JSON.stringify(updatedUser));
-
-                  this.loadingScreenService.showLoadingScreen(null);
-                  this.confirmationModalService.openModal({
-                    icon: ModalIconEnum.ok,
-                    title: 'Cambios guardados',
-                    message: 'Se ha guardado la configuración correctamente',
-                    accept: {
-                      title: 'Aceptar',
-                      action: () => {
-                        this.confirmationModalService.closeModal();
-                      },
-                    },
-                  });
-                },
-                error: () => {
-                  this.loadingScreenService.showLoadingScreen(null);
-                  this.confirmationModalService.openModal({
-                    icon: ModalIconEnum.error,
-                    title: 'Error al cambiar rol',
-                    message:
-                      'El jugador fue creado pero no se pudo actualizar su rol.',
-                    accept: {
-                      title: 'Aceptar',
-                      action: () => {
-                        this.confirmationModalService.closeModal();
-                      },
-                    },
-                  });
+              this.loadingScreenService.showLoadingScreen(null);
+              this.confirmationModalService.openModal({
+                icon: ModalIconEnum.ok,
+                title: 'Cambios guardados',
+                message: 'Se ha guardado la configuración correctamente',
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    this.confirmationModalService.closeModal();
+                  },
                 },
               });
             },
             error: () => {
               this.loadingScreenService.showLoadingScreen(null);
-              console.error('Error updating user role:', this.errorMessage);
+              console.error('Error creating player:', this.errorMessage);
               this.confirmationModalService.openModal({
                 icon: ModalIconEnum.error,
                 title: 'Error al guardar',

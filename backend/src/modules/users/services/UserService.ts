@@ -1,9 +1,7 @@
-
+import { Transaction } from "sequelize";
 import { UserRepository } from "../../auth/adapters/repositories/UserRepository";
 import { NewUserRequest } from "../../auth/core/dtos/request/NewUserRequest";
 import User from "../../auth/core/models/UserModel";
-
-
 
 export class UserService {
   userRepository = new UserRepository();
@@ -12,12 +10,13 @@ export class UserService {
     return await this.userRepository.createUser(newUser);
   };
 
-
-  setUserType = async (id:number, userType: 'Jugador'|'Club'): Promise<any> => {
-    return await this.userRepository.setUserType(id, userType);
-  }
-
-
+  setUserType = async (
+    id: number,
+    userType: "Jugador" | "Club",
+    transaction: Transaction // required
+  ): Promise<any> => {
+    return await this.userRepository.setUserType(id, userType, transaction);
+  };
   getUserById = async (id: number): Promise<User | null> => {
     return await this.userRepository.getUserById(id);
   };

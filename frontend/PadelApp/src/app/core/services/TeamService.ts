@@ -8,7 +8,7 @@ import { AuthService } from './AuthService';
   providedIn: 'root',
 })
 export class TeamService {
-  private readonly apiUrl = 'http://localhost:3000/api';
+  private readonly apiUrl = 'http://localhost:3000/api/players/team';
 
   constructor(
     private readonly http: HttpClient,
@@ -23,7 +23,7 @@ export class TeamService {
     const token = this.authService.getToken();
 
     return this.http.post(
-      `${this.apiUrl}/teams`,
+      `${this.apiUrl}`,
       {
         creatorId,
         name: newTeam.name,
