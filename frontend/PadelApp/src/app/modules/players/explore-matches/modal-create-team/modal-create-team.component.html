@@ -7,7 +7,7 @@
   >
     <button
       (click)="onClose()"
-      class="absolute top-3 right-3 text-appWhiteText hover:text-red-500"
+      class="absolute top-3 right-3 text-appWhiteText hover:text-appError"
     >
       ✕
     </button>
@@ -49,8 +49,8 @@
           <div class="border border-appPrimary rounded p-2 min-h-[80px]">
             <div>Nombre: {{ selectedPlayer?.fullName || "-" }}</div>
             <div>Edad: {{ selectedPlayer?.birthDate || "-" }}</div>
-            <div>Posición: {{ selectedPlayer?.positionId || "-" }}</div>
-            <div>Categoría: {{ selectedPlayer?.categoryId || "-" }}</div>
+            <div>Posición: {{ selectedPlayer?.position?.name || "-" }}</div>
+            <div>Categoría: {{ selectedPlayer?.category?.name || "-" }}</div>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@
       <!-- Confirm Button -->
       <button
         type="submit"
-        class="bg-appPrimary text-black font-bold mt-5 px-4 py-2 rounded-md w-full"
+        class="bg-appPrimary text-appBlackText font-bold mt-5 px-4 py-2 rounded-md w-full"
       >
         Confirmar
       </button>

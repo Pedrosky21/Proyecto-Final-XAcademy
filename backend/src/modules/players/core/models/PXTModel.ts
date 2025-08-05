@@ -8,6 +8,7 @@ class PlayersTeams extends Model {}
 PlayersTeams.init(
   {
     id: {
+
         type: DataTypes.INTEGER,
         primaryKey: true,
         field: "idjugadorxequipo",
@@ -33,11 +34,13 @@ PlayersTeams.init(
             key: "id"
         }
     }
+
   },
   {
     sequelize,
     timestamps: false,
     tableName: "jugadorxequipo",
+
     modelName: "PlayersTeams"
   }
 );
@@ -47,5 +50,6 @@ PlayersTeams.belongsTo(Team, {foreignKey: "teamId", as: "team"});
 
 Player.hasMany(PlayersTeams, {foreignKey: "playerId"});
 Team.hasMany(PlayersTeams, {foreignKey: "teamId"});
+
 
 export default PlayersTeams;
