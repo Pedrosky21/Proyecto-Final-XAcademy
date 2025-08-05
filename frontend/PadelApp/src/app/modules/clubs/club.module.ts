@@ -4,11 +4,13 @@ import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HabilitateClubComponent } from "./habilitate-club/habilitate-club.component";
 import { ComponentsModule } from "../../components/components.module";
 import { ViewCourtsComponent } from "./view-courts/view-courts.component";
+import { DiagramTurnModalComponent } from "./view-courts/diagram-turn-modal/diagram-turn-modal.component";
 
 @NgModule({
   declarations: [
     HabilitateClubComponent,
-    ViewCourtsComponent
+    ViewCourtsComponent,
+    DiagramTurnModalComponent
   ],
   imports: [
     CommonModule,

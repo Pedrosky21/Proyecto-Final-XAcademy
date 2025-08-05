@@ -5,7 +5,6 @@ import Court from "../core/models/sequelize/Courts";
 import { NewCourt } from "../core/models/classes/NewCourt";
 import { CourtRepository } from "../adapters/repositories/CourtRepository";
 import { BadRequestError } from "../../../errors/BadRequestError";
-import { DiagramTurnCourt } from "../core/models/classes/DiagramTurnCourts";
 import { TurnService } from "./TurnService";
 import { DiagramTurnRequest } from "../core/dtos/request/DiagramTurnsRequest";
 
@@ -30,10 +29,10 @@ export class CourtService{
   }
 
   diagramTurns=async(diagramTurns: DiagramTurnRequest,transaction:Transaction):Promise<any>=>{
-    //agregar control de que no hay turnos para el mes y año ingresados
-    
+    //control de que la cancha ya tiene turnos para el mes aqui
     for(const court of diagramTurns.courts){
-      await this.turnService.diagramTurns(court,transaction)
+
+      await this.turnService.diagramTurns(court,diagramTurns.year,diagramTurns.month,transaction)
     }
   }
 }

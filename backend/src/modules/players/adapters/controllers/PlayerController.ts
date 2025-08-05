@@ -66,7 +66,15 @@ export class PlayerController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      const { fullName } = req.body;
+      const { fullName } = req.query as { fullName?: string };
+
+      if (!fullName || fullName.trim() === "") {
+        res
+          .status(400)
+          .json({ message: "fullName query parameter is required" });
+        return;
+      }
+
       const players = await this.playerService.getPlayersByName(fullName);
       res.json(players);
     } catch (error) {
@@ -91,12 +99,12 @@ export class PlayerController {
   // Posiciones
   getAllPositions = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const positions = await this.positionService.getAllPositions()
+      const positions = await this.positionService.getAllPositions();
       res.json(positions);
     } catch (error) {
-      next(error)
+      next(error);
     }
-  }
+  };
 
   // Teams
   createTeam = async (
@@ -111,14 +119,10 @@ export class PlayerController {
         throw new UnauhtorizedError("No existe el usuario");
       }
 
-      console.log(creatorId);
-
-      console.log(req.body);
-
 
       const team = new NewTeamRequest(req.body);
 
-      const validationError= team.validate()
+      const validationError = team.validate();
       if (validationError) {
         throw new BadRequestError(validationError);
       }
@@ -133,5 +137,4 @@ export class PlayerController {
       next(error);
     }
   };
-
 }

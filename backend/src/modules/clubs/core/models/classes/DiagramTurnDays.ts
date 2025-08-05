@@ -8,7 +8,8 @@ export class DiagramTurnWeekDay{
   }
 
   validate(court:number): string | null {
-    if(!this.weekDay|| typeof(this.weekDay)!=="number"|| this.weekDay<0 || this.weekDay>6){
+    if(!this.weekDay===null|| typeof(this.weekDay)!=="number"|| this.weekDay<0 || this.weekDay>6){
+
       return "Todos los weekDay tienen que ser un número entre 0 y 6"
     }
     if(!Array.isArray(this.turns)){
@@ -39,6 +40,7 @@ export class DiagramTurnWeekDay{
         ) {
           return `Existen turnos superpuestos en el dia ${this.weekDay} de la cancha ${court}`;
         }
+        i++
       }
     }
     return null;

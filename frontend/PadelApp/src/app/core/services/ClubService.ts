@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from './AuthService';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,9 @@ import { Observable } from 'rxjs';
 export class ClubService {
   private readonly apiUrl = 'http://localhost:3000/api';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient,
+    private readonly authService: AuthService
+  ) {}
 
   getWallMaterial(): Observable<any> {
     return this.http.get(this.apiUrl + '/wall-materials');
@@ -19,14 +22,24 @@ export class ClubService {
   }
 
   habilitateClub(info: any): Observable<any> {
-    console.log('NO EJETUCA');
-    return this.http.post(this.apiUrl + '/clubs', info);
+    const token = this.authService.getToken();
+
+    return this.http.post(this.apiUrl + '/clubs',
+      info,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
   }
 
   getClubByUserId(): Observable<any> {
-    const params = {
-      userId: 2,
-    };
-    return this.http.get(this.apiUrl + '/clubs', { params });
+    const token = this.authService.getToken();
+    return this.http.get(this.apiUrl + '/clubs',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      } );
   }
 }

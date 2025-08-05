@@ -20,11 +20,9 @@ export class ClubService{
   }
 
   createClub = async(newClub:NewClubRequest):Promise<any>=>{
-    const user= await this.userService.getUserById(newClub.userId)
-    if(!user){
-      throw new BadRequestError("Usuario no existente")
-    }
+
     const userClub=await this.getClubByUserId(newClub.userId)
+
     if(userClub){
       throw new BadRequestError("El usuario ya posee un club")
     }
@@ -65,9 +63,9 @@ export class ClubService{
   diagramTurns=async(userId:number, diagramTurns:DiagramTurnRequest):Promise<any>=>{
     const club= await this.getClubByUserId(userId)
 
-    const courtsId= club.getDataValue("courts").map((court:any)=>court.id)
+    const courtsId:number[]= club.getDataValue("courts").map((court:any)=>court.id)
 
-    const invalidCourts=diagramTurns.courts.some((court)=> !courtsId(court.id))
+    const invalidCourts=diagramTurns.courts.some((court)=> !courtsId.includes(court.id))
     if(invalidCourts){
       throw new NotFoundError("Cancha no encontrada")
     }
@@ -78,7 +76,7 @@ export class ClubService{
       await this.courtService.diagramTurns(diagramTurns,transaction)
 
       await transaction.commit()
-
+      return "ok"
     }catch(error: any){
       await transaction.rollback();
       throw error

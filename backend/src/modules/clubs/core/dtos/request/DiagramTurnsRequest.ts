@@ -6,7 +6,7 @@ export class DiagramTurnRequest {
   year:number
 
   constructor(data: any) {
-    this.courts = data.map((court:any)=> new DiagramTurnCourt(court));
+    this.courts = data.courts.map((court:any)=> new DiagramTurnCourt(court));
     this.month= data.month
     this.year=data.year
   }
@@ -32,6 +32,7 @@ export class DiagramTurnRequest {
     }
     const seenCourtId = new Set<number>();
     for (const court of this.courts){
+
       if(seenCourtId.has(court.id)){
         return `La cancha ${court.id} esta repetida`
       }

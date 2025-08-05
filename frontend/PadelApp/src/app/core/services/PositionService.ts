@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PositionService {
-  private readonly apiUrl = 'http://localhost:3000/api/positions';
+  private readonly apiUrl = 'http://localhost:3000/api/players/positions';
 
   constructor(private readonly http: HttpClient) {}
 

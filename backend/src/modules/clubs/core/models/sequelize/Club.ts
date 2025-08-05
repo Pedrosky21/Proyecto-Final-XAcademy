@@ -50,7 +50,7 @@ Club.init({
     },
     cancelationRules: {
         type: DataTypes.STRING,
-        field: "reglacancelacion"
+        field: "reglaCancelacion"
     },
     userId: {
         type: DataTypes.INTEGER,
@@ -70,5 +70,4 @@ Club.init({
 
 Club.belongsTo(User, { foreignKey: 'usuario_idusuario', as: 'usuario' });
 User.hasOne(Club, { foreignKey: 'usuario_idusuario' });
-Club.hasMany(Court, { foreignKey: 'clubId',as: 'courts'});
 export default Club;

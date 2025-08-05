@@ -1,13 +1,15 @@
+import { Transaction } from "sequelize"
+import { NewTurn } from "../../core/models/classes/NewTurn"
 import Turn from "../../core/models/sequelize/Turn"
 
 export class TurnRepository{
 
-  createTurn=async():Promise<any>=>{
+  createTurn=async(newTurn:NewTurn,transaction:Transaction):Promise<any>=>{
     return Turn.create({
-      startDateTime:"14-42-123",
-      endDateTime:"123-123-23",
+      startDateTime:newTurn.startDate,
+      endDateTime:newTurn.endDate,
       turnStateId:1,
-      courtId:2
-    })
+      courtId:newTurn.courtId
+    },{transaction})
   }
 }
