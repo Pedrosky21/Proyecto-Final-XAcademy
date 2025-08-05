@@ -61,7 +61,6 @@ Court.belongsTo(WallMaterial, {
   foreignKey: "wallMaterialId",
   as: "wallMaterial",
 });
-Court.hasMany(Turn, { foreignKey: "courtId", as: "turns" });
 Court.belongsTo(Club, { foreignKey: 'clubId' });
 
 Club.hasMany(Court, { foreignKey: 'clubId',as: 'courts'})

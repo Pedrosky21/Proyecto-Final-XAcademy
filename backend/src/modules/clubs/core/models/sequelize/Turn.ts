@@ -48,4 +48,5 @@ Turn.init({
 })
 
 Turn.belongsTo(TurnState, { foreignKey: 'turnStateId', as: 'turnState' });
+Court.hasMany(Turn, { foreignKey: "courtId", as: "turns" });
 export default Turn;

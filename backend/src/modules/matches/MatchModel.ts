@@ -1,10 +1,10 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../../config/db.config";
-import Turn from "../turns/models/Turn";
 import WallMaterial from "../wallMaterials/core/models/WallMaterial";
 import FloorMaterial from "../floorMaterials/core/FloorMaterial";
-import TurnState from "../turns/models/TurnState";
 import MatchState from "./MatchStateModel";
+import TurnState from "../clubs/core/models/sequelize/TurnState";
+import Turn from "../clubs/core/models/sequelize/Turn";
 
 class Match extends Model {
     public id!: number
