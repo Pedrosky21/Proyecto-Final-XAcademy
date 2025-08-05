@@ -3,7 +3,14 @@ import sequelize from "../../../../config/db.config";
 import Team from "./TeamModel";
 import Player from "./PlayerModel";
 
-class PlayersTeams extends Model {}
+class PlayersTeams extends Model {
+  public id!: number;
+  public creator!: number;
+  public playerId!: number;
+  public teamId!: number;
+
+  public team?: Team; // signo ? por si no se usa include
+}
 
 PlayersTeams.init(
   {
@@ -40,7 +47,6 @@ PlayersTeams.init(
     sequelize,
     timestamps: false,
     tableName: "jugadorxequipo",
-
     modelName: "PlayersTeams"
   }
 );

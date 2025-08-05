@@ -53,14 +53,8 @@ Court.init(
   }
 );
 
-Court.belongsTo(FloorMaterial, {
-  foreignKey: "floorMaterialId",
-  as: "floorMaterial",
-});
-Court.belongsTo(WallMaterial, {
-  foreignKey: "wallMaterialId",
-  as: "wallMaterial",
-});
-Court.hasMany(Turn, { foreignKey: "courtId", as: "turns" });
+Court.belongsTo(FloorMaterial, { foreignKey: 'floorMaterialId', as: 'floorMaterial' });
+Court.belongsTo(WallMaterial, { foreignKey: 'wallMaterialId', as: 'wallMaterial' });
+//Court.hasMany(Turn, { foreignKey: 'courtId', as: 'turns' });
 
 export default Court;

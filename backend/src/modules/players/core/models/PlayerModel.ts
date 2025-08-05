@@ -11,7 +11,6 @@ class Player extends Model {}
 Player.init(
   {
     id: {
-
         type: DataTypes.INTEGER,
         primaryKey: true,
         field:'idjugador',
@@ -67,7 +66,6 @@ Player.init(
   },
   {
     sequelize,
-
     modelName: 'Jugador',
     tableName: 'jugador',
     timestamps: false
