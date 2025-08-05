@@ -1,2 +1,73 @@
-<p>browse-matches works!</p>
-<h1>jeje</h1>
+<div class="bg-appBackground min-h-[calc(100vh-68px)] bg-splash w-full">
+  <h1 class="text-5xl pt-8 ml-6 font-bold text-appWhiteText text-center">
+    Busca <span class="text-appPrimary">Partidos</span><br />
+  </h1>
+  <h3 class="text-2x1 pt-2 text-center text-appWhiteText font-bold">
+    Aquí apareceran los partidos publicados para jugar. <br />
+    Recorda que tenes que se parte de un equipo para poder jugar
+  </h3>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <!-- Material Piso -->
+    <select
+      [(ngModel)]="filters.materialPiso"
+      class="border border-[#D6FF1D] bg-transparent text-white px-3 py-2 rounded"
+    >
+      <option value="">Material Piso</option>
+      <option value="Profesional">Profesional</option>
+      <option value="Inicial">Inicial</option>
+    </select>
+
+    <!-- Material Pared -->
+    <select
+      [(ngModel)]="filters.materialPared"
+      class="border border-[#D6FF1D] bg-transparent text-white px-3 py-2 rounded"
+    >
+      <option value="">Material Pared</option>
+      <option value="Profesional">Profesional</option>
+      <option value="Inicial">Inicial</option>
+    </select>
+
+    <!-- Techada -->
+    <select
+      [(ngModel)]="filters.techada"
+      class="border border-[#D6FF1D] bg-transparent text-white px-3 py-2 rounded"
+    >
+      <option value="">Techada</option>
+      <option value="Profesional">Profesional</option>
+      <option value="Inicial">Inicial</option>
+    </select>
+
+    <!-- Buttons -->
+    <div class="flex gap-3">
+      <button
+        class="bg-[#D6FF1D] text-black font-bold px-4 py-2 rounded"
+        (click)="buscar()"
+      >
+        Buscar
+      </button>
+      <button class="border border-[#D6FF1D] px-4 py-2 rounded">
+        Reiniciar Filtros
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div
+      *ngFor="let team of teams"
+      (click)="selectTeam(team)"
+      [ngClass]="{
+        'bg-[#D6FF1D] text-black': selectedTeam === team,
+        'border border-[#D6FF1D]': selectedTeam !== team
+      }"
+      class="p-4 rounded-lg cursor-pointer transition hover:scale-105"
+    >
+      <div class="flex items-center gap-2">
+        <span class="text-lg">👥</span>
+        <span class="font-bold">{{ team.name }}</span>
+      </div>
+      <div class="text-sm">{{ team.category }}</div>
+      <div class="text-xs">{{ team.date }}</div>
+    </div>
+  </div>
+</div>

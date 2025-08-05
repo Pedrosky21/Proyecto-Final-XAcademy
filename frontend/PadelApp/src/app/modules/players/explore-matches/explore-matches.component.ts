@@ -9,6 +9,7 @@ import { loadingScreenService } from '../../../core/layouts/loading-screen/servi
 import { TeamService } from '../../../core/services/TeamService';
 import { NewTeamRequest } from '../../../model/NewTeamRequest';
 import { AuthService } from '../../../core/services/AuthService';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-explore-matches',
@@ -35,29 +36,31 @@ export class ExploreMatchesComponent {
     this.createTeamForm = this.fb.group({
       selectedPlayer: [null, Validators.required],
       teamName: ['', [Validators.required, Validators.minLength(3)]],
-      teamDescription: ['', [Validators.required, Validators.minLength(5)]],
+      teamDescription: ['', [Validators.minLength(5)]],
     });
   }
+  private searchSubject = new Subject<string>();
   matchGroup: FormGroup;
   createTeamForm!: FormGroup;
 
   showCreateTeamModal = false;
   showCreateMatchModal = false;
+  searchTerm = '';
+  filteredPlayers: any[] = [];
 
   players: any[] = [];
   clubs: string[] = ['Los Imbatibles', 'Los Campeones'];
 
-  ngOnInit() {
-    this.loadPlayers();
-  }
+  ngOnInit() {}
 
-  loadPlayers() {
+  /* loadPlayers() {
     this.playerService.getPlayers().subscribe({
       next: (data) => {
         this.players = data.map((p: any) => {
           return {
             ...p,
             fullName: `${p.firstName} ${p.lastName}`,
+            age: this.calculateAge(p.birthDate),
           };
         });
       },
@@ -65,13 +68,7 @@ export class ExploreMatchesComponent {
         console.error('Error fetching players', err);
       },
     });
-  }
-
-  loadTeams() {}
-
-  get selectedPlayer() {
-    return this.createTeamForm.value.selectedPlayer;
-  }
+  } */
 
   openCreateMatchModal() {
     this.showCreateMatchModal = true;
@@ -148,40 +145,39 @@ export class ExploreMatchesComponent {
 
     this.confirmationModalService.openModal({
       title: '¿Confirmar equipo?',
-      message: `¿Desea crear el equipo ${teamName} con ${this.selectedPlayer?.fullName}?`,
+      message: `¿Desea crear el equipo ${teamName} con ${selectedPlayer?.fullName}?`,
       icon: ModalIconEnum.ok,
       accept: {
         title: 'Confirmar',
         action: () => {
           this.confirmationModalService.closeModal();
-
           this.loadingScreenService.showLoadingScreen('Creando Equipo...');
-
           const newTeam: NewTeamRequest = {
             name: teamName,
             description: teamDescription,
           };
 
           const creatorId = this.authService.getLoggedInUser();
-          console.log('Creator ID:', creatorId);
+
           const playerId = selectedPlayer.id;
-          console.log('Sending newTeam:', newTeam);
 
           this.teamService.createTeam(creatorId, newTeam, playerId).subscribe({
             next: (team) => {
-              this.loadingScreenService.showLoadingScreen(null);
+              setTimeout(() => {
+                this.loadingScreenService.showLoadingScreen(null);
 
-              this.confirmationModalService.openModal({
-                icon: ModalIconEnum.ok,
-                title: 'Equipo creado con éxito',
-                message: `Se ha creado el equipo ${team.name} correctamente.`,
-                accept: {
-                  title: 'Aceptar',
-                  action: () => {
-                    this.confirmationModalService.closeModal();
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.ok,
+                  title: 'Equipo creado con éxito',
+                  message: `Se ha creado el equipo ${team.name} correctamente.`,
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                    },
                   },
-                },
-              });
+                });
+              }, 800);
             },
             error: (err) => {
               this.loadingScreenService.showLoadingScreen(null);
