@@ -1,4 +1,4 @@
-<div class="pt-6 bg-primary min-h-[calc(100vh-68px)] w-full">
+<div class="pt-6 bg-appBackground min-h-[calc(100vh-68px)] w-full">
   <h1 class="text-5xl font-raleway font-bold text-white text-center pt-4">
     Mis can<span class="text-secondary">chas</span>
   </h1>
@@ -10,7 +10,8 @@
     
     <button
       type="button"
-      class="bg-secondary text-black font-bold w-fit py-2 px-4 h-fit rounded-md"
+      (click)="openDiagramTurnModal()"
+      class="bg-appPrimary text-black font-bold w-fit py-2 px-4 h-fit rounded-md"
     >
         Diagramar turnos
     </button>
@@ -30,5 +31,11 @@
           </article>
       </article>
   </section>
+<app-diagram-turn-modal
+*ngIf="diagramTurnModalOpen"
+(onClose)="closeDiagramTurnModal"></app-diagram-turn-modal>
  
 </div>
+<app-diagram-turn-modal
+[isOpen]="diagramTurnModalOpen"
+  (onCloseModal)="closeDiagramTurnModal()"></app-diagram-turn-modal>

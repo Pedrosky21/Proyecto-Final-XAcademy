@@ -25,7 +25,7 @@ export class UserRepository {
 
     user.userType = userType;
     await user.save({transaction});
-
+    
     return user;
   };
 

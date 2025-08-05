@@ -1,0 +1,24 @@
+<div
+  *ngIf="isOpen"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+>
+  <div
+    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[500px] p-6 relative"
+  >
+    <button
+      (click)="onClose()"
+      class="absolute top-3 right-3 text-appWhiteText hover:text-appError"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold text-center mb-6">Diagramación de Turnos</h2>
+    <div class="w-full flex flex-row  items-center text-center justify-center gap-3">
+      <label class="flex text-xl font-roboto font-bold">Mes: </label>
+      <input type="month"
+      class="w-1/2 border border-[#EBFF00] text-lg resize-none bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+    </div>
+
+    
+  </div>
+</div>

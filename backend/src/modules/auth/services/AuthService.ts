@@ -14,6 +14,7 @@ export class AuthService {
 
         const token = this.generateToken(user.id, user.email);
 
+        console.log(user)
     return { token, user };
   };
 

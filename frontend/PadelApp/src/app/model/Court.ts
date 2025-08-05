@@ -8,7 +8,7 @@ export class Court{
   
   constructor(data:any){
     this.id=data.id
-    this.index=data.number
+    this.index=data.index
     this.wallMaterialId=data.wallMaterialId
     this.floorMaterialId = data.floorMaterialId
     this.roofted= data.roofed
