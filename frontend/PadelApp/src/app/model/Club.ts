@@ -6,7 +6,7 @@ export class Club{
     admisionRules:string
     cancelationRules:string
     cellNumber:number
-    closingTimeTime:string
+    closingTime:string
     courts?:Court[]
     id:number
     name:string
@@ -20,11 +20,11 @@ export class Club{
       this.admisionRules=data.admisionRules
       this.cancelationRules=data.cancelationRules
       this.cellNumber=data.cellNumber
-      this.closingTimeTime=data.closingTime
-      this.courts= data.courts.map((court:any)=>new Court(court))
+      this.closingTime=data.closingTime
+      this.courts=data.courts? data.courts.map((court:any,index:number)=>new Court(court,index+1)):[]
       this.id=data.id
       this.name=data.name
-      this.openningTime= data.openingTime
+      this.openningTime= data.openningTime
       this.responsableFirstName=data.responsableFirstName
       this.responsableLastName= data.responsableLastName
       this.turnPrice =data.turnPrice

@@ -61,14 +61,12 @@ export class HabilitateClubComponent implements OnInit {
   addCourt() {
     this.newCourts.push(
       new Court({
-        index:
-          this.newCourts.length !==0
-            ? this.newCourts[this.newCourts.length - 1].index + 1
-            : 1,
         wallMaterialId: '',
         floorMaterialId: '',
-        roofted: false,
-      })
+        roofted: false
+      },
+       this.newCourts.length !==0? this.newCourts[this.newCourts.length - 1].index + 1 : 1
+    )
       
     );
   }

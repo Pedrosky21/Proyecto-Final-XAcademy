@@ -1,9 +1,9 @@
 <div
   *ngIf="isOpen"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 p-4"
 >
   <div
-    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[500px] p-6 relative"
+    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[60vw] p-6 relative"
   >
     <button
       (click)="onClose()"
@@ -16,8 +16,37 @@
     <div class="w-full flex flex-row  items-center text-center justify-center gap-3">
       <label class="flex text-xl font-roboto font-bold">Mes: </label>
       <input type="month"
-      class="w-1/2 border border-[#EBFF00] text-lg resize-none bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+      [(ngModel)]="selectedMonth"
+      class="w-38 border border-appSecondary text-lg resize-none bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
     </div>
+    <div 
+      *ngIf="club"
+      class="w-full flex flex-row justify-start items-stretch border  border-black my-3"
+    >
+      <button
+        *ngFor="let court of courtsDiagram"
+        [ngClass]="getCourtButtonClass(court.index-1)"
+        (click)="setSelectedCourt(court.index-1)"
+        class="h-full flex-1 border-x border-appBlackText text-lg font-roboto font-semibold py-2 px-3"
+      >
+        Cancha {{court.index}}
+      </button>
+    </div>
+
+    <div class="w-full flex overflow-auto">
+      <app-turn-table
+      [columns]="columns"
+      [rows]="courtsDiagram[selectedCourt]"
+      (rowClick)="clickRow($event)"></app-turn-table>
+    </div>
+      <div class="flex mt-6 w-full align-middle justify-center">
+        <button
+          (click)="handleSubmit($event)"
+          class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
+        >
+          Confirmar
+        </button>
+      </div>
 
     
   </div>

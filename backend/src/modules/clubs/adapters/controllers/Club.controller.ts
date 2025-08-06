@@ -68,6 +68,7 @@ export class ClubController{
       const diagramTurnRequest= new DiagramTurnRequest(req.body)
   
 
+      console.log(req.body)
       const validationError= diagramTurnRequest.validate()
       if (validationError) {
         throw new BadRequestError(validationError);

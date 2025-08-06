@@ -9,16 +9,18 @@ export class TurnService{
   diagramTurns=async(court: DiagramTurnCourt,year:number,month:number,transaction:Transaction):Promise<any>=>{
     for(const day of court.days){
       for(const week of [1,2,3,4,5]){
-        const exactDay= this.getDateFromWeek(year, month, week, day.weekDay)
+        const exactDay= this.getDateFromWeek(year, month-1, week, day.weekDay)
 
+        console.log(exactDay)
       // Evitar días fuera del mes
-      if (exactDay.getMonth() !== month) continue;
+      if (exactDay.getMonth() !== month-1) continue;
 
       for (const turn of day.turns) {
         const[hours,minutes]=turn.split(":").map(Number)
         const turnDate = new Date(exactDay); 
         turnDate.setHours(hours,minutes,0,0)
         const newTurn=  new NewTurn(turnDate,court.id)
+        console.log(newTurn)
         await this.turnRepository.createTurn(newTurn,transaction)
       }
       }
