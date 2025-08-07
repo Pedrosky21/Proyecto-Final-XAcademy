@@ -3,7 +3,7 @@ export class DiagramTurnWeekDay{
   turns:string[]
 
   constructor(data:any){
-    this.weekDay=data.weekDay
+    this.weekDay=Number(data.weekDay)
     this.turns= data.turns
   }
 

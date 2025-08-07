@@ -61,14 +61,12 @@ export class HabilitateClubComponent implements OnInit {
   addCourt() {
     this.newCourts.push(
       new Court({
-        index:
-          this.newCourts.length !==0
-            ? this.newCourts[this.newCourts.length - 1].index + 1
-            : 1,
         wallMaterialId: '',
         floorMaterialId: '',
-        roofted: false,
-      })
+        roofted: false
+      },
+       this.newCourts.length !==0? this.newCourts[this.newCourts.length - 1].index + 1 : 1
+    )
       
     );
   }
@@ -109,8 +107,6 @@ export class HabilitateClubComponent implements OnInit {
         ? 'Revise los valores ingresados antes de continuar'
         : tableMessage;
       this.form.markAllAsTouched();
-      console.log(this.form.errors)
-      console.log(tableMessage)
       this.confirmationModalService.openModal({
         icon: ModalIconEnum.error,
         title: 'Error en el formulario',
@@ -251,7 +247,7 @@ export class HabilitateClubComponent implements OnInit {
     this.loadFloorMaterial();
     this.loadWallMaterial();
     this.setColumns();
-    console.log(this.columnsSettings)
+    
   }
 
   autoResize(event: Event): void {

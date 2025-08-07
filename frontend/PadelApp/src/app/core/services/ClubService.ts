@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './AuthService';
+import { DiagramatingTurnsCourt } from '../../model/DiagramatedTurn';
 
 @Injectable({
   providedIn: 'root',
@@ -41,5 +42,22 @@ export class ClubService {
           Authorization: `Bearer ${token}`,
         },
       } );
+  }
+
+  diagramTurns(turns:DiagramatingTurnsCourt[],selectedMonth:string): Observable<any>{
+    const body={
+      "year":selectedMonth.split("-")[0],
+      "month":selectedMonth.split("-")[1],
+      "courts":turns
+    }
+    
+    const token = this.authService.getToken();
+    return this.http.post(this.apiUrl + '/clubs/diagram-turns',
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
   }
 }

@@ -30,7 +30,13 @@ export class CourtService{
 
   diagramTurns=async(diagramTurns: DiagramTurnRequest,transaction:Transaction):Promise<any>=>{
     //control de que la cancha ya tiene turnos para el mes aqui
+  
     for(const court of diagramTurns.courts){
+      const existingTurns= await this.courtRepository.getCourtTurnCountForMonth(court.id,diagramTurns.year,diagramTurns.month)
+
+      if(existingTurns>0){
+        throw new BadRequestError(`Ya existe turnos para el mes y año ingresados para la cancha ${court.id}`)
+      }
 
       await this.turnService.diagramTurns(court,diagramTurns.year,diagramTurns.month,transaction)
     }

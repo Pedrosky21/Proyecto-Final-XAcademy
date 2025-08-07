@@ -177,7 +177,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `mydb`.`partido` (
   `idpartido` INT NOT NULL AUTO_INCREMENT,
   `techada` TINYINT NULL DEFAULT NULL,
-  `turno_idturno` INT NOT NULL,
+  `turno_idturno` INT NULL DEFAULT NULL,
   `materialPared_idmaterialpared` INT NOT NULL,
   `materialSuelo_idmaterialSuelo` INT NOT NULL,
   `estadopartido_idestadoturno` INT NOT NULL,
@@ -359,5 +359,48 @@ INSERT INTO `mydb`.`estadopartido` (`nombre`, `descripcion`) VALUES
   ('Confirmado','Tiene una cancha'),
   ('En curso','Esta ocurriendo'),
   ('Finalizado','Ya termino');
-  
 
+
+-- Club
+INSERT INTO `mydb`.`club` (
+  nombre, direccion, horaInicio, horaCierre,
+  nombreResponsable, apellidoResponsable,
+  telefonoClub, precioTurno,
+  reglaCancelacion, reglaAdmision,
+  usuario_idusuario
+) VALUES (
+  'Club Central', 'Av. Padel 123', '08:00:00', '23:00:00',
+  'Juan', 'Pérez',
+  123456789, 1500,
+  'Cancelar 24h antes', 'Solo socios',
+  1
+);
+
+-- Cancha
+INSERT INTO `mydb`.`cancha` (
+  techada,
+  club_idclub,
+  materialPared_idmaterialpared,
+  materialSuelo_idmaterialSuelo
+) VALUES (
+  1,  -- techada = true
+  1,  -- club_idclub
+  1,  -- materialPared_idmaterialpared
+  1   -- materialSuelo_idmaterialSuelo
+);
+
+
+-- Turno
+INSERT INTO mydb.turno (
+  fechaHoraInicio,
+  fechaHoraFin,
+  nombre,
+  cancha_idcancha,
+  estadoturno_idestadoturno
+) VALUES (
+  '2025-08-05 14:00:00',
+  '2025-08-05 15:00:00',
+  'Turno de prueba',
+  1,
+  1
+);

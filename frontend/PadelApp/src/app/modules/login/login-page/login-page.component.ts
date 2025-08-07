@@ -55,7 +55,7 @@ export class LoginPageComponent {
                   this.router.navigate(['home']);
                   break;
                 case 'Club':
-                  this.router.navigate(['club/view-courts']);
+                  this.router.navigate(['/clubs/view-courts']);
                   break;
                 default:
                   this.router.navigate(['/home']);

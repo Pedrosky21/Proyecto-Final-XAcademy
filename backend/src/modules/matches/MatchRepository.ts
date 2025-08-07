@@ -7,18 +7,26 @@ import Team from "../players/core/models/TeamModel";
 import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
 
+interface MatchCreateInput {
+  roofed: number;
+  wallMaterialId: number;
+  floorMaterialId: number;
+  matchStateId: number;
+  timeSlotId: number;
+}
+
 export class MatchRepository {
   createMatch = async (
-    newMatch: NewMatchRequest,
+    newMatch: MatchCreateInput,
     transaction: Transaction
   ): Promise<Match> => {
     const createdMatch = await Match.create(
       {
         roofed: newMatch.roofed,
-        turnId: newMatch.turnId,
         wallMaterialId: newMatch.wallMaterialId,
         floorMaterialId: newMatch.floorMaterialId,
-        matchStateId: newMatch.matchState,
+        matchStateId: newMatch.matchStateId,
+        timeSlotId: newMatch.timeSlotId
       },
       { transaction }
     );
@@ -30,7 +38,6 @@ export class MatchRepository {
     newMatchesTeams: NewMatchesTeams,
     transaction: Transaction
   ): Promise<MatchesTeams> => {
-    console.log(newMatchesTeams);
     const createdMatchesTeams = await MatchesTeams.create(
       {
         isCreator: newMatchesTeams.isCreator,
