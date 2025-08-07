@@ -39,10 +39,15 @@
       [rows]="courtsDiagram[selectedCourt]"
       (rowClick)="clickRow($event)"></app-turn-table>
     </div>
-      <div class="flex mt-6 w-full align-middle justify-center">
+      <div class="flex mt-6 w-full align-middle gap-6 justify-end">
+        <button 
+          (click)="applyAll()"
+          class="bg-[#EBFF00] px-6 py-2 rounded-md font-bold text-appBlackText">
+          Aplicar a todas
+        </button>
         <button
           (click)="handleSubmit($event)"
-          class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
+          class="bg-[#EBFF00] px-6 py-2 rounded-md font-bold text-appBlackText"
         >
           Confirmar
         </button>

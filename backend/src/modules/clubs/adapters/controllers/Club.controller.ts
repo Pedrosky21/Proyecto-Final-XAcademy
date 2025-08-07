@@ -24,9 +24,6 @@ export class ClubController{
   
   createClub = async (req: Request, res: Response, next: NextFunction) => {
 
-      console.log("headers")
-      console.log(req.headers)
-    console.log(req.user?.id)
     try {
       const newClubRequest= new NewClubRequest(req.body,Number(req.user?.id))
       
@@ -58,8 +55,6 @@ export class ClubController{
   diagramTurns= async (req: Request, res: Response, next: NextFunction) => {
 
     try{
-      console.log("headers")
-      console.log(req.headers)
       const clubUser = req.user?.id
 //reemplazar por el que toma del token
       if(!clubUser){
@@ -67,16 +62,14 @@ export class ClubController{
       }
       const diagramTurnRequest= new DiagramTurnRequest(req.body)
   
-
-      console.log(req.body)
       const validationError= diagramTurnRequest.validate()
       if (validationError) {
         throw new BadRequestError(validationError);
       }
 
-      const club=await this.clubService.diagramTurns(clubUser,diagramTurnRequest)
+      await this.clubService.diagramTurns(clubUser,diagramTurnRequest)
       
-      res.status(200).send(club)
+      res.status(200).send()
     }catch(error){
       next(error)
     }

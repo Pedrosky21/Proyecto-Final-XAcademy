@@ -60,12 +60,11 @@ export class DiagramTurnModalComponent implements OnChanges {
     this.courtsDiagram = this.club?.courts!.map(
       (court) => new DiagramatingTurnsCourt(court, [0, 1, 2, 3, 4, 5, 6])
     )!;
-    console.log(this.courtsDiagram);
+
   }
   selectedCourt = 0;
   setSelectedCourt(index: number) {
     this.selectedCourt = index;
-    console.log(this.courtsDiagram[this.selectedCourt]);
   }
 
   clickRow(event: { weekDay: number; column: string }) {
@@ -104,31 +103,80 @@ export class DiagramTurnModalComponent implements OnChanges {
     return 'bg-appPrimay';
   }
 
+  applyAll() {
+    //clonar los dias de la cancha seleccionada
+    const selectedDays = this.courtsDiagram[this.selectedCourt].days.map(
+      (day) => ({
+        weekDay: day.weekDay,
+        turns: [...day.turns], 
+      })
+    );
+
+    //clonar esos dias a cada cancha
+    this.courtsDiagram = this.courtsDiagram.map((diagram) => ({
+      ...diagram,
+      days: selectedDays.map((day) => ({
+        weekDay: day.weekDay,
+        turns: [...day.turns], 
+      })),
+    }));
+  }
+
   handleSubmit($event: Event) {
-    this.confirmationModalService.openModal({
-      title: 'Confirmar diagramación',
-      message: `¿Desea guardar la configuración ingresada?`,
-      reject: {
-        title: 'Cancelar',
-        action: () => {
-          this.confirmationModalService.closeModal();
+    if (!this.selectedMonth) {
+      this.confirmationModalService.openModal({
+        icon: ModalIconEnum.error,
+        title: 'Error al confirmar turnos',
+        message: 'Debe seleccionar un mes antes de continuar',
+        accept: {
+          title: 'Aceptar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+          },
         },
-      },
-      accept: {
-        title: 'Confirmar',
-        action: () => {
-          this.confirmationModalService.closeModal();
-          this.loadingScreenService.showLoadingScreen('Generando turnos...');
-          this.clubService
-            .diagramTurns(this.courtsDiagram, this.selectedMonth)
-            .subscribe({
-              next: (response) => {
-                setTimeout(() => {
+      });
+    } else {
+      this.confirmationModalService.openModal({
+        title: 'Confirmar diagramación',
+        message: `¿Desea guardar la configuración ingresada?`,
+        reject: {
+          title: 'Cancelar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+          },
+        },
+        accept: {
+          title: 'Confirmar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+            this.loadingScreenService.showLoadingScreen('Generando turnos...');
+            this.clubService
+              .diagramTurns(this.courtsDiagram, this.selectedMonth)
+              .subscribe({
+                next: (response) => {
+                  setTimeout(() => {
+                    this.loadingScreenService.showLoadingScreen(null);
+                    this.confirmationModalService.openModal({
+                      icon: ModalIconEnum.ok,
+                      title: 'Turnos generados con éxito',
+                      message: 'Ya puede consultarlos desde cada cancha',
+                      accept: {
+                        title: 'Aceptar',
+                        action: () => {
+                          this.confirmationModalService.closeModal();
+                        },
+                      },
+                    });
+                  }, 1500);
+                },
+                error: (error) => {
+                  console.log(error)
                   this.loadingScreenService.showLoadingScreen(null);
                   this.confirmationModalService.openModal({
-                    icon: ModalIconEnum.ok,
-                    title: 'Turnos generados con éxito',
-                    message: 'Ya puede consultarlos desde cada cancha',
+                    icon: ModalIconEnum.error,
+                    title: 'Error',
+                    message:
+                      'Ocurrio un problema al generar los turnos. Intente de nuevo mas tarde',
                     accept: {
                       title: 'Aceptar',
                       action: () => {
@@ -136,27 +184,12 @@ export class DiagramTurnModalComponent implements OnChanges {
                       },
                     },
                   });
-                }, 1500);
-              },
-              error: (error) => {
-                this.loadingScreenService.showLoadingScreen(null);
-                this.confirmationModalService.openModal({
-                  icon: ModalIconEnum.error,
-                  title: 'Error',
-                  message:
-                    'Ocurrio un problema al generar los turnos. Intente de nuevo mas tarde',
-                  accept: {
-                    title: 'Aceptar',
-                    action: () => {
-                      this.confirmationModalService.closeModal();
-                    },
-                  },
-                });
-              },
-            });
+                },
+              });
+          },
         },
-      },
-    });
+      });
+    }
   }
   getCourtButtonClass(court: number) {
     return court === this.selectedCourt

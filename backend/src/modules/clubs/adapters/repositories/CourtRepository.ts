@@ -1,6 +1,7 @@
 import { Transaction } from "sequelize";
 import Court from "../../core/models/sequelize/Courts";
 import { NewCourt } from "../../core/models/classes/NewCourt";
+import Turn from "../../core/models/sequelize/Turn";
 
 export class CourtRepository{
 
@@ -14,5 +15,21 @@ export class CourtRepository{
     }, {transaction})
   }
 
- 
+  getCourtTurnCountForMonth=async(courtId:number,year:number,month:number):Promise<any>=>{
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+
+    const count = await Turn.count({
+      where: {
+        courtId,
+        fechaHoraInicio: {
+          $gte: startDate,
+          $lt: endDate,
+        },
+      },
+    });
+
+    return count;
+  }
+
 }

@@ -11,7 +11,6 @@ export class TurnService{
       for(const week of [1,2,3,4,5]){
         const exactDay= this.getDateFromWeek(year, month-1, week, day.weekDay)
 
-        console.log(exactDay)
       // Evitar días fuera del mes
       if (exactDay.getMonth() !== month-1) continue;
 
@@ -20,7 +19,7 @@ export class TurnService{
         const turnDate = new Date(exactDay); 
         turnDate.setHours(hours,minutes,0,0)
         const newTurn=  new NewTurn(turnDate,court.id)
-        console.log(newTurn)
+        
         await this.turnRepository.createTurn(newTurn,transaction)
       }
       }

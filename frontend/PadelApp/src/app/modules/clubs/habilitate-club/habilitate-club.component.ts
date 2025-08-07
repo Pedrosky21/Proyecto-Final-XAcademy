@@ -107,8 +107,6 @@ export class HabilitateClubComponent implements OnInit {
         ? 'Revise los valores ingresados antes de continuar'
         : tableMessage;
       this.form.markAllAsTouched();
-      console.log(this.form.errors)
-      console.log(tableMessage)
       this.confirmationModalService.openModal({
         icon: ModalIconEnum.error,
         title: 'Error en el formulario',
@@ -249,7 +247,7 @@ export class HabilitateClubComponent implements OnInit {
     this.loadFloorMaterial();
     this.loadWallMaterial();
     this.setColumns();
-    console.log(this.columnsSettings)
+    
   }
 
   autoResize(event: Event): void {

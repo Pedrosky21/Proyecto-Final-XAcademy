@@ -50,7 +50,7 @@ export class ClubService {
       "month":selectedMonth.split("-")[1],
       "courts":turns
     }
-    console.log(body)
+    
     const token = this.authService.getToken();
     return this.http.post(this.apiUrl + '/clubs/diagram-turns',
       body,
