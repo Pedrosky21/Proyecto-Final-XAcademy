@@ -56,7 +56,7 @@ export class TeamRepository {
         model: PlayersTeams,
         as: "playersTeams",
         where: { playerId },
-        attributes: [] // para no traer los datos de la tabla intermedia si no los necesitás
+        attributes: []
       }
     ],
     order: [["name", "ASC"]],
