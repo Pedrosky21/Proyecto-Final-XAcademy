@@ -14,7 +14,7 @@ export class ViewCourtsComponent implements OnInit{
   ){
 
   }
-  club:Club|null=null
+  club:Club= new Club({})
   loadClub() {
     this.clubService.getClubByUserId().subscribe({
       next: (data: any) => {

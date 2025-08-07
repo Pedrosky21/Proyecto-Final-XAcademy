@@ -15,7 +15,6 @@ export class UserService {
   }
 
   getUserById = async (id: number): Promise<User | null> => {
-    console.log(id)
     return await this.userRepository.getUserById(id);
   };
 

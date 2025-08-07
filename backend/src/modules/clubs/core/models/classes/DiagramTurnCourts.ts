@@ -5,7 +5,7 @@ export class DiagramTurnCourt{
   days:DiagramTurnWeekDay[]
 
   constructor(data:any){
-    this.id=data.id
+    this.id=Number(data.courtId)
     this.days= data.days.map((day:any)=>new DiagramTurnWeekDay(day))
   }
 

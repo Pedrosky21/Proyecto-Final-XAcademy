@@ -7,8 +7,8 @@ export class DiagramTurnRequest {
 
   constructor(data: any) {
     this.courts = data.courts.map((court:any)=> new DiagramTurnCourt(court));
-    this.month= data.month
-    this.year=data.year
+    this.month= Number(data.month)
+    this.year=Number(data.year)
   }
 
   validate(): string | null {
@@ -16,8 +16,8 @@ export class DiagramTurnRequest {
       return "El year debe ser un año válido"
     }
 
-    if(!this.month || typeof(this.month)!=="number"|| this.month<0 || this.month>11){
-      return "El month debe ser un número entre 0 y 11"
+    if(!this.month || typeof(this.month)!=="number"|| this.month<1 || this.month>12){
+      return "El month debe ser un número entre 1 y 12"
     }
     const currentDate= new Date()
     if(currentDate.getFullYear()>this.year){

@@ -1,0 +1,104 @@
+<div class="flex flex-col justify-center align-middle">
+  <table class="w-full table-fixed overflow-auto">
+    <thead>
+      <tr class="bg-appPrimary">
+        <!-- Columna Día con ancho automático -->
+        <td
+          class="w-[100px] whitespace-nowrap px-3 text-center font-bold text-appBlackText"
+        >
+          Día
+        </td>
+
+        <!-- Otras columnas distribuidas uniformemente -->
+        <td
+          *ngFor="let column of columns"
+          class="text-center align-middle text-wrap text-appBlackText font-roboto font-bold"
+        >
+          <span *ngIf="!column.includes(':30')">
+            {{ column.replace(":00", "") }}
+          </span>
+          <div
+            *ngIf="column.includes(':30')"
+            class="h-full w-[1px] bg-appBlackText"
+          ></div>
+        </td>
+      </tr>
+    </thead>
+    <tbody *ngIf="rows">
+      <tr
+        *ngFor="let day of rows.days; let index = index"
+        class="border border-appSecondary"
+      >
+        <!-- Día -->
+        <td
+          class="w-auto whitespace-nowrap text-center px-3 border-x border-appSecondary"
+        >
+          {{ weekDayEnum[day.weekDay] }}
+        </td>
+
+        <!-- Celdas horarias -->
+
+        <td
+          *ngFor="let col of columns; let colIndex = index"
+          (click)="onCellClick(day.weekDay, colIndex)"
+          (mouseenter)="setHoverIndex(day.weekDay, colIndex)"
+          (mouserleave)="setHoverIndex()"
+          class="relative text-center min-h-16 py-2"
+        >
+          <!-- Contorno por hover, usando getHoverStatusClass -->
+          <ng-container [ngSwitch]="getHoverStatusClass(day.weekDay, colIndex)">
+            <!-- Contorno completo -->
+            <div
+              *ngSwitchCase="'middle'"
+              class="absolute inset-0 z-20 rounded-none border-y-2 border-appPrimary pointer-events-none"
+            ></div>
+            <!-- Solo start -->
+            <div
+              *ngSwitchCase="'start'"
+              class="absolute right-0 top-0 bottom-0 w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
+            ></div>
+            <!-- Solo end -->
+            <div
+              *ngSwitchCase="'end'"
+              class="absolute left-0 top-0 bottom-0 w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
+            ></div>
+            <!-- Start-End -->
+            <div
+              *ngSwitchCase="'start-end'"
+              class="absolute inset-0 flex justify-between items-center z-20 px-[2px] pointer-events-none"
+            >
+              <div
+                class="w-1/2 h-full border-r-4 border-appPrimary rounded-r-full"
+              ></div>
+              <div
+                class="w-1/2 h-full border-l-4 border-appPrimary rounded-l-full"
+              ></div>
+            </div>
+          </ng-container>
+          <!-- Fondo real, usando getCellStatus -->
+          <ng-container [ngSwitch]="getCellStatus(day.weekDay, colIndex)">
+            <div
+              *ngSwitchCase="'middle'"
+              class="absolute inset-0 bg-appPrimary z-0 rounded-none cursor-pointer"
+            ></div>
+            <div
+              *ngSwitchCase="'start'"
+              class="absolute right-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
+            ></div>
+            <div
+              *ngSwitchCase="'end'"
+              class="absolute left-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
+            ></div>
+            <div
+              *ngSwitchCase="'start-end'"
+              class="absolute inset-0 flex justify-between items-center z-10 px-[2px] cursor-pointer"
+            >
+              <div class="w-1/2 h-full bg-appPrimary rounded-r-full"></div>
+              <div class="w-1/2 h-full bg-appPrimary rounded-l-full"></div>
+            </div>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
