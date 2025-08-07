@@ -6,12 +6,15 @@ import sequelize from "../../config/db.config";
 import { NewMatchesTeams } from "./MXTRequest";
 import { WallMaterialService } from "../wallMaterials/services/WallMaterialService";
 import { FloorMaterialService } from "../floorMaterials/services/FloorMaterialService";
+import { TimeSlotService } from "../timeSlot/TimeSlotService";
+import { NewTSREquest } from "../timeSlot/NewTSRequest";
 
 export class MatchService {
   matchRepository = new MatchRepository();
   teamService = new TeamService();
   wallMaterialService = new WallMaterialService();
   floorMaterialService = new FloorMaterialService();
+  timeSlotService = new TimeSlotService();
 
   createMatch = async (
     creatorTeamId: number,
@@ -33,10 +36,17 @@ export class MatchService {
     const transaction = await sequelize.transaction();
 
     try {
+      const { timeSlot, ...matchData } = newMatch;
+
+      const timeSlotCreated = await this.timeSlotService.createTimeSlot(timeSlot, transaction);
+
       const match = await this.matchRepository.createMatch(
-        newMatch,
-        transaction
-      );
+      {
+        ...matchData,
+        timeSlotId: timeSlotCreated.id,
+      },
+      transaction
+    );
 
       const matchesTeams = new NewMatchesTeams({
         isCreator: 1,

@@ -195,9 +195,15 @@ export class PlayerController {
 
       const match = new NewMatchRequest({
         roofed: req.body.roofed,
+        turnId: req.body.turnId,
         wallMaterialId: req.body.wallMaterialId,
         floorMaterialId: req.body.floorMaterialId,
-        matchState: 1,
+        matchStateId: 1,
+        timeSlot: {
+          date: req.body.date,
+          startTime: req.body.startTime,
+          endTime: req.body.endTime,
+        },
       });
 
       const newMatch = await this.matchService.createMatch(
