@@ -159,6 +159,31 @@ export class PlayerController {
     }
   };
 
+  // limit 5 in repository
+  getTeamsByName = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const playerId = req.user?.id;
+      const { teamName } = req.query as { teamName?: string };
+
+      if (!playerId) {
+        throw new UnauhtorizedError("No autorizado");
+      }
+
+      if (!teamName || teamName.trim() === "") {
+        throw new BadRequestError("Se necesita nombre del team");
+      }
+
+      const teams = await this.teamService.getTeamsPlayerByName(
+        teamName,
+        Number(playerId)
+      );
+
+      return res.status(200).json(teams);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // Create match
   createMatch = async (
     req: Request,
@@ -173,10 +198,18 @@ export class PlayerController {
         turnId: req.body.turnId,
         wallMaterialId: req.body.wallMaterialId,
         floorMaterialId: req.body.floorMaterialId,
-        matchState: 1,
+        matchStateId: 1,
+        timeSlot: {
+          date: req.body.date,
+          startTime: req.body.startTime,
+          endTime: req.body.endTime,
+        },
       });
 
-      const newMatch = await this.matchService.createMatch(creatorTeamId, match);
+      const newMatch = await this.matchService.createMatch(
+        creatorTeamId,
+        match
+      );
 
       res.status(201).json(newMatch);
     } catch (error) {
@@ -209,8 +242,8 @@ export class PlayerController {
       const matches = await this.matchService.getMatchesWithTeams(
         Number(limit),
         Number(page),
-        roofed, 
-        wallMaterial, 
+        roofed,
+        wallMaterial,
         floorMaterial
       );
 

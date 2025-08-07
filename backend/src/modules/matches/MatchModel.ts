@@ -5,6 +5,7 @@ import FloorMaterial from "../floorMaterials/core/FloorMaterial";
 import MatchState from "./MatchStateModel";
 import TurnState from "../clubs/core/models/sequelize/TurnState";
 import Turn from "../clubs/core/models/sequelize/Turn";
+import TimeSlot from "../timeSlot/TimeSlotModel";
 
 class Match extends Model {
     public id!: number
@@ -12,7 +13,8 @@ class Match extends Model {
     public turnId!: number
     public wallMaterialId!: number
     public floorMaterialId!: number
-    public matchState!: number
+    public matchStateId!: number
+    public timeSlotId!: number
 };
 
 Match.init({
@@ -57,6 +59,14 @@ Match.init({
             model: TurnState,
             key: "id"
         }
+    },
+    timeSlotId: {
+        type: DataTypes.INTEGER,
+        field: "franjahoraria_idfranjahoraria",
+        references: {
+            model: TimeSlot,
+            key: "id"
+        }
     }
 }, {
     sequelize,
@@ -68,9 +78,11 @@ Match.init({
 Match.belongsTo(MatchState, {foreignKey: "matchStateId"});
 Match.belongsTo(WallMaterial, {foreignKey: "wallMaterialId"});
 Match.belongsTo(FloorMaterial, {foreignKey: "floorMaterialId"});
+Match.belongsTo(TimeSlot, {foreignKey: "timeSlotId"});
 
 MatchState.hasMany(Match, {foreignKey: "matchStateId"});
 WallMaterial.hasMany(Match, {foreignKey: "wallMaterialId"});
 FloorMaterial.hasMany(Match, {foreignKey: "floorMaterialId"});
+TimeSlot.hasOne(Match, {foreignKey: "timeSlotId"});
 
 export default Match;
