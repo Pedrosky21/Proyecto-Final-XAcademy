@@ -35,14 +35,15 @@
           <select
             formControlName="selectedTeam"
             class="w-full sm:w-64 bg-transparent border-2 border-appPrimary text-appWhiteText p-2 rounded"
+            (change)="onTeamChange($event)"
           >
             <option value="" disabled selected>Seleccione un equipo</option>
             <option
               class="bg-appBackground"
-              *ngFor="let club of clubs"
-              [value]="club"
+              *ngFor="let team of teams"
+              [value]="team.id"
             >
-              {{ club }}
+              {{ team.name }}
             </option>
           </select>
           <div
@@ -56,10 +57,9 @@
           </div>
         </div>
 
-        <!-- Team Info (Placeholder until backend provides data) -->
-        <div class="text-sm">
-          <p><strong>Nombre: </strong> backend nombre</p>
-          <p><strong>Compañero: </strong> backend nombre</p>
+        <div class="text-sm" *ngIf="selectedPlayers.length">
+          <p><strong>Nombre:</strong> {{ selectedPlayers[0] }}</p>
+          <p><strong>Compañero:</strong> {{ selectedPlayers[1] }}</p>
         </div>
       </section>
 

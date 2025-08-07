@@ -46,31 +46,26 @@ export class ExploreMatchesComponent {
   showCreateTeamModal = false;
   showCreateMatchModal = false;
   searchTerm = '';
-  filteredPlayers: any[] = [];
 
   players: any[] = [];
-  clubs: string[] = ['Los Imbatibles', 'Los Campeones'];
+  teams: any[] = [];
 
   ngOnInit() {}
-
-  /* loadPlayers() {
-    this.playerService.getPlayers().subscribe({
-      next: (data) => {
-        this.players = data.map((p: any) => {
-          return {
-            ...p,
-            fullName: `${p.firstName} ${p.lastName}`,
-            age: this.calculateAge(p.birthDate),
-          };
-        });
+  loadUserTeams() {
+    console.log('Calling getTeamsByPlayerId()');
+    this.playerService.getTeamsByPlayerId().subscribe({
+      next: (teams) => {
+        this.teams = teams;
+        console.log('User teams loaded:', teams);
       },
       error: (err) => {
-        console.error('Error fetching players', err);
+        console.error('Error loading user teams:', err);
       },
     });
-  } */
+  }
 
   openCreateMatchModal() {
+    this.loadUserTeams();
     this.showCreateMatchModal = true;
   }
 
@@ -158,6 +153,7 @@ export class ExploreMatchesComponent {
           };
 
           const creatorId = this.authService.getLoggedInUser();
+          console.log(creatorId);
 
           const playerId = selectedPlayer.id;
 

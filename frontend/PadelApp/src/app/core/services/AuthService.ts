@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -10,27 +10,38 @@ export class AuthService {
 
   constructor(private readonly http: HttpClient) {}
 
-  login(credentials: { email: string; password: string }) {
+  private setLocalStorageItem(key: string, value: string) {
+    localStorage.setItem(key, value);
+  }
+
+  private getLocalStorageItem(key: string): string | null {
+    return localStorage.getItem(key);
+  }
+
+  login(credentials: {
+    email: string;
+    password: string;
+  }): Observable<{ token: string; user: any }> {
     return this.http
       .post<{ token: string; user: any }>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap((response) => {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
+          this.setLocalStorageItem('token', response.token);
+          this.setLocalStorageItem('user', JSON.stringify(response.user));
         })
       );
   }
 
   getLoggedInUser(): any {
-    const userJson = localStorage.getItem('user');
+    const userJson = this.getLocalStorageItem('user');
     return userJson ? JSON.parse(userJson) : null;
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return this.getLocalStorageItem('token');
   }
 
-  register(credentials: { email: string; password: string }) {
+  register(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, credentials);
   }
 }

@@ -176,7 +176,10 @@ export class PlayerController {
         matchState: 1,
       });
 
-      const newMatch = await this.matchService.createMatch(creatorTeamId, match);
+      const newMatch = await this.matchService.createMatch(
+        creatorTeamId,
+        match
+      );
 
       res.status(201).json(newMatch);
     } catch (error) {
@@ -209,8 +212,8 @@ export class PlayerController {
       const matches = await this.matchService.getMatchesWithTeams(
         Number(limit),
         Number(page),
-        roofed, 
-        wallMaterial, 
+        roofed,
+        wallMaterial,
         floorMaterial
       );
 

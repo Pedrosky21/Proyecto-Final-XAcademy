@@ -1,4 +1,4 @@
-<div class="bg-appBackground min-h-[calc(100vh-68px)] bg-splash w-full">
+<div class="bg-appBackground min-h-[calc(100vh-68px)] w-full">
   <h1 class="text-5xl pt-8 ml-6 font-bold text-appWhiteText text-center">
     Busca <span class="text-appPrimary">Partidos</span><br />
   </h1>
@@ -6,68 +6,76 @@
     Aquí apareceran los partidos publicados para jugar. <br />
     Recorda que tenes que se parte de un equipo para poder jugar
   </h3>
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+  <div
+    class="flex flex-wrap justify-center items-center gap-4 mt-6 mb-6 font-roboto font-bold"
+  >
     <!-- Material Piso -->
     <select
       [(ngModel)]="filters.materialPiso"
-      class="border border-[#D6FF1D] bg-transparent text-white px-3 py-2 rounded"
+      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-transparent focus:outline-none focus:ring-2 focus:ring-appPrimary"
     >
       <option value="">Material Piso</option>
-      <option value="Profesional">Profesional</option>
-      <option value="Inicial">Inicial</option>
+      <option value="2">Cesped Artificial</option>
+      <option value="3">Concreto</option>
     </select>
 
     <!-- Material Pared -->
     <select
       [(ngModel)]="filters.materialPared"
-      class="border border-[#D6FF1D] bg-transparent text-white px-3 py-2 rounded"
+      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-transparent focus:outline-none focus:ring-2 focus:ring-appPrimary"
     >
       <option value="">Material Pared</option>
-      <option value="Profesional">Profesional</option>
-      <option value="Inicial">Inicial</option>
+      <option value="1">Ladrillo</option>
+      <option value="2">Concreto</option>
     </select>
 
     <!-- Techada -->
     <select
       [(ngModel)]="filters.techada"
-      class="border border-[#D6FF1D] bg-transparent text-white px-3 py-2 rounded"
+      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-transparent focus:outline-none focus:ring-2 focus:ring-appPrimary"
     >
-      <option value="">Techada</option>
-      <option value="Profesional">Profesional</option>
-      <option value="Inicial">Inicial</option>
+      <option class="bg-appBackground" value="">Techada</option>
+      <option class="bg-appBackground" value="true">Si</option>
+      <option class="bg-appBackground" value="false">No</option>
     </select>
 
-    <!-- Buttons -->
-    <div class="flex gap-3">
-      <button
-        class="bg-[#D6FF1D] text-black font-bold px-4 py-2 rounded"
-        (click)="buscar()"
-      >
-        Buscar
-      </button>
-      <button class="border border-[#D6FF1D] px-4 py-2 rounded">
-        Reiniciar Filtros
-      </button>
-    </div>
-  </div>
-
-  <!-- Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div
-      *ngFor="let team of teams"
-      (click)="selectTeam(team)"
-      [ngClass]="{
-        'bg-[#D6FF1D] text-black': selectedTeam === team,
-        'border border-[#D6FF1D]': selectedTeam !== team
-      }"
-      class="p-4 rounded-lg cursor-pointer transition hover:scale-105"
+    <!-- Buscar Button -->
+    <button
+      (click)="buscar()"
+      class="h-10 px-5 rounded-lg font-bold bg-appPrimary text-black hover:opacity-90 transition"
     >
-      <div class="flex items-center gap-2">
-        <span class="text-lg">👥</span>
-        <span class="font-bold">{{ team.name }}</span>
-      </div>
-      <div class="text-sm">{{ team.category }}</div>
-      <div class="text-xs">{{ team.date }}</div>
-    </div>
+      Buscar
+    </button>
+
+    <!-- Reiniciar Filtros Button -->
+    <button
+      (click)="reiniciarFiltros()"
+      class="h-10 px-5 rounded-lg font-bold border border-appPrimary text-appWhiteText hover:bg-appPrimary hover:text-black transition"
+    >
+      Reiniciar Filtros
+    </button>
+
+    <!-- Matches List -->
   </div>
+  <section class="flex flex-wrap justify-center items-center font-roboto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <div
+        *ngFor="let partido of filteredPartidos"
+        class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-48 text-center"
+      >
+        <div class="gap-2 font-bold">
+          <span class="text-bold text-center"
+            ><i class="fa-solid fa-people-group pr-1"></i
+            >{{ partido.equipo }}</span
+          >
+        </div>
+        <span class="font-bold">{{ partido.nombre }}</span>
+        <div class="text-sm">{{ partido.categoria }}</div>
+        <div class="text-sm font-bold">
+          <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

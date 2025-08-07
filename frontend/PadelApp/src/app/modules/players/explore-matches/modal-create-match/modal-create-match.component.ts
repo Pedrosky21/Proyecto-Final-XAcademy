@@ -7,6 +7,9 @@ import { ConfirmationModalService } from '../../../../core/layouts/confirmation-
 import { ModalIconEnum } from '../../../../core/layouts/confirmation-modal/models/ModalProps';
 
 import { loadingScreenService } from '../../../../core/layouts/loading-screen/service/loadingService';
+import { MatchService } from '../../../../core/services/MatchService';
+import { PlayerService } from '../../../../core/services/PlayerServices';
+import { Match } from '../../../../model/Match-model';
 @Component({
   selector: 'app-modal-create-match',
 
@@ -16,8 +19,10 @@ import { loadingScreenService } from '../../../../core/layouts/loading-screen/se
 export class ModalCreateMatchComponent {
   @Input() showCreateMatchModal = false;
   @Input() matchGroup!: FormGroup;
-  @Input() clubs: string[] = [];
+  @Input() teams: any[] = [];
+
   newTimeSlots: TimeSlots[] = [];
+  selectedPlayers: string[] = [];
 
   @Output() close = new EventEmitter<void>();
   @Output() confirm = new EventEmitter<void>();
@@ -26,7 +31,8 @@ export class ModalCreateMatchComponent {
 
   constructor(
     private readonly confirmationModalService: ConfirmationModalService,
-    private readonly loadingScreenService: loadingScreenService
+    private readonly loadingScreenService: loadingScreenService,
+    private readonly matchService: MatchService
   ) {}
 
   onClose() {
@@ -35,6 +41,19 @@ export class ModalCreateMatchComponent {
 
   onConfirm() {
     this.confirm.emit();
+  }
+
+  onTeamChange(event: Event) {
+    const selectedTeamId = Number((event.target as HTMLSelectElement).value);
+
+    const team = this.teams.find((t) => t.id === selectedTeamId);
+    if (team && team.PlayersTeams) {
+      this.selectedPlayers = team.PlayersTeams.map(
+        (pt: any) => `${pt.player.firstName} ${pt.player.lastName}`
+      );
+    } else {
+      this.selectedPlayers = [];
+    }
   }
 
   addTimeSlot() {
@@ -141,45 +160,43 @@ export class ModalCreateMatchComponent {
             this.confirmationModalService.closeModal();
             this.loadingScreenService.showLoadingScreen('Creando Partido...');
             const newMatch = {
-              ...this.matchGroup.value,
-              timeSlots: this.newTimeSlots,
+              teamId: this.matchGroup.value.selectedTeam,
+              roofed: this.matchGroup.value.roofed,
+              turnId: this.matchGroup.value.turnId,
+              wallMaterialId: this.matchGroup.value.wallMaterialId,
+              floorMaterialId: this.matchGroup.value.floorMaterialId,
             };
-            console.log(newMatch);
-            /*
-this.clubService.habilitateClub(formValue).subscribe({
-  next: (response) => {
-    setTimeout(() => {
-      this.loadingScreenService.showLoadingScreen(null);
-      this.confirmationModalService.openModal({
-        icon: ModalIconEnum.ok,
-        title: 'Club configurado con éxito',
-        message: 'Se ha guardado la nueva información con éxito',
-        accept: {
-          title: 'Aceptar',
-          action: () => {
-            this.confirmationModalService.closeModal();
-          },
-        },
-      });
-    }, 1500);
-  },
-});
-*/
-            // esto deberia ir en el medio
 
-            setTimeout(() => {
-              this.loadingScreenService.showLoadingScreen(null);
-            }, 2000);
-
-            this.confirmationModalService.openModal({
-              icon: ModalIconEnum.ok,
-              title: 'Partido creado con éxito',
-              message: 'Se ha creado el partido correctamente.',
-              accept: {
-                title: 'Aceptar',
-                action: () => {
-                  this.confirmationModalService.closeModal();
-                },
+            this.matchService.createMatch(newMatch).subscribe({
+              next: (response) => {
+                setTimeout(() => {
+                  this.loadingScreenService.showLoadingScreen(null);
+                  this.confirmationModalService.openModal({
+                    icon: ModalIconEnum.ok,
+                    title: 'Partido creado con éxito',
+                    message: 'Se ha creado el partido correctamente.',
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        this.confirmationModalService.closeModal();
+                      },
+                    },
+                  });
+                }, 1500);
+              },
+              error: (err) => {
+                this.loadingScreenService.showLoadingScreen(null);
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.error,
+                  title: 'Error al crear el partido',
+                  message: err.error?.message || 'Ocurrió un error inesperado.',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                    },
+                  },
+                });
               },
             });
           },
@@ -187,6 +204,7 @@ this.clubService.habilitateClub(formValue).subscribe({
       });
     }
   }
+
   setColumns() {
     this.columnsSettings = [
       {
