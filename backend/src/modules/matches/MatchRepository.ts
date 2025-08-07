@@ -15,7 +15,6 @@ export class MatchRepository {
     const createdMatch = await Match.create(
       {
         roofed: newMatch.roofed,
-        turnId: newMatch.turnId,
         wallMaterialId: newMatch.wallMaterialId,
         floorMaterialId: newMatch.floorMaterialId,
         matchStateId: newMatch.matchState,
@@ -30,7 +29,6 @@ export class MatchRepository {
     newMatchesTeams: NewMatchesTeams,
     transaction: Transaction
   ): Promise<MatchesTeams> => {
-    console.log(newMatchesTeams);
     const createdMatchesTeams = await MatchesTeams.create(
       {
         isCreator: newMatchesTeams.isCreator,

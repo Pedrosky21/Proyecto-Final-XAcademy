@@ -1,14 +1,13 @@
 import { NewTeamRequest } from "../core/dtos/request/NewTeamRequest";
 import { TeamRepository } from "../adapters/repositories/TeamRepository";
-import { PlayersTeamsService } from "../../playersXTeams/PXTService";
 import { NewPlayersTeams } from "../../playersXTeams/NewPXTRequest";
 import { PlayerService } from "./PlayerService";
 import sequelize from "../../../config/db.config";
 import { NotFoundError } from "../../../errors/NotFoundError";
+import AppError from "../../../errors/AppError";
 
 export class TeamService {
   teamRepository = new TeamRepository();
-  playersTeamsService = new PlayersTeamsService();
   playerService = new PlayerService();
 
   createTeam = async (
@@ -27,6 +26,28 @@ export class TeamService {
     );
     if (!playerIdAdd) {
       throw new NotFoundError("Jugador no encontradod");
+    }
+
+    if (playerIdCreator.id === playerIdAdd.id) {
+      throw new AppError("El mismo jugador no puede ser los 2 integrantes del equipo");
+    }
+
+    // Check that players dont play on the same position or someone plays both
+    // positionId 3 means both in database
+    if (
+      (playerIdCreator.positionId !== 3 ||
+      playerIdAdd.positionId !== 3 ) &&
+      playerIdCreator.positionId === playerIdAdd.positionId
+    ) {
+      throw new AppError("Los jugadores juegan en la misma posicion");
+    }
+
+    const sameTeamAlready = await this.teamRepository.arePlayersInSameTeam(
+      playerIdCreator.id,
+      playerIdAdd.id
+    );
+    if (sameTeamAlready) {
+      throw new AppError("Los jugadores ya pertenecen a un mismo equipo");
     }
 
     const transaction = await sequelize.transaction();
@@ -59,4 +80,8 @@ export class TeamService {
   getTeamById = async (id: number): Promise<any> => {
     return await this.teamRepository.getTeamById(id);
   };
+
+  getTeamsPlayerByName = async (teamName:string, playerId:number): Promise<any> => {
+    return await this.teamRepository.getTeamsPlayerByName(teamName, playerId);
+  }
 }
