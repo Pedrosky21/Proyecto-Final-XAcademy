@@ -68,17 +68,22 @@
         <div>
           <label class="block mb-1 font-bold">Material Piso</label>
           <select
-            formControlName="floorMaterial"
+            formControlName="floorMaterialId"
             class="w-full bg-transparent border-2 border-appPrimary p-1 text-appWhiteText rounded"
           >
             <option value="" disabled selected>Seleccione</option>
-            <option class="bg-appBackground">Concreto</option>
-            <option class="bg-appBackground">Pasto</option>
+            <option
+              *ngFor="let floor of floorMaterials"
+              class="bg-appBackground"
+              [value]="floor.id"
+            >
+              {{ floor.name }}
+            </option>
           </select>
           <div
             *ngIf="
-              matchGroup.get('floorMaterial')?.touched &&
-              matchGroup.get('floorMaterial')?.invalid
+              matchGroup.get('floorMaterialId')?.touched &&
+              matchGroup.get('floorMaterialId')?.invalid
             "
             class="text-appError text-xs mt-1"
           >
@@ -89,17 +94,22 @@
         <div>
           <label class="block mb-1 font-bold">Pared</label>
           <select
-            formControlName="wallMaterial"
+            formControlName="wallMaterialId"
             class="w-full bg-transparent border-2 border-appPrimary p-1 text-appWhiteText rounded"
           >
             <option value="" disabled selected>Seleccione</option>
-            <option class="bg-appBackground">Cualquiera</option>
-            <option class="bg-appBackground">Ladrillo</option>
+            <option
+              *ngFor="let wall of wallMaterials"
+              class="bg-appBackground"
+              [value]="wall.id"
+            >
+              {{ wall.name }}
+            </option>
           </select>
           <div
             *ngIf="
-              matchGroup.get('wallMaterial')?.touched &&
-              matchGroup.get('wallMaterial')?.invalid
+              matchGroup.get('wallMaterialId')?.touched &&
+              matchGroup.get('wallMaterialId')?.invalid
             "
             class="text-appError text-xs mt-1"
           >
@@ -114,9 +124,9 @@
             class="w-full bg-transparent border-2 border-appPrimary p-1 text-appWhiteText rounded"
           >
             <option value="" disabled selected>Seleccione</option>
-            <option class="bg-appBackground">Cualquiera</option>
-            <option class="bg-appBackground">Sí</option>
-            <option class="bg-appBackground">No</option>
+            <option class="bg-appBackground" [value]="0">Cualquiera</option>
+            <option class="bg-appBackground" [value]="1">Sí</option>
+            <option class="bg-appBackground" [value]="2">No</option>
           </select>
           <div
             *ngIf="
@@ -129,6 +139,7 @@
           </div>
         </div>
       </div>
+
       <div class="overflow-auto mt-3">
         <app-edit-table
           [columns]="columnsSettings"
@@ -139,6 +150,7 @@
           class="w-full"
         ></app-edit-table>
       </div>
+
       <!-- Confirm -->
       <div class="text-center mt-4">
         <button

@@ -191,20 +191,10 @@ export class PlayerController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      console.log("Received createMatch request body:", req.body);
       const creatorTeamId = req.body.teamId;
 
-      const match = new NewMatchRequest({
-        roofed: req.body.roofed,
-        turnId: req.body.turnId,
-        wallMaterialId: req.body.wallMaterialId,
-        floorMaterialId: req.body.floorMaterialId,
-        matchStateId: 1,
-        timeSlot: {
-          date: req.body.date,
-          startTime: req.body.startTime,
-          endTime: req.body.endTime,
-        },
-      });
+      const match = new NewMatchRequest(req.body);
 
       const newMatch = await this.matchService.createMatch(
         creatorTeamId,

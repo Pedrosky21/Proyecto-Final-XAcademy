@@ -104,12 +104,7 @@ export class PlayerRepository {
         },
       ],
     });
-    console.log(playersTeams);
-    console.log(
-      playersTeams
-        .map((pt) => pt.team)
-        .filter((team): team is Team => team !== undefined)
-    );
+
     return playersTeams
       .map((pt) => pt.team)
       .filter((team): team is Team => team !== undefined);

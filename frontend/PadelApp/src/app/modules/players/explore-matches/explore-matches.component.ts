@@ -28,8 +28,8 @@ export class ExploreMatchesComponent {
   ) {
     this.matchGroup = this.fb.group({
       selectedTeam: ['', Validators.required],
-      floorMaterial: ['', Validators.required],
-      wallMaterial: ['', Validators.required],
+      floorMaterialId: ['', Validators.required],
+      wallMaterialId: ['', Validators.required],
       roofed: ['', Validators.required],
     });
 
@@ -98,7 +98,7 @@ export class ExploreMatchesComponent {
         title: 'Confirmar',
         action: () => {
           this.confirmationModalService.closeModal();
-          // enviarse data al backend
+
           this.loadingScreenService.showLoadingScreen('Creando Partido...');
 
           setTimeout(() => {
@@ -153,7 +153,6 @@ export class ExploreMatchesComponent {
           };
 
           const creatorId = this.authService.getLoggedInUser();
-          console.log(creatorId);
 
           const playerId = selectedPlayer.id;
 

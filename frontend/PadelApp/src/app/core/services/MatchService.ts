@@ -39,10 +39,7 @@ export class MatchService {
     );
   }
 
-  /**
-   * Create a new match
-   */
-  createMatch(match: NewMatchRequest): Observable<Match> {
-    return this.http.post<Match>(`${this.apiUrl}/match`, match);
+  createMatch(newMatch: NewMatchRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/match`, newMatch);
   }
 }

@@ -1,23 +1,23 @@
-import { NewTSREquest } from "../timeSlot/NewTSRequest"
+import { NewTSREquest } from "../timeSlot/NewTSRequest";
 
 export class NewMatchRequest {
-    roofed: number
-    turnId: number
-    wallMaterialId: number
-    floorMaterialId: number
-    matchStateId: number
-    timeSlot: NewTSREquest
+  roofed: number;
+  turnId: number;
+  wallMaterialId: number;
+  floorMaterialId: number;
+  matchStateId: number;
+  timeSlot: NewTSREquest;
 
-    constructor (data: any) {
-        this.roofed = data.roofed
-        this.turnId = data.turnId
-        this.wallMaterialId = data.wallMaterialId
-        this.floorMaterialId = data.floorMaterialId
-        this.matchStateId = data.matchStateId
-        this.timeSlot = data.timeSlot
-    }
+  constructor(data: any) {
+    this.roofed = data.roofed;
+    this.turnId = data.turnId;
+    this.wallMaterialId = data.wallMaterialId;
+    this.floorMaterialId = data.floorMaterialId;
+    this.matchStateId = data.matchStateId;
+    this.timeSlot = new NewTSREquest(data.timeSlot);
+  }
 
-    public validate(): string | null {
+  public validate(): string | null {
     if (!this.roofed || typeof this.roofed !== "number") {
       return "Roofed es un campo obligatorio y debe ser un numero";
     } else if (this.roofed !== 0 && this.roofed !== 1) {
