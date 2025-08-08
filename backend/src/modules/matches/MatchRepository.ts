@@ -9,6 +9,7 @@ import PlayersTeams from "../players/core/models/PXTModel";
 
 interface MatchCreateInput {
   roofed: number;
+  turnId: number;
   wallMaterialId: number;
   floorMaterialId: number;
   matchStateId: number;
@@ -25,8 +26,8 @@ export class MatchRepository {
         roofed: newMatch.roofed,
         wallMaterialId: newMatch.wallMaterialId,
         floorMaterialId: newMatch.floorMaterialId,
-        matchStateId: newMatch.matchStateId,
-        timeSlotId: newMatch.timeSlotId
+        matchStateId: 1,
+        timeSlotId: newMatch.timeSlotId,
       },
       { transaction }
     );

@@ -1,4 +1,4 @@
-<nav class="bg-splash drop-shadow-xl/25 border-b-4 border-[#D6FF1D]">
+<nav class="bg-splash drop-shadow-xl/25 border-b-4 border-appPrimary">
   <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
       <!-- Logo y Menú Desktop -->
@@ -7,14 +7,14 @@
       >
         <div class="flex items-center space-x-4">
           <i
-            class="fa-solid fa-table-tennis-paddle-ball pt-2 fa-2x text-white hover:text-secondary"
+            class="fa-solid fa-table-tennis-paddle-ball pt-2 fa-2x text-appWhiteText hover:text-appPrimary"
           ></i>
           <div class="hidden sm:block">
             <div class="flex space-x-4">
               <a
                 *ngFor="let item of menuItems"
                 [routerLink]="item.route"
-                class="px-3 py-2 text-xl font-bold text-white hover:text-secondary"
+                class="px-3 py-2 text-xl font-bold text-appWhiteText hover:text-appPrimary"
               >
                 {{ item.text }}
               </a>
@@ -42,10 +42,10 @@
 
             <div
               *ngIf="dropdownOpen"
-              class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-[#D6FF1D] py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+              class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-appPrimary py-1 shadow-lg ring-1 ring-black ring-opacity-5"
             >
               <button
-                class="block w-full px-4 py-2 text-left text-sm text-black"
+                class="block w-full px-4 py-2 text-left text-sm text-appBlackText"
                 (click)="logout()"
               >
                 Cerrar sesión
@@ -54,7 +54,7 @@
           </div>
 
           <!-- Nombre del usuario -->
-          <span class="text-white font-bold hidden sm:inline">{{
+          <span class="text-appWhiteText font-bold hidden sm:inline">{{
             userName || userEmail
           }}</span>
         </ng-container>
@@ -62,13 +62,13 @@
         <!-- Vista para usuarios no autenticados -->
         <ng-template #guestView>
           <button
-            class="text-white font-bold text-sm hover:text-secondary border-2 border-white px-3 py-1 rounded-md"
+            class="text-appWhiteText font-bold text-sm hover:text-appPrimary border-2 border-white px-3 py-1 rounded-md"
             (click)="login()"
           >
             Iniciar Sesión
           </button>
           <button
-            class="bg-secondary text-black px-3 py-1 rounded-md font-bold text-sm border-2 border-primary"
+            class="bg-appPrimary text-appBlackText px-3 py-1 rounded-md font-bold text-sm border-2 border-primary"
             (click)="register()"
           >
             Registrarse
@@ -83,7 +83,7 @@
     <a
       *ngFor="let item of menuItems"
       [routerLink]="item.route"
-      class="block rounded-md px-3 py-2 font-bold text-white hover:text-secondary flex items-center gap-2"
+      class="block rounded-md px-3 py-2 font-bold text-appWhiteText hover:text-appPrimary flex items-center gap-2"
     >
       <span *ngIf="item.icon" [innerHTML]="sanitizeIcon(item.icon)"></span>
       {{ item.text }}
@@ -91,7 +91,7 @@
 
     <ng-container *ngIf="isAuthenticated; else guestMobile">
       <button
-        class="flex items-center gap-2 mt-3 rounded-md px-3 py-2 font-bold text-white hover:text-secondary w-full text-left"
+        class="flex items-center gap-2 mt-3 rounded-md px-3 py-2 font-bold text-appWhiteText hover:text-appPrimary w-full text-left"
         (click)="logout()"
       >
         <i class="fa-solid fa-power-off"></i> Cerrar Sesión
@@ -101,13 +101,13 @@
     <ng-template #guestMobile>
       <div class="mt-4 flex flex-col gap-2">
         <button
-          class="text-white font-bold text-left hover:text-secondary"
+          class="text-appWhiteText font-bold text-left hover:text-appPrimary"
           (click)="login()"
         >
           Iniciar Sesión
         </button>
         <button
-          class="bg-secondary text-black px-3 py-2 rounded-md font-bold text-left"
+          class="bg-appPrimary text-appBlackText px-3 py-2 rounded-md font-bold text-left"
           (click)="login()"
         >
           Registrarse

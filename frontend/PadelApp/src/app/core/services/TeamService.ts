@@ -20,21 +20,11 @@ export class TeamService {
     newTeam: NewTeamRequest,
     playerId: number
   ): Observable<any> {
-    const token = this.authService.getToken();
-
-    return this.http.post(
-      `${this.apiUrl}`,
-      {
-        creatorId,
-        name: newTeam.name,
-        description: newTeam.description,
-        playerId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    return this.http.post(`${this.apiUrl}`, {
+      creatorId,
+      name: newTeam.name,
+      description: newTeam.description,
+      playerId,
+    });
   }
 }

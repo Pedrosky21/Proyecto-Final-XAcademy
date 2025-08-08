@@ -32,4 +32,7 @@ export class PlayerService {
       params: { fullName },
     });
   }
+  getTeamsByPlayerId(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/teams`);
+  }
 }

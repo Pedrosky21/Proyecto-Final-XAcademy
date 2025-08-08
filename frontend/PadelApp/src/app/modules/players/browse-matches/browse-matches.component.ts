@@ -17,54 +17,77 @@ export class BrowseMatchesComponent {
     private readonly categoryService: CategoryService,
     private readonly clubService: ClubService
   ) {}
-
+  hardcodedPartidos = [
+    {
+      idpartido: 1,
+      nombre: 'Partido A',
+      equipo: 'Mclaren',
+      categoria: 'Avanzado',
+      fecha: '2025-08-05',
+      techada: true,
+      turno_idturno: 1,
+      materialPared_idmaterialpared: 2,
+      materialSuelo_idmaterialSuelo: 3,
+      estadopartido_idestadoturno: 1,
+    },
+    {
+      idpartido: 2,
+      nombre: 'Partido B',
+      equipo: 'Mercedes',
+      categoria: 'Intermedio',
+      fecha: '2025-08-10',
+      techada: false,
+      turno_idturno: 2,
+      materialPared_idmaterialpared: 1,
+      materialSuelo_idmaterialSuelo: 2,
+      estadopartido_idestadoturno: 2,
+    },
+    {
+      idpartido: 2,
+      nombre: 'Partido B',
+      equipo: 'Mercedes',
+      categoria: 'Intermedio',
+      fecha: '2025-08-10',
+      techada: false,
+      turno_idturno: 2,
+      materialPared_idmaterialpared: 1,
+      materialSuelo_idmaterialSuelo: 2,
+      estadopartido_idestadoturno: 2,
+    },
+  ];
   filters = {
     materialPiso: '',
     materialPared: '',
     techada: '',
   };
 
-  floorMaterials: any[] = [];
-  wallMaterials: any[] = [];
+  filteredPartidos = [...this.hardcodedPartidos];
+
   techadaOptions: string[] = ['Si', 'No'];
   teams: any[] = [];
-  selectedTeam: any | null = null;
 
-  ngOnInit() {
-    this.loadMaterials();
-    this.loadTeams(); // optional: if you want to show clubs from backend
-  }
-
-  loadMaterials() {
-    this.clubService.getFloorMaterials().subscribe({
-      next: (data) => (this.floorMaterials = data),
-      error: (err) => console.error('Error loading floor materials', err),
-    });
-
-    this.clubService.getWallMaterial().subscribe({
-      next: (data) => (this.wallMaterials = data),
-      error: (err) => console.error('Error loading wall materials', err),
-    });
-  }
-
-  loadTeams() {
-    this.clubService.getClubByUserId().subscribe({
-      next: (data) => (this.teams = data),
-      error: (err) => console.error('Error loading teams', err),
-    });
-  }
-
-  selectTeam(team: any) {
-    this.selectedTeam = this.selectedTeam === team ? null : team;
-  }
+  ngOnInit() {}
 
   buscar() {
-    console.log('Buscando con filtros:', this.filters);
-    // Optional: call backend with filters to retrieve filtered clubs
+    this.filteredPartidos = this.hardcodedPartidos.filter((partido) => {
+      const matchesFloor =
+        !this.filters.materialPiso ||
+        partido.materialSuelo_idmaterialSuelo === +this.filters.materialPiso;
+
+      const matchesWall =
+        !this.filters.materialPared ||
+        partido.materialPared_idmaterialpared === +this.filters.materialPared;
+
+      const matchesTechada =
+        !this.filters.techada ||
+        partido.techada === (this.filters.techada === 'true');
+
+      return matchesFloor && matchesWall && matchesTechada;
+    });
   }
 
   reiniciarFiltros() {
     this.filters = { materialPiso: '', materialPared: '', techada: '' };
-    this.selectedTeam = null;
+    this.filteredPartidos = [...this.hardcodedPartidos];
   }
 }

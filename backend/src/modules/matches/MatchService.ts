@@ -24,11 +24,15 @@ export class MatchService {
     if (!creatorTeam) {
       throw new NotFoundError("Equipo no encontrado");
     }
-    const wallMaterial = await this.wallMaterialService.getWallMaterialById(newMatch.wallMaterialId);
+    const wallMaterial = await this.wallMaterialService.getWallMaterialById(
+      newMatch.wallMaterialId
+    );
     if (!wallMaterial) {
       throw new NotFoundError("Material de pared no encontrado");
     }
-    const floorMaterial = await this.floorMaterialService.getFloorMaterialById(newMatch.floorMaterialId);
+    const floorMaterial = await this.floorMaterialService.getFloorMaterialById(
+      newMatch.floorMaterialId
+    );
     if (!floorMaterial) {
       throw new NotFoundError("Material de suelo no encontrado");
     }
@@ -38,15 +42,18 @@ export class MatchService {
     try {
       const { timeSlot, ...matchData } = newMatch;
 
-      const timeSlotCreated = await this.timeSlotService.createTimeSlot(timeSlot, transaction);
+      const timeSlotCreated = await this.timeSlotService.createTimeSlot(
+        timeSlot,
+        transaction
+      );
 
       const match = await this.matchRepository.createMatch(
-      {
-        ...matchData,
-        timeSlotId: timeSlotCreated.id,
-      },
-      transaction
-    );
+        {
+          ...matchData,
+          timeSlotId: timeSlotCreated.id,
+        },
+        transaction
+      );
 
       const matchesTeams = new NewMatchesTeams({
         isCreator: 1,

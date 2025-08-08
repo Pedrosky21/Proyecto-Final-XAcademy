@@ -6,7 +6,6 @@ import Position from "../../core/models/PositionModel";
 import Team from "../../core/models/TeamModel";
 import PlayersTeams from "../../core/models/PXTModel";
 
-
 export class PlayerRepository {
   createPlayer = async (
     newPlayer: NewPlayerRequest,
@@ -95,13 +94,13 @@ export class PlayerRepository {
         {
           model: Team,
           as: "team",
-          // Para incluir jugadores del equipo:
-          // include: [
-          //   {
-          //     model: PlayersTeams,
-          //     include: [{ model: Player, as: "player" }],
-          //   },
-          // ],
+
+          include: [
+            {
+              model: PlayersTeams,
+              include: [{ model: Player, as: "player" }],
+            },
+          ],
         },
       ],
     });

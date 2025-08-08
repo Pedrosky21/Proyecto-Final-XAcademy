@@ -26,8 +26,15 @@ export class PlayerService {
     const transaction = await sequelize.transaction();
 
     try {
-      const player = await this.playerRepository.createPlayer(newPlayer, transaction);
-      await this.userService.setUserType(newPlayer.userId, "Jugador", transaction);
+      const player = await this.playerRepository.createPlayer(
+        newPlayer,
+        transaction
+      );
+      await this.userService.setUserType(
+        newPlayer.userId,
+        "Jugador",
+        transaction
+      );
       await transaction.commit();
       return player;
     } catch (error) {
@@ -52,8 +59,8 @@ export class PlayerService {
     return await this.playerRepository.getPlayerByUserId(userId);
   };
 
-  getTeamsByPlayerId = async (id: number): Promise <any> => {
+  getTeamsByPlayerId = async (id: number): Promise<any> => {
     const playerId = await this.getPlayerByUserId(id);
     return await this.playerRepository.getTeamsByPlayerId(playerId.id);
-  }
+  };
 }
