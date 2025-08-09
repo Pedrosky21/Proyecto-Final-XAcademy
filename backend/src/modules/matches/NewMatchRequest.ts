@@ -1,21 +1,21 @@
 import { NewTSREquest } from "../timeSlot/NewTSRequest";
 
 export class NewMatchRequest {
-  roofed: number;
-  turnId: number;
-  wallMaterialId: number;
-  floorMaterialId: number;
-  matchStateId: number;
-  timeSlot: NewTSREquest;
+    roofed: number
+    turnId: number
+    wallMaterialId: number
+    floorMaterialId: number
+    matchStateId: number
+    timeSlots: NewTSREquest[]
 
-  constructor(data: any) {
-    this.roofed = data.roofed;
-    this.turnId = data.turnId;
-    this.wallMaterialId = data.wallMaterialId;
-    this.floorMaterialId = data.floorMaterialId;
-    this.matchStateId = data.matchStateId;
-    this.timeSlot = new NewTSREquest(data.timeSlot);
-  }
+    constructor (data: any) {
+        this.roofed = data.roofed
+        this.turnId = data.turnId
+        this.wallMaterialId = data.wallMaterialId
+        this.floorMaterialId = data.floorMaterialId
+        this.matchStateId = data.matchStateId
+        this.timeSlots = Array.isArray(data.timeSlots) ? data.timeSlots.map((ts: any) => new NewTSREquest(ts)) : [];
+    }
 
   public validate(): string | null {
     if (!this.roofed || typeof this.roofed !== "number") {
@@ -34,6 +34,9 @@ export class NewMatchRequest {
     }
     if (!this.matchStateId || typeof this.matchStateId !== "number") {
       return "MatchState es un campo obligatorio y debe ser un numero";
+    }
+    if (!Array.isArray(this.timeSlots)) {
+      return "TimeSlots es un campo obligatorio y debe ser un array";
     }
 
     return null;

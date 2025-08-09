@@ -7,7 +7,8 @@ export class TimeSlotRepository {
         const createdTimeSlot = await TimeSlot.create({
             date: newTS.date,
             startTime: newTS.startTime,
-            endTime: newTS.endTime
+            endTime: newTS.endTime,
+            matchId: newTS.matchId
         }, { transaction });
 
         return createdTimeSlot;
