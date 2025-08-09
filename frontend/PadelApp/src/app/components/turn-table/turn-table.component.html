@@ -26,76 +26,179 @@
     </thead>
     <tbody *ngIf="rows">
       <tr
-        *ngFor="let day of rows.days; let index = index"
+        *ngFor="let day of rows; let index = index"
         class="border border-appSecondary"
       >
         <!-- Día -->
         <td
           class="w-auto whitespace-nowrap text-center px-3 border-x border-appSecondary"
         >
-          {{ weekDayEnum[day.weekDay] }}
+          {{ day.label }}
         </td>
 
         <!-- Celdas horarias -->
 
         <td
           *ngFor="let col of columns; let colIndex = index"
-          (click)="onCellClick(day.weekDay, colIndex)"
-          (mouseenter)="setHoverIndex(day.weekDay, colIndex)"
+          (click)="onCellClick(index, colIndex)"
+          (mouseenter)="setHoverIndex(index, colIndex)"
           (mouserleave)="setHoverIndex()"
           class="relative text-center min-h-16 py-2"
         >
-          <!-- Contorno por hover, usando getHoverStatusClass -->
-          <ng-container [ngSwitch]="getHoverStatusClass(day.weekDay, colIndex)">
-            <!-- Contorno completo -->
-            <div
-              *ngSwitchCase="'middle'"
-              class="absolute inset-0 z-20 rounded-none border-y-2 border-appPrimary pointer-events-none"
-            ></div>
-            <!-- Solo start -->
-            <div
-              *ngSwitchCase="'start'"
-              class="absolute right-0 top-0 bottom-0 w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
-            ></div>
-            <!-- Solo end -->
-            <div
-              *ngSwitchCase="'end'"
-              class="absolute left-0 top-0 bottom-0 w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
-            ></div>
-            <!-- Start-End -->
-            <div
-              *ngSwitchCase="'start-end'"
-              class="absolute inset-0 flex justify-between items-center z-20 px-[2px] pointer-events-none"
-            >
+          <!-- Si la tabla se esta usando para diagramar turnos -->
+          <ng-container *ngIf="type === 'diagramTurns'">
+            <!-- Contorno por hover, usando getHoverStatusClass -->
+            <ng-container [ngSwitch]="getHoverStatusClass(index, colIndex)">
+              <!-- Contorno completo -->
               <div
-                class="w-1/2 h-full border-r-4 border-appPrimary rounded-r-full"
+                *ngSwitchCase="'middle'"
+                class="absolute inset-0 z-20 rounded-none border-y-2 border-appPrimary pointer-events-none"
+              ></div>
+              <!-- Solo start -->
+              <div
+                *ngSwitchCase="'start'"
+                class="absolute right-0 top-0 bottom-0 w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
+              ></div>
+              <!-- Solo end -->
+              <div
+                *ngSwitchCase="'end'"
+                class="absolute left-0 top-0 bottom-0 w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
+              ></div>
+              <!-- Start-End -->
+              <div
+                *ngSwitchCase="'start-end'"
+                class="absolute inset-0 flex justify-between items-center z-20 px-[2px] pointer-events-none"
+              >
+                <div
+                  class="w-1/2 h-full border-r-4 border-appPrimary rounded-r-full"
+                ></div>
+                <div
+                  class="w-1/2 h-full border-l-4 border-appPrimary rounded-l-full"
+                ></div>
+              </div>
+            </ng-container>
+            <!-- Fondo real, usando getCellStatus -->
+            <ng-container [ngSwitch]="getCellStatus(index, colIndex)">
+              <div
+                *ngSwitchCase="'middle'"
+                class="absolute inset-0 bg-appPrimary z-0 rounded-none cursor-pointer"
               ></div>
               <div
-                class="w-1/2 h-full border-l-4 border-appPrimary rounded-l-full"
+                *ngSwitchCase="'start'"
+                class="absolute right-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
               ></div>
-            </div>
+              <div
+                *ngSwitchCase="'end'"
+                class="absolute left-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
+              ></div>
+              <div
+                *ngSwitchCase="'start-end'"
+                class="absolute inset-0 flex justify-between items-center z-10 px-[2px] cursor-pointer"
+              >
+                <div class="w-1/2 h-full bg-appPrimary rounded-r-full"></div>
+                <div class="w-1/2 h-full bg-appPrimary rounded-l-full"></div>
+              </div>
+            </ng-container>
           </ng-container>
-          <!-- Fondo real, usando getCellStatus -->
-          <ng-container [ngSwitch]="getCellStatus(day.weekDay, colIndex)">
-            <div
-              *ngSwitchCase="'middle'"
-              class="absolute inset-0 bg-appPrimary z-0 rounded-none cursor-pointer"
-            ></div>
-            <div
-              *ngSwitchCase="'start'"
-              class="absolute right-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
-            ></div>
-            <div
-              *ngSwitchCase="'end'"
-              class="absolute left-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
-            ></div>
-            <div
-              *ngSwitchCase="'start-end'"
-              class="absolute inset-0 flex justify-between items-center z-10 px-[2px] cursor-pointer"
+          <ng-container *ngIf="type === 'viewClub'">
+            <ng-container
+              *ngIf="getCellTurnStatus(index, colIndex)?.includes('created')"
             >
-              <div class="w-1/2 h-full bg-appPrimary rounded-r-full"></div>
-              <div class="w-1/2 h-full bg-appPrimary rounded-l-full"></div>
-            </div>
+              <!-- Contorno por hover, usando getHoverStatusClass -->
+              <ng-container [ngSwitch]="getCellStatus(index, colIndex)">
+                <!-- Contorno completo -->
+                <div
+                  *ngSwitchCase="'middle'"
+                  class="absolute inset-0 z-20 rounded-none border-y-2 border-appPrimary pointer-events-none"
+                ></div>
+                <!-- Solo start -->
+                <div
+                  *ngSwitchCase="'start'"
+                  class="absolute right-0 top-0 bottom-0 w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
+                ></div>
+                <!-- Solo end -->
+                <div
+                  *ngSwitchCase="'end'"
+                  class="absolute left-0 top-0 bottom-0 w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
+                ></div>
+                <!-- Start-End -->
+                <div
+                  *ngSwitchCase="'start-end'"
+                  class="absolute inset-0 flex justify-between items-center z-20 px-[2px] pointer-events-none"
+                >
+                  <div
+                    class="w-1/2 h-full border-r-4 border-appPrimary rounded-r-full"
+                  ></div>
+                  <div
+                    class="w-1/2 h-full border-l-4 border-appPrimary rounded-l-full"
+                  ></div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <ng-container
+              *ngIf="
+                getCellTurnStatus(index, colIndex)?.includes('paid') ||
+                getCellTurnStatus(index, colIndex)?.includes('reserved')
+              "
+            >
+              <!-- Fondo real, usando getCellStatus -->
+              <ng-container [ngSwitch]="getCellStatus(index, colIndex)">
+                <div
+                  *ngSwitchCase="'middle'"
+                  class="absolute inset-0 bg-appPrimary z-0 rounded-none cursor-pointer"
+                >
+                  <ng-container [ngSwitch]="getCellTurnStatus(index, colIndex)">
+                  </ng-container>
+                  <svg
+                    *ngSwitchCase="'reserved'"
+                    *ngIf="getMiddleIndex(index, colIndex) === 2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="black"
+                    class="size-6 absolute top-1/2 left-3/2 transform -translate-x-1/2 -translate-y-1/2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                  <svg
+                    *ngSwitchCase="'paid'"
+                    *ngIf="getMiddleIndex(index, colIndex) === 2"
+                    class="size-6 absolute top-1/2 left-3/2 transform -translate-x-1/2 -translate-y-1/2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </div>
+                <div
+                  *ngSwitchCase="'start'"
+                  class="absolute right-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
+                ></div>
+                <div
+                  *ngSwitchCase="'end'"
+                  class="absolute left-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
+                ></div>
+                <div
+                  *ngSwitchCase="'start-end'"
+                  class="absolute inset-0 flex justify-between items-center z-10 px-[2px] cursor-pointer"
+                >
+                  <div class="w-1/2 h-full bg-appPrimary rounded-r-full"></div>
+                  <div class="w-1/2 h-full bg-appPrimary rounded-l-full"></div>
+                </div>
+              </ng-container>
+            </ng-container>
           </ng-container>
         </td>
       </tr>

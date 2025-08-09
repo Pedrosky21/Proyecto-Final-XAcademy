@@ -1,9 +1,39 @@
-import {Model, DataTypes} from 'sequelize';
+import {Model, DataTypes, Optional} from 'sequelize';
 import sequelize from '../../../../../config/db.config';
 import User from '../../../../auth/core/models/UserModel';
 import Court from './Courts';
+interface ClubAttributes {
+  id: number;
+  name: string;
+  address: string;
+  openningTime: string;
+  closingTime: string;
+  responsableFirstName: string;
+  responsableLastName: string;
+  turnPrice: string;
+  cellNumber: number;
+  admisionRules: string;
+  cancelationRules: string;
+  userId:number
+}
 
-class Club extends Model {};
+
+interface ClubCreationAttributes extends Optional<ClubAttributes, 'id'> {}
+class Club  extends Model<ClubAttributes,ClubCreationAttributes> implements ClubCreationAttributes {
+  public id!: number;
+  public name!: string;
+  public address!: string;
+  public openningTime!: string;
+  public closingTime!: string;
+  public responsableFirstName!: string;
+  public responsableLastName!: string;
+  public turnPrice!: string;
+  public cellNumber!: number;
+  public admisionRules!: string;
+  public cancelationRules!: string;
+  public userId!:number
+
+};
 
 Club.init({
     id: {

@@ -7,6 +7,7 @@ import { CourtRepository } from "../adapters/repositories/CourtRepository";
 import { BadRequestError } from "../../../errors/BadRequestError";
 import { TurnService } from "./TurnService";
 import { DiagramTurnRequest } from "../core/dtos/request/DiagramTurnsRequest";
+import Turn from "../core/models/sequelize/Turn";
 
 
 export class CourtService{
@@ -40,5 +41,8 @@ export class CourtService{
 
       await this.turnService.diagramTurns(court,diagramTurns.year,diagramTurns.month,transaction)
     }
+  }
+  getCourtTurnsByWeek=async(courtId:number, startDate:Date):Promise<Turn[]>=>{
+    return await this.turnService.getCourtTurnsByWeek(courtId,startDate)
   }
 }

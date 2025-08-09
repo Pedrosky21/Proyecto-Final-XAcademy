@@ -2,6 +2,7 @@ import { Transaction } from "sequelize";
 import { TurnRepository } from "../adapters/repositories/TurnRepository";
 import { DiagramTurnCourt } from "../core/models/classes/DiagramTurnCourts";
 import { NewTurn } from "../core/models/classes/NewTurn";
+import { start } from "repl";
 
 export class TurnService{
   turnRepository= new TurnRepository()
@@ -32,5 +33,11 @@ export class TurnService{
 
     const offset = (7 * (weekNumber - 1)) + ((weekDay - firstWeekDay + 7) % 7);
     return new Date(year, month, 1 + offset);
+  }
+
+  getCourtTurnsByWeek=async(courtId:number, startDate:Date):Promise<any>=>{
+    const endDate= new Date(startDate)
+    endDate.setDate(startDate.getDate()+6)
+    return await this.turnRepository.getCourtTurnsByWeek(courtId,startDate,endDate)
   }
 }
