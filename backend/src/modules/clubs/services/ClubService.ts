@@ -9,6 +9,8 @@ import { BadRequestError } from "../../../errors/BadRequestError";
 import { NotFoundError } from "../../../errors/NotFoundError";
 import Club from "../core/models/sequelize/Club";
 import { DiagramTurnRequest } from "../core/dtos/request/DiagramTurnsRequest";
+import { ClubByUserIdResponse } from "../core/dtos/responses/ClubByUserIdResponse";
+import Turn from "../core/models/sequelize/Turn";
 
 export class ClubService{
   clubRepository = new ClubRepository();
@@ -50,7 +52,7 @@ export class ClubService{
     }
   }
 
-  getClubByUserId=async(userId:number):Promise<any>=>{
+  getClubByUserId=async(userId:number):Promise<ClubByUserIdResponse>=>{
     const user=await this.userService.getUserById(userId)
     if(!user){
       throw new NotFoundError("Usuario no existente")
@@ -63,7 +65,7 @@ export class ClubService{
   diagramTurns=async(userId:number, diagramTurns:DiagramTurnRequest):Promise<any>=>{
     const club= await this.getClubByUserId(userId)
 
-    const courtsId:number[]= club.getDataValue("courts").map((court:any)=>court.id)
+    const courtsId:number[]= club.courts.map((court:any)=>court.id)
 
     const invalidCourts=diagramTurns.courts.some((court)=> !courtsId.includes(court.id))
     if(invalidCourts){
@@ -81,5 +83,9 @@ export class ClubService{
       await transaction.rollback();
       throw error
     }
+  }
+
+  getCourtTurnsByWeek=async(courtId:number,startDate:Date):Promise<Turn[]>=>{
+    return await this.courtService.getCourtTurnsByWeek(courtId,startDate)
   }
 }

@@ -36,7 +36,8 @@
     <div class="w-full flex overflow-auto">
       <app-turn-table
       [columns]="columns"
-      [rows]="courtsDiagram[selectedCourt]"
+      [rows]="courtsDiagram[selectedCourt].days"
+      [type]="'diagramTurns'"
       (rowClick)="clickRow($event)"></app-turn-table>
     </div>
       <div class="flex mt-6 w-full align-middle gap-6 justify-end">

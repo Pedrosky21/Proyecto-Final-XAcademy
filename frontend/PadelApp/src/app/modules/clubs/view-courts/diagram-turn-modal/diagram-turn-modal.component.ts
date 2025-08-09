@@ -22,6 +22,7 @@ export class DiagramTurnModalComponent implements OnChanges {
   @Output() onCloseModal = new EventEmitter();
   @Output() onCellClick = new EventEmitter();
   @Input() club?: Club;
+  @Input() columns:string[]=[]
 
   onClose() {
     this.onCloseModal.emit();
@@ -32,28 +33,12 @@ export class DiagramTurnModalComponent implements OnChanges {
     private readonly loadingScreenService: loadingScreenService,
     private readonly clubService: ClubService
   ) {}
-  columns: string[] = [];
   courtsDiagram: DiagramatingTurnsCourt[] = [];
   selectedMonth: string = '';
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['club'] && this.club?.openningTime) {
-      this.setColumns();
       this.setRows();
-    }
-  }
-  setColumns() {
-    const initialTime = Number(this.club?.openningTime.split(':')[0]) * 60;
-    let currentTime = initialTime;
-    const finalTime = Number(this.club?.closingTime.split(':')[0]) * 60;
-
-    while (currentTime < finalTime) {
-      const hours = Math.floor(currentTime / 60)
-        .toFixed()
-        .padStart(2, '0');
-      const minutes = (currentTime % 60).toFixed().padStart(2, '0');
-      this.columns.push(hours + ':' + minutes);
-
-      currentTime += 30;
     }
   }
   setRows() {
@@ -70,7 +55,7 @@ export class DiagramTurnModalComponent implements OnChanges {
   clickRow(event: { weekDay: number; column: string }) {
     const columnIndex = this.columns.findIndex((col) => col === event.column);
     const days = this.courtsDiagram[this.selectedCourt].days[event.weekDay];
-    const turns = days.turns;
+    const turns = days.startHours;
 
     let deleted = false;
 
@@ -79,14 +64,14 @@ export class DiagramTurnModalComponent implements OnChanges {
       if (i < 0) continue;
 
       const potentialStart = this.columns[i];
-      if (turns.includes(potentialStart)) {
+      if (turns.includes({hour:potentialStart,idState:0})) {
         // Si la columna clickeada está dentro del rango de ese turno (start, start+1, start+2)
         const startIdx = this.columns.findIndex(
           (col) => col === potentialStart
         );
         if (columnIndex >= startIdx && columnIndex <= startIdx + 2) {
           // Eliminar ese turno
-          days.turns = turns.filter((t) => t !== potentialStart);
+          days.startHours = turns.filter((t:any) => t !== potentialStart);
           deleted = true;
           break;
         }
@@ -95,7 +80,7 @@ export class DiagramTurnModalComponent implements OnChanges {
 
     // Si no se eliminó nada, es porque no pertenece a un turno → crear uno
     if (!deleted) {
-      days.turns.push(event.column);
+      days.startHours.push({hour:event.column,idState:0});
     }
   }
 
@@ -107,8 +92,8 @@ export class DiagramTurnModalComponent implements OnChanges {
     //clonar los dias de la cancha seleccionada
     const selectedDays = this.courtsDiagram[this.selectedCourt].days.map(
       (day) => ({
-        weekDay: day.weekDay,
-        turns: [...day.turns], 
+        label: day.label,
+        startHours: [...day.startHours], 
       })
     );
 
@@ -116,8 +101,8 @@ export class DiagramTurnModalComponent implements OnChanges {
     this.courtsDiagram = this.courtsDiagram.map((diagram) => ({
       ...diagram,
       days: selectedDays.map((day) => ({
-        weekDay: day.weekDay,
-        turns: [...day.turns], 
+        label: day.label,
+        startHours: [...day.startHours], 
       })),
     }));
   }
@@ -170,7 +155,6 @@ export class DiagramTurnModalComponent implements OnChanges {
                   }, 1500);
                 },
                 error: (error) => {
-                  console.log(error)
                   this.loadingScreenService.showLoadingScreen(null);
                   this.confirmationModalService.openModal({
                     icon: ModalIconEnum.error,

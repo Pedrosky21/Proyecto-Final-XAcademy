@@ -5,12 +5,14 @@ import { HabilitateClubComponent } from "./habilitate-club/habilitate-club.compo
 import { ComponentsModule } from "../../components/components.module";
 import { ViewCourtsComponent } from "./view-courts/view-courts.component";
 import { DiagramTurnModalComponent } from "./view-courts/diagram-turn-modal/diagram-turn-modal.component";
+import { CourtModalComponent } from "./view-courts/court-modal/court-modal.component";
 
 @NgModule({
   declarations: [
     HabilitateClubComponent,
     ViewCourtsComponent,
-    DiagramTurnModalComponent
+    DiagramTurnModalComponent,
+    CourtModalComponent
   ],
   imports: [
     CommonModule,

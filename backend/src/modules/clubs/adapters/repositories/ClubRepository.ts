@@ -6,6 +6,7 @@ import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
 import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
 import Turn from "../../core/models/sequelize/Turn";
 import Club from "../../core/models/sequelize/Club";
+import { ClubByUserIdResponse } from "../../core/dtos/responses/ClubByUserIdResponse";
 
 export class ClubRepository {
   getClubById = async (id: number): Promise<Club | null> => {
@@ -20,10 +21,10 @@ export class ClubRepository {
       {
         name: newClubRequest.name,
         address: newClubRequest.address,
-        cellNumber: newClubRequest.cellNumber,
+        cellNumber: Number(newClubRequest.cellNumber),
         responsableFirstName: newClubRequest.responsableFirstName,
         responsableLastName: newClubRequest.responsableLastName,
-        turnPrice: newClubRequest.turnPrice,
+        turnPrice:newClubRequest.turnPrice.toString(),
         openningTime: newClubRequest.openningTime,
         closingTime: newClubRequest.closingTime,
         admisionRules: newClubRequest.admisionRules,
@@ -33,13 +34,14 @@ export class ClubRepository {
       { transaction }
     );
   };
-  getClubByUserId = async (userId: number): Promise<any> => {
+  getClubByUserId = async (userId: number): Promise<ClubByUserIdResponse> => {
     const club = await Club.findOne({
       where: { userId: userId },
       include: [
         {
           model: Court,
           as: "courts",
+          attributes: ["id", "roofed"],
           include: [
             {
               model: FloorMaterial,
@@ -55,6 +57,7 @@ export class ClubRepository {
               model: Turn,
               as: "turns",
               separate: true,
+              attributes:["id"],
               include: [
                 {
                   model: TurnState,
@@ -70,7 +73,8 @@ export class ClubRepository {
       ],
     });
 
-    return club;
+    const toReturnClub:ClubByUserIdResponse= new ClubByUserIdResponse(club)
+    return toReturnClub;
   };
 
   
