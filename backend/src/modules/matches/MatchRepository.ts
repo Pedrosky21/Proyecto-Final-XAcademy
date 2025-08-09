@@ -6,13 +6,13 @@ import { Transaction } from "sequelize";
 import Team from "../players/core/models/TeamModel";
 import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
+import TimeSlot from "../timeSlot/TimeSlotModel";
 
 interface MatchCreateInput {
   roofed: number;
   wallMaterialId: number;
   floorMaterialId: number;
   matchStateId: number;
-  timeSlotId: number;
 }
 
 export class MatchRepository {
@@ -25,8 +25,7 @@ export class MatchRepository {
         roofed: newMatch.roofed,
         wallMaterialId: newMatch.wallMaterialId,
         floorMaterialId: newMatch.floorMaterialId,
-        matchStateId: newMatch.matchStateId,
-        timeSlotId: newMatch.timeSlotId
+        matchStateId: 1,
       },
       { transaction }
     );
@@ -50,8 +49,35 @@ export class MatchRepository {
     return createdMatchesTeams;
   };
 
-  getMatchById = async (id: number): Promise<Match | null> => {
-    const match = await Match.findByPk(id);
+  getMatchById = async (id: number, transaction:Transaction): Promise<Match | null> => {
+    const match = await Match.findByPk(id, {
+      include: [
+        {
+          model: MatchesTeams,
+          as: "MatchesTeams",
+          include: [
+            {
+              model: Team,
+              as: "team",
+              include: [
+                {
+                  model: PlayersTeams,
+                  as: "PlayersTeams",
+                  include: [
+                    {
+                      model: Player,
+                      as: "player",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        { model: TimeSlot, as: "timeSlots" },
+      ],
+      transaction
+    });
     return match;
   };
 
@@ -105,5 +131,33 @@ export class MatchRepository {
     });
 
     return matches;
+  };
+
+  getMatchTeam = async (
+    matchId: number,
+    teamId: number
+  ): Promise<MatchesTeams | null> => {
+    const matchTeam = await MatchesTeams.findOne({
+      where: {
+        matchId: matchId,
+        teamId: teamId,
+      },
+    });
+    return matchTeam;
+  };
+
+  setMatchToPending = async (
+    matchId: number,
+    transaction: Transaction
+  ): Promise<void> => {
+    const [matchesChanged] = await Match.update(
+      { matchStateId: 2 },
+      {
+        where: {
+          id: matchId,
+        },
+        transaction,
+      }
+    );
   };
 }
