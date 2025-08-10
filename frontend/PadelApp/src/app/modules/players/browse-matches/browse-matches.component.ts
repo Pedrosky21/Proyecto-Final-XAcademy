@@ -1,8 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TeamService } from '../../../core/services/TeamService';
 import { PlayerService } from '../../../core/services/PlayerServices';
 import { CategoryService } from '../../../core/services/CategoryService';
 import { ClubService } from '../../../core/services/ClubService';
+import { MatchService } from '../../../core/services/MatchService';
+import { Match } from '../../../model/Match';
+import { FloorMaterial } from '../../../model/FloorMaterial';
+import { WallMaterial } from '../../../model/WallMaterial';
+import { FloorMaterialService } from '../../../core/services/FloorMaterialService';
+import { WallMaterialService } from '../../../core/services/WallMaterialService';
 
 @Component({
   selector: 'app-browse-matches',
@@ -10,84 +16,76 @@ import { ClubService } from '../../../core/services/ClubService';
   templateUrl: './browse-matches.component.html',
   styleUrl: './browse-matches.component.scss',
 })
-export class BrowseMatchesComponent {
+export class BrowseMatchesComponent implements OnInit {
   constructor(
-    private readonly teamService: TeamService,
-    private readonly playerService: PlayerService,
-    private readonly categoryService: CategoryService,
-    private readonly clubService: ClubService
+    private readonly matchService: MatchService,
+    private readonly floorMaterialService: FloorMaterialService,
+    private readonly wallMaterialService: WallMaterialService
   ) {}
-  hardcodedPartidos = [
-    {
-      idpartido: 1,
-      nombre: 'Partido A',
-      equipo: 'Mclaren',
-      categoria: 'Avanzado',
-      fecha: '2025-08-05',
-      techada: true,
-      turno_idturno: 1,
-      materialPared_idmaterialpared: 2,
-      materialSuelo_idmaterialSuelo: 3,
-      estadopartido_idestadoturno: 1,
-    },
-    {
-      idpartido: 2,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 2,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-  ];
+  showAcceptMatchModal = false;
   filters = {
     materialPiso: '',
     materialPared: '',
     techada: '',
   };
+  filteredPartidos: Match[] = [];
+  floorMaterials: FloorMaterial[] = [];
+  wallMaterials: WallMaterial[] = [];
+  page = 1;
+  limit = 30;
+  totalMatches = 0;
 
-  filteredPartidos = [...this.hardcodedPartidos];
+  ngOnInit() {
+    this.buscar();
+    this.loadMaterials();
+  }
 
-  techadaOptions: string[] = ['Si', 'No'];
-  teams: any[] = [];
+  loadMaterials() {
+    this.wallMaterialService.getWallMaterials().subscribe((materials) => {
+      this.wallMaterials = materials;
+    });
 
-  ngOnInit() {}
+    this.floorMaterialService.getFloorMaterials().subscribe((materials) => {
+      this.floorMaterials = materials;
+    });
+  }
 
   buscar() {
-    this.filteredPartidos = this.hardcodedPartidos.filter((partido) => {
-      const matchesFloor =
-        !this.filters.materialPiso ||
-        partido.materialSuelo_idmaterialSuelo === +this.filters.materialPiso;
+    const roofed =
+      this.filters.techada !== ''
+        ? this.filters.techada === 'true'
+          ? 1
+          : 0
+        : null;
+    const wallMaterial = this.filters.materialPared
+      ? Number(this.filters.materialPared)
+      : null;
+    const floorMaterial = this.filters.materialPiso
+      ? Number(this.filters.materialPiso)
+      : null;
 
-      const matchesWall =
-        !this.filters.materialPared ||
-        partido.materialPared_idmaterialpared === +this.filters.materialPared;
-
-      const matchesTechada =
-        !this.filters.techada ||
-        partido.techada === (this.filters.techada === 'true');
-
-      return matchesFloor && matchesWall && matchesTechada;
-    });
+    this.matchService
+      .getMatches(this.limit, this.page, roofed, wallMaterial, floorMaterial)
+      .subscribe({
+        next: (matches) => {
+          this.filteredPartidos = matches;
+          console.log('Filtered matches:', this.filteredPartidos);
+        },
+        error: (err) => {
+          console.error('Error fetching matches', err);
+        },
+      });
   }
 
   reiniciarFiltros() {
     this.filters = { materialPiso: '', materialPared: '', techada: '' };
-    this.filteredPartidos = [...this.hardcodedPartidos];
+    this.page = 1;
+    this.buscar();
   }
+
+  openAcceptMatchModal() {
+    this.showAcceptMatchModal = true;
+  }
+
+  onConfirmAcceptMatchModal() {}
 }

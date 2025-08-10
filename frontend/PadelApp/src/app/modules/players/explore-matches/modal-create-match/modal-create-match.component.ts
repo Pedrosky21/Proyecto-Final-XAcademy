@@ -8,7 +8,7 @@ import { ModalIconEnum } from '../../../../core/layouts/confirmation-modal/model
 
 import { loadingScreenService } from '../../../../core/layouts/loading-screen/service/loadingService';
 import { MatchService } from '../../../../core/services/MatchService';
-import { NewMatchRequest } from '../../../../model/Match-model';
+import { NewMatchRequest } from '../../../../model/Match';
 import { WallMaterial } from '../../../../model/WallMaterial';
 import { FloorMaterial } from '../../../../model/FloorMaterial';
 import { WallMaterialService } from '../../../../core/services/WallMaterialService';
@@ -72,9 +72,10 @@ export class ModalCreateMatchComponent {
             : 1,
         date: '',
         startTime: '',
-        finishTime: '',
+        endTime: '',
       })
     );
+    console.log(this.newTimeSlots);
   }
 
   handleRowChange(event: { index: number; key: keyof TimeSlots; value: any }) {
@@ -95,7 +96,7 @@ export class ModalCreateMatchComponent {
       const [startHour, startMinute] = timeslot.startTime
         .split(':')
         .map(Number);
-      const [finishHour, finishMinute] = timeslot.finishTime
+      const [finishHour, finishMinute] = timeslot.endTime
         .split(':')
         .map(Number);
 
@@ -176,11 +177,11 @@ export class ModalCreateMatchComponent {
             wallMaterialId: this.matchGroup.value.wallMaterialId,
             floorMaterialId: this.matchGroup.value.floorMaterialId,
 
-            timeSlot: {
-              startTime: this.matchGroup.value.startTime,
-              endTime: this.matchGroup.value.endTime,
-              date: this.matchGroup.value.date,
-            },
+            timeSlot: this.newTimeSlots.map((slot) => ({
+              date: slot.date,
+              startTime: slot.startTime,
+              endTime: slot.endTime,
+            })),
           };
           console.log(newMatch);
           this.matchService.createMatch(newMatch).subscribe({
@@ -236,7 +237,7 @@ export class ModalCreateMatchComponent {
         type: 'time',
       },
       {
-        key: 'finishTime',
+        key: 'endTime',
         title: 'Hora Fin',
         editable: true,
         type: 'time',

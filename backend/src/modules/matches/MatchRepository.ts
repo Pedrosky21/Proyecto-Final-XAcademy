@@ -7,6 +7,7 @@ import Team from "../players/core/models/TeamModel";
 import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
 import TimeSlot from "../timeSlot/TimeSlotModel";
+import Category from "../players/core/models/CategoryModel";
 
 interface MatchCreateInput {
   roofed: number;
@@ -50,7 +51,10 @@ export class MatchRepository {
     return createdMatchesTeams;
   };
 
-  getMatchById = async (id: number, transaction:Transaction): Promise<Match | null> => {
+  getMatchById = async (
+    id: number,
+    transaction: Transaction
+  ): Promise<Match | null> => {
     const match = await Match.findByPk(id, {
       include: [
         {
@@ -77,7 +81,7 @@ export class MatchRepository {
         },
         { model: TimeSlot, as: "timeSlots" },
       ],
-      transaction
+      transaction,
     });
     return match;
   };
@@ -95,15 +99,15 @@ export class MatchRepository {
       whereClause.roofed = roofed;
     }
     if (wallMaterial !== null) {
-      whereClause.wallMaterial = wallMaterial;
+      whereClause.wallMaterialId = wallMaterial;
     }
     if (floorMaterial !== null) {
-      whereClause.floorMaterial = floorMaterial;
+      whereClause.floorMaterialId = floorMaterial;
     }
 
     const matches = await Match.findAll({
       where: whereClause,
-      limit: limit,
+      limit,
       offset: (page - 1) * limit,
       include: [
         {
@@ -121,12 +125,24 @@ export class MatchRepository {
                     {
                       model: Player,
                       as: "player",
+                      include: [
+                        {
+                          model: Category,
+                          as: "category",
+                          attributes: ["id", "name"],
+                        },
+                      ],
                     },
                   ],
                 },
               ],
             },
           ],
+        },
+        {
+          model: TimeSlot,
+
+          attributes: ["date", "startTime", "endTime"],
         },
       ],
     });

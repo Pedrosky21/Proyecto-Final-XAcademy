@@ -3,13 +3,13 @@ export class TimeSlots {
   index: number;
   date: string;
   startTime: string;
-  finishTime: string;
+  endTime: string;
 
   constructor(data: any) {
     this.id = data.id;
     this.index = data.index;
     this.date = data.date;
     this.startTime = data.startTime;
-    this.finishTime = data.finishTime;
+    this.endTime = data.endTime;
   }
 }
