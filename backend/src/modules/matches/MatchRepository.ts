@@ -6,6 +6,8 @@ import { Transaction } from "sequelize";
 import Team from "../players/core/models/TeamModel";
 import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
+import Category from "../players/core/models/CategoryModel";
+import TimeSlot from "../timeSlot/TimeSlotModel";
 
 interface MatchCreateInput {
   roofed: number;
@@ -69,15 +71,15 @@ export class MatchRepository {
       whereClause.roofed = roofed;
     }
     if (wallMaterial !== null) {
-      whereClause.wallMaterial = wallMaterial;
+      whereClause.wallMaterialId = wallMaterial;
     }
     if (floorMaterial !== null) {
-      whereClause.floorMaterial = floorMaterial;
+      whereClause.floorMaterialId = floorMaterial;
     }
 
     const matches = await Match.findAll({
       where: whereClause,
-      limit: limit,
+      limit,
       offset: (page - 1) * limit,
       include: [
         {
@@ -95,12 +97,24 @@ export class MatchRepository {
                     {
                       model: Player,
                       as: "player",
+                      include: [
+                        {
+                          model: Category,
+                          as: "category",
+                          attributes: ["id", "name"],
+                        },
+                      ],
                     },
                   ],
                 },
               ],
             },
           ],
+        },
+        {
+          model: TimeSlot,
+
+          attributes: ["date", "startTime", "endTime"],
         },
       ],
     });

@@ -14,7 +14,7 @@ export class NewMatchRequest {
     this.wallMaterialId = data.wallMaterialId;
     this.floorMaterialId = data.floorMaterialId;
     this.matchStateId = data.matchStateId;
-    this.timeSlot = new NewTSREquest(data.timeSlot);
+    this.timeSlot = data.timeSlot;
   }
 
   public validate(): string | null {

@@ -7,7 +7,6 @@ import { NewMatchesTeams } from "./MXTRequest";
 import { WallMaterialService } from "../wallMaterials/services/WallMaterialService";
 import { FloorMaterialService } from "../floorMaterials/services/FloorMaterialService";
 import { TimeSlotService } from "../timeSlot/TimeSlotService";
-import { NewTSREquest } from "../timeSlot/NewTSRequest";
 
 export class MatchService {
   matchRepository = new MatchRepository();

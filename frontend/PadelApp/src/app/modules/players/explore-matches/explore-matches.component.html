@@ -31,6 +31,84 @@
     </button>
   </section>
 
+  <section class="flex gap-4 p-4 h-full w-[1200px] mx-auto">
+    <article
+      class="flex-1 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
+    >
+      <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
+        Creadas
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-6">
+        <div
+          *ngFor="let partido of hardcodedPartidos"
+          class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-36 text-center"
+        >
+          <div class="gap-2 font-bold">
+            <span class="text-bold text-center"
+              ><i class="fa-solid fa-people-group pr-1"></i
+              >{{ partido.equipo }}</span
+            >
+          </div>
+          <span class="font-bold">{{ partido.nombre }}</span>
+          <div class="text-sm">{{ partido.categoria }}</div>
+          <div class="text-sm font-bold">
+            <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+          </div>
+        </div>
+      </div>
+    </article>
+    <article
+      class="flex-1 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
+    >
+      <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
+        Pendientes
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-6">
+        <div
+          *ngFor="let partido of hardcodedPartidos"
+          class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-36 text-center"
+        >
+          <div class="gap-2 font-bold">
+            <span class="text-bold text-center"
+              ><i class="fa-solid fa-people-group pr-1"></i
+              >{{ partido.equipo }}</span
+            >
+          </div>
+          <span class="font-bold">{{ partido.nombre }}</span>
+          <div class="text-sm">{{ partido.categoria }}</div>
+          <div class="text-sm font-bold">
+            <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+          </div>
+        </div>
+      </div>
+    </article>
+    <article
+      class="flex-1 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
+    >
+      <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
+        Confirmadas
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-6">
+        <div
+          *ngFor="let partido of hardcodedPartidos"
+          class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-36 text-center"
+        >
+          <div class="gap-2 font-bold">
+            <span class="text-bold text-center"
+              ><i class="fa-solid fa-people-group pr-1"></i
+              >{{ partido.equipo }}</span
+            >
+          </div>
+          <span class="font-bold">{{ partido.nombre }}</span>
+          <div class="text-sm">{{ partido.categoria }}</div>
+          <div class="text-sm font-bold">
+            <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
   <app-modal-create-team
     [showCreateTeamModal]="showCreateTeamModal"
     [createTeamForm]="createTeamForm"
