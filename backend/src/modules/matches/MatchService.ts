@@ -54,7 +54,10 @@ export class MatchService {
       const timeSlotsCreated = [];
 
       for (const timeSlot of timeSlots) {
-        const timeSlotData = new NewTSREquest({...timeSlot, matchId: match.id})
+        const timeSlotData = new NewTSREquest({
+          ...timeSlot,
+          matchId: match.id,
+        });
         console.log(timeSlotData);
         const timeSlotCreated = await this.timeSlotService.createTimeSlot(
           timeSlotData,
@@ -98,7 +101,7 @@ export class MatchService {
     return matches;
   };
 
-  getMatchById = async (id: number, transaction:Transaction): Promise<any> => {
+  getMatchById = async (id: number, transaction: Transaction): Promise<any> => {
     const match = await this.matchRepository.getMatchById(id, transaction);
     return match;
   };

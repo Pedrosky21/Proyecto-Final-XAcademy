@@ -13,30 +13,32 @@
     <!-- Material Piso -->
     <select
       [(ngModel)]="filters.materialPiso"
-      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-transparent focus:outline-none focus:ring-2 focus:ring-appPrimary"
+      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
     >
-      <option value="">Material Piso</option>
-      <option value="2">Cesped Artificial</option>
-      <option value="3">Concreto</option>
+      <option value="" disabled>Material Piso</option>
+      <option *ngFor="let material of floorMaterials" [value]="material.id">
+        {{ material.name }}
+      </option>
     </select>
 
     <!-- Material Pared -->
     <select
       [(ngModel)]="filters.materialPared"
-      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-transparent focus:outline-none focus:ring-2 focus:ring-appPrimary"
+      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
     >
-      <option value="">Material Pared</option>
-      <option value="1">Ladrillo</option>
-      <option value="2">Concreto</option>
+      <option value="" disabled>Material Pared</option>
+      <option *ngFor="let material of wallMaterials" [value]="material.id">
+        {{ material.name }}
+      </option>
     </select>
 
     <!-- Techada -->
     <select
       [(ngModel)]="filters.techada"
-      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-transparent focus:outline-none focus:ring-2 focus:ring-appPrimary"
+      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
     >
-      <option class="bg-appBackground" value="">Techada</option>
-      <option class="bg-appBackground" value="true">Si</option>
+      <option class="bg-appBackground" value="" disabled>Techada</option>
+      <option class="bg-appBackground" value="true">Sí</option>
       <option class="bg-appBackground" value="false">No</option>
     </select>
 
@@ -55,25 +57,30 @@
     >
       Reiniciar Filtros
     </button>
-
-    <!-- Matches List -->
   </div>
+  <!-- Matches List -->
+
   <section class="flex flex-wrap justify-center items-center font-roboto">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
       <div
         *ngFor="let partido of filteredPartidos"
         class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-48 text-center"
+        (click)="openAcceptMatchModal()"
       >
-        <div class="gap-2 font-bold">
-          <span class="text-bold text-center"
-            ><i class="fa-solid fa-people-group pr-1"></i
-            >{{ partido.equipo }}</span
-          >
+        <!-- Teams list -->
+        <div class="gap-2 font-bold text-center">
+          <span *ngFor="let mt of partido.MatchesTeams">
+            <i class="fa-solid fa-people-group"></i> {{ mt.team?.name }}
+          </span>
         </div>
-        <span class="font-bold">{{ partido.nombre }}</span>
-        <div class="text-sm">{{ partido.categoria }}</div>
-        <div class="text-sm font-bold">
-          <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+
+        <div class="text-sm text-center pt-2">
+          <span *ngFor="let mt of partido.MatchesTeams">
+            <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+            <span *ngFor="let pt of mt.team?.PlayersTeams; let last = last">
+              {{ pt.player?.category?.name }}<span *ngIf="!last"> /</span>
+            </span>
+          </span>
         </div>
       </div>
     </div>
