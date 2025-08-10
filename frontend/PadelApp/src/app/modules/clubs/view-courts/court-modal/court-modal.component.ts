@@ -72,7 +72,6 @@ export class CourtModalComponent implements OnChanges {
           if (this.turns) {
             this.setTurns(this.turns);
           }
-          console.log(this.tableTurns)
         },
         error: (err) => {
           console.error('Error al cargar turnos', err);
@@ -109,8 +108,6 @@ export class CourtModalComponent implements OnChanges {
           }),
       };
     });
-    console.log(turns)
-    console.log(this.tableTurns)
   }
 
   changeWeek(next: boolean) {
