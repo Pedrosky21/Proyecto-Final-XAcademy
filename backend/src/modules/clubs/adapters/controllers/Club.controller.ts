@@ -138,7 +138,7 @@ export class ClubController {
         throw new BadRequestError("El nombre de jugador es requerido y debe ser numérico")
       }
 
-      if(!turnId || typeof(turnId)==="number"){
+      if(!turnId || typeof(turnId)!=="number"){
         throw new BadRequestError("El turnId debe ser un número")
       }
       await this.turnService.payTurn(Number(turnId),UserTypeEnum.Club,playerName)
@@ -165,7 +165,7 @@ export class ClubController {
         throw new BadRequestError("El nombre de jugador es requerido y debe ser numérico")
       }
 
-      if(!turnId || typeof(turnId)==="number"){
+      if(!turnId || typeof(turnId)!=="number"){
         throw new BadRequestError("El turnId debe ser un número")
       }
       await this.turnService.reserveTurn(Number(turnId),UserTypeEnum.Club,playerName)
@@ -189,7 +189,7 @@ export class ClubController {
       const {turnId}=req.body
 
 
-      if(!turnId || typeof(turnId)==="number"){
+      if(!turnId || typeof(turnId)!=="number"){
         throw new BadRequestError("El turnId debe ser un número")
       }
       await this.turnService.cancelReserve(Number(turnId),UserTypeEnum.Club)

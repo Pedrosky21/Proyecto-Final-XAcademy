@@ -81,4 +81,13 @@ export class ClubService {
     console.log(day)
     return this.http.get(this.apiUrl+"/clubs/court-turns",{params})
   }
+
+  markTurnAsReserved(turnId:number,fullName:string): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+      "playerName":fullName
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/reserve-turn",body)
+  }
 }
