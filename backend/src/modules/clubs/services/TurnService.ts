@@ -2,7 +2,10 @@ import { Transaction } from "sequelize";
 import { TurnRepository } from "../adapters/repositories/TurnRepository";
 import { DiagramTurnCourt } from "../core/models/classes/DiagramTurnCourts";
 import { NewTurn } from "../core/models/classes/NewTurn";
-import { start } from "repl";
+import TurnModel from "../core/models/sequelize/Turn";
+import { NotFoundError } from "../../../errors/NotFoundError";
+import { Turn } from "../core/models/classes/Turn";
+import { UserTypeEnum } from "../../auth/core/models/enums/UserTypeEnum";
 
 export class TurnService{
   turnRepository= new TurnRepository()
@@ -39,5 +42,55 @@ export class TurnService{
     const endDate= new Date(startDate)
     endDate.setDate(startDate.getDate()+6)
     return await this.turnRepository.getCourtTurnsByWeek(courtId,startDate,endDate)
+  }
+
+  payTurn=async(turnId:number,userType:UserTypeEnum, playerName?:string):Promise<any>=>{
+    const getTurn:TurnModel|null= await this.turnRepository.getTurnById(turnId)
+    if(!getTurn){
+      throw new NotFoundError("Turno no encontrado")
+    }
+    const currentTurn = new Turn(getTurn)
+
+    currentTurn.state.setAsPaid(userType)
+
+    return await this.turnRepository.updateTurnState(turnId,3)
+
+  }
+  reserveTurn=async(turnId:number,userType:UserTypeEnum,playerName?:string):Promise<any>=>{
+    const getTurn:TurnModel|null= await this.turnRepository.getTurnById(turnId)
+    if(!getTurn){
+      throw new NotFoundError("Turno no encontrado")
+    }
+    const currentTurn = new Turn(getTurn)
+
+    currentTurn.state.setAsReserved(userType)
+
+    return await this.turnRepository.updateTurnState(turnId,2)
+
+  }
+
+  cancelPayment=async(turnId:number,userType:UserTypeEnum):Promise<any>=>{
+    const getTurn:TurnModel|null= await this.turnRepository.getTurnById(turnId)
+    if(!getTurn){
+      throw new NotFoundError("Turno no encontrado")
+    }
+    const currentTurn = new Turn(getTurn)
+
+    currentTurn.state.cancelPayment(userType)
+
+    return await this.turnRepository.updateTurnState(turnId,2)
+
+  }
+  cancelReserve=async(turnId:number,userType:UserTypeEnum):Promise<any>=>{
+    const getTurn:TurnModel|null= await this.turnRepository.getTurnById(turnId)
+    if(!getTurn){
+      throw new NotFoundError("Turno no encontrado")
+    }
+    const currentTurn = new Turn(getTurn)
+
+    currentTurn.state.cancelReserved(userType)
+
+    return await this.turnRepository.updateTurnState(turnId,1)
+
   }
 }

@@ -4,9 +4,13 @@ import { NotFoundError } from "../../../../errors/NotFoundError";
 import { NewClubRequest } from "../../core/dtos/request/NewClubRequest";
 import { BadRequestError } from "../../../../errors/BadRequestError";
 import { DiagramTurnRequest } from "../../core/dtos/request/DiagramTurnsRequest";
+import { TurnService } from "../../services/TurnService";
+import { UserTypeEnum } from "../../../auth/core/models/enums/UserTypeEnum";
 
 export class ClubController {
   clubService = new ClubService();
+  turnService= new TurnService()
+
 
   getClubById = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -91,7 +95,6 @@ export class ClubController {
           "El query startDate debe ser una fecha valida"
         );
       }
-      console.log(startDate)
 
       let date: Date;
         if ((startDate as string).includes('/')) {
@@ -117,4 +120,108 @@ export class ClubController {
       next(error);
     }
   };
+
+
+  setTurnAsPaid = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const clubUser = req.user?.id;
+      //reemplazar por el que toma del token
+      if (!clubUser) {
+        throw new BadRequestError(
+          "Debe pasar el id de un usuario que tenga un club"
+        );
+      }
+
+      const {turnId,playerName}=req.body
+
+      if(!playerName || typeof(playerName)!=="string"){
+        throw new BadRequestError("El nombre de jugador es requerido y debe ser numérico")
+      }
+
+      if(!turnId || typeof(turnId)==="number"){
+        throw new BadRequestError("El turnId debe ser un número")
+      }
+      await this.turnService.payTurn(Number(turnId),UserTypeEnum.Club,playerName)
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  setTurnAsReserved= async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const clubUser = req.user?.id;
+      //reemplazar por el que toma del token
+      if (!clubUser) {
+        throw new BadRequestError(
+          "Debe pasar el id de un usuario que tenga un club"
+        );
+      }
+
+      const {turnId,playerName}=req.body
+
+      if(!playerName || typeof(playerName)!=="string"){
+        throw new BadRequestError("El nombre de jugador es requerido y debe ser numérico")
+      }
+
+      if(!turnId || typeof(turnId)==="number"){
+        throw new BadRequestError("El turnId debe ser un número")
+      }
+      await this.turnService.reserveTurn(Number(turnId),UserTypeEnum.Club,playerName)
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  cancelReservation= async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const clubUser = req.user?.id;
+      //reemplazar por el que toma del token
+      if (!clubUser) {
+        throw new BadRequestError(
+          "Debe pasar el id de un usuario que tenga un club"
+        );
+      }
+
+      const {turnId}=req.body
+
+
+      if(!turnId || typeof(turnId)==="number"){
+        throw new BadRequestError("El turnId debe ser un número")
+      }
+      await this.turnService.cancelReserve(Number(turnId),UserTypeEnum.Club)
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  cancelPayment= async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const clubUser = req.user?.id;
+      //reemplazar por el que toma del token
+      if (!clubUser) {
+        throw new BadRequestError(
+          "Debe pasar el id de un usuario que tenga un club"
+        );
+      }
+
+      const {turnId}=req.body
+
+
+      if(!turnId || typeof(turnId)==="number"){
+        throw new BadRequestError("El turnId debe ser un número")
+      }
+      await this.turnService.cancelPayment(Number(turnId),UserTypeEnum.Club)
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  };
+
 }

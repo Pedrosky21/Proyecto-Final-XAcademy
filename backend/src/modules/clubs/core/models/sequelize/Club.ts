@@ -1,7 +1,6 @@
 import {Model, DataTypes, Optional} from 'sequelize';
 import sequelize from '../../../../../config/db.config';
 import User from '../../../../auth/core/models/UserModel';
-import Court from './Courts';
 interface ClubAttributes {
   id: number;
   name: string;

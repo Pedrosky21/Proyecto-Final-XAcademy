@@ -22,7 +22,7 @@ export class CourtRepository{
     const count = await Turn.count({
       where: {
         courtId,
-        fechaHoraInicio: {
+        startDateTime: {
           $gte: startDate,
           $lt: endDate,
         },
