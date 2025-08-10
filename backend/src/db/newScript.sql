@@ -233,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`franjahoraria` (
   `horaFin` TIME NULL DEFAULT NULL,
   `partido_idpartido` INT NOT NULL,
   PRIMARY KEY (`idfranjahoraria`),
-  INDEX `fk_franjahoraria_partido1_idx` (`partido_idpartido` ASC) VISIBLE,
+  INDEX `fk_franjahoraria_partido_idx` (`partido_idpartido` ASC) VISIBLE,
   CONSTRAINT `fk_franjahoraria_partido1`
     FOREIGN KEY (`partido_idpartido`)
     REFERENCES `mydb`.`partido` (`idpartido`))

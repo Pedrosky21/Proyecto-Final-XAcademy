@@ -1,5 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../../config/db.config";
+import Match from "../matches/MatchModel";
 
 class TimeSlot extends Model {};
 
@@ -21,6 +22,14 @@ TimeSlot.init({
     endTime: {
         type: DataTypes.TIME,
         field: "horaFin"
+    },
+    matchId: {
+        type: DataTypes.INTEGER,
+        field: "partido_idpartido",
+        references: {
+            model: Match,
+            key: "id"
+        }
     }
 }, {
     sequelize,
