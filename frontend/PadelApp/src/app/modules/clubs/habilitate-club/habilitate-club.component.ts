@@ -93,7 +93,6 @@ export class HabilitateClubComponent implements OnInit {
           (value === null || value === undefined || value === '')
       )
     );
-    console.log(this.newCourts)
     return hasIncompleteCourt
       ? 'Todas las chanchas deben tener todos los datos'
       : '';

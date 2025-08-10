@@ -23,7 +23,6 @@ export class ClubService{
 
   createClub = async(newClub:NewClubRequest):Promise<any>=>{
 
-    console.log("LLega al service")
     const userClub=await this.getClubByUserId(newClub.userId)
 
     if(userClub){
@@ -43,7 +42,6 @@ export class ClubService{
       }
       await this.userService.setUserType(newClub.userId,"Club",transaction)
       await transaction.commit()
-      console.log("Termimna el alta")
       return{
         createdClub,
         newCourts

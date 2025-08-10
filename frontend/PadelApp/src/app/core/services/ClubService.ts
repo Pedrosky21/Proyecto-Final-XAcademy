@@ -78,7 +78,6 @@ export class ClubService {
       "courtId":courtId,
       "startDate":day
     }
-    console.log(day)
     return this.http.get(this.apiUrl+"/clubs/court-turns",{params})
   }
 
