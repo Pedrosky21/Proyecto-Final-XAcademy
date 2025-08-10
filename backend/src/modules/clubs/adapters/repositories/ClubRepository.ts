@@ -17,6 +17,8 @@ export class ClubRepository {
     newClubRequest: NewClubRequest,
     transaction: Transaction
   ): Promise<Club> => {
+    console.log("Llega al repo")
+    console.log(NewClubRequest)
     return await Club.create(
       {
         name: newClubRequest.name,
@@ -34,8 +36,10 @@ export class ClubRepository {
       { transaction }
     );
   };
-  getClubByUserId = async (userId: number): Promise<ClubByUserIdResponse> => {
+  getClubByUserId = async (userId: number): Promise<ClubByUserIdResponse|null> => {
+    console.log("Intenta el buscar")
     const club = await Club.findOne({
+
       where: { userId: userId },
       include: [
         {
@@ -72,7 +76,9 @@ export class ClubRepository {
         },
       ],
     });
-
+    if(!club){
+      return null
+    }
     const toReturnClub:ClubByUserIdResponse= new ClubByUserIdResponse(club)
     return toReturnClub;
   };

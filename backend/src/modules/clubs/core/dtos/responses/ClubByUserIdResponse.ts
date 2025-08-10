@@ -16,6 +16,7 @@ export class ClubByUserIdResponse {
   courts: CourtByIdUser[];
 
   constructor(club: any) {
+    console.log(club)
     this.id = club.id;
     this.name = club.name;
     this.address = club.address;

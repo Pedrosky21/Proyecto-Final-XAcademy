@@ -55,7 +55,7 @@ export class ClubService {
           days:turn.days.map((day)=>{
             return{
               weekDay: WeekDayEnum[day.label as keyof typeof WeekDayEnum],
-              turns:day.startHours
+              turns:day.startHours.map((turn)=>turn.hour)
 
             }
           })
