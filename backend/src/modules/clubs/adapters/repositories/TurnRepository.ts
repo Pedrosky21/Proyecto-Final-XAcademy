@@ -1,7 +1,6 @@
-import { Transaction } from "sequelize"
+import { Op, Transaction } from "sequelize"
 import { NewTurn } from "../../core/models/classes/NewTurn"
 import Turn from "../../core/models/sequelize/Turn"
-import { Op } from "sequelize"
 import TurnState from "../../core/models/sequelize/TurnState"
 
 export class TurnRepository{
@@ -11,7 +10,8 @@ export class TurnRepository{
       startDateTime:newTurn.startDate,
       endDateTime:newTurn.endDate,
       turnStateId:1,
-      courtId:newTurn.courtId
+      courtId:newTurn.courtId,
+      playerName:""
     },{transaction})
   }
 
@@ -31,5 +31,19 @@ export class TurnRepository{
   });
 
     return turnsByWeek
+  }
+
+  updateTurnState=async(turnId:number, nextState:number, transaction?: Transaction):Promise<any>=>{
+    return await Turn.update(
+      {turnStateId:nextState},
+      {
+        where:{id:turnId},
+        transaction
+      },
+    )
+  }
+
+  getTurnById=async(turnId:number):Promise<Turn|null>=>{
+    return await Turn.findByPk(turnId)
   }
 }

@@ -1,11 +1,30 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import Court from "./Courts";
 import TurnState from "./TurnState";
 import sequelize from '../../../../../config/db.config';
 
-class Turn extends Model {};
+interface TurnAttributes {
+  id: number;
+  startDateTime: Date;
+  endDateTime: Date;
+  playerName:string
+  courtId: number;
+  turnStateId:number
+}
 
-Turn.init({
+
+interface TurnCreationAttributes extends Optional<TurnAttributes, 'id'> {}
+class TurnModel  extends Model<TurnAttributes,TurnCreationAttributes> implements TurnCreationAttributes {
+  public id!: number;
+  public startDateTime!: Date;
+  public endDateTime!: Date;
+  public playerName!:string
+  public courtId!: number;
+  public turnStateId!:number
+
+};
+
+TurnModel.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -47,6 +66,6 @@ Turn.init({
     timestamps: false
 })
 
-Turn.belongsTo(TurnState, { foreignKey: 'turnStateId', as: 'turnState' });
-Court.hasMany(Turn, { foreignKey: "courtId", as: "turns" });
-export default Turn;
+TurnModel.belongsTo(TurnState, { foreignKey: 'turnStateId', as: 'turnState' });
+Court.hasMany(TurnModel, { foreignKey: "courtId", as: "turns" });
+export default TurnModel;
