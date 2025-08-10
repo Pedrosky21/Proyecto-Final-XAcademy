@@ -212,7 +212,7 @@ export class ClubController {
       const {turnId}=req.body
 
 
-      if(!turnId || typeof(turnId)==="number"){
+      if(!turnId || typeof(turnId)!=="number"){
         throw new BadRequestError("El turnId debe ser un número")
       }
       await this.turnService.cancelPayment(Number(turnId),UserTypeEnum.Club)
