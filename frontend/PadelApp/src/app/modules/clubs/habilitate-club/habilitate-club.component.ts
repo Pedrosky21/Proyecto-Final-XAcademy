@@ -8,7 +8,6 @@ import { ConfirmationModalService } from '../../../core/layouts/confirmation-mod
 import { ModalIconEnum } from '../../../core/layouts/confirmation-modal/models/ModalProps';
 import { EditTableColumn } from '../../../components/edit-table/models/ColumntSetting';
 import { Court } from '../../../model/Court';
-import { table } from 'console';
 import { Router } from '@angular/router';
 
 @Component({
@@ -31,7 +30,6 @@ export class HabilitateClubComponent implements OnInit {
       cellNumber: ['', [Validators.required]],
       responsableFirstName: ['', [Validators.required]],
       responsableLastName: ['', [Validators.required]],
-      userId: [5],
       turnPrice: ['', [Validators.required]],
       openingTime: ['', [Validators.required]],
       closingTime: ['', [Validators.required]],
@@ -60,20 +58,21 @@ export class HabilitateClubComponent implements OnInit {
   columnsSettings: EditTableColumn<Court>[] = [];
   addCourt() {
     this.newCourts.push(
-      new Court({
-        wallMaterialId: '',
-        floorMaterialId: '',
-        roofted: false
-      },
-       this.newCourts.length !==0? this.newCourts[this.newCourts.length - 1].index + 1 : 1
-    )
-      
+      new Court(
+        {
+          wallMaterialId: '',
+          floorMaterialId: '',
+          roofted: false,
+        },
+        this.newCourts.length !== 0
+          ? this.newCourts[this.newCourts.length - 1].index + 1
+          : 1
+      )
     );
   }
 
   handleRowChange(event: { index: number; key: keyof Court; value: any }) {
     (this.newCourts[event.index] as any)[event.key] = event.value;
-
   }
 
   deleteRow(event: { index: number }) {
@@ -90,10 +89,11 @@ export class HabilitateClubComponent implements OnInit {
     const hasIncompleteCourt = this.newCourts.some((court) =>
       Object.entries(court).some(
         ([key, value]) =>
-          key !== 'id' &&
+          (key === 'wallMaterialId' || key==="floorMaterialId" ||key==="roofted") &&
           (value === null || value === undefined || value === '')
       )
     );
+    console.log(this.newCourts)
     return hasIncompleteCourt
       ? 'Todas las chanchas deben tener todos los datos'
       : '';
@@ -148,9 +148,8 @@ export class HabilitateClubComponent implements OnInit {
                     accept: {
                       title: 'Aceptar',
                       action: () => {
-                        
                         this.confirmationModalService.closeModal();
-                        this.router.navigate(["/clubs/view-courts"])
+                        this.router.navigate(['/clubs/view-courts']);
                       },
                     },
                   });
@@ -184,10 +183,9 @@ export class HabilitateClubComponent implements OnInit {
         this.selectableWallMaterial = wallMaterial.map(
           (element) => new WallMaterial(element)
         );
+        this.setColumns();
       },
-      error: (err) => {
-        console.error('Error al cargar categorías', err);
-      },
+      error: (err) => console.error('Error al cargar pared', err),
     });
   }
 
@@ -197,10 +195,9 @@ export class HabilitateClubComponent implements OnInit {
         this.selectableFloorMaterial = floorMaterial.map(
           (element) => new FloorMaterial(element)
         );
+        this.setColumns();
       },
-      error: (err) => {
-        console.error('Error al cargar categorías', err);
-      },
+      error: (err) => console.error('Error al cargar piso', err),
     });
   }
 
@@ -247,7 +244,6 @@ export class HabilitateClubComponent implements OnInit {
     this.loadFloorMaterial();
     this.loadWallMaterial();
     this.setColumns();
-    
   }
 
   autoResize(event: Event): void {

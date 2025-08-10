@@ -26,6 +26,7 @@ export class ClubController {
   };
 
   createClub = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Ejecuto lo que deberia")
     try {
       const newClubRequest = new NewClubRequest(req.body, Number(req.user?.id));
 
@@ -42,6 +43,7 @@ export class ClubController {
   };
 
   getClubByUserId = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Ejecuto lo que no deberia")
     try {
       const userId = req.user?.id;
       const club = await this.clubService.getClubByUserId(Number(userId));

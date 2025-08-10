@@ -23,6 +23,7 @@ export class ClubService{
 
   createClub = async(newClub:NewClubRequest):Promise<any>=>{
 
+    console.log("LLega al service")
     const userClub=await this.getClubByUserId(newClub.userId)
 
     if(userClub){
@@ -42,6 +43,7 @@ export class ClubService{
       }
       await this.userService.setUserType(newClub.userId,"Club",transaction)
       await transaction.commit()
+      console.log("Termimna el alta")
       return{
         createdClub,
         newCourts
@@ -52,7 +54,7 @@ export class ClubService{
     }
   }
 
-  getClubByUserId=async(userId:number):Promise<ClubByUserIdResponse>=>{
+  getClubByUserId=async(userId:number):Promise<ClubByUserIdResponse|null>=>{
     const user=await this.userService.getUserById(userId)
     if(!user){
       throw new NotFoundError("Usuario no existente")
@@ -65,6 +67,9 @@ export class ClubService{
   diagramTurns=async(userId:number, diagramTurns:DiagramTurnRequest):Promise<any>=>{
     const club= await this.getClubByUserId(userId)
 
+    if(!club){
+      throw new NotFoundError("Club no encontrado")
+    }
     const courtsId:number[]= club.courts.map((court:any)=>court.id)
 
     const invalidCourts=diagramTurns.courts.some((court)=> !courtsId.includes(court.id))
