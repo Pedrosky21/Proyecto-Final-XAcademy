@@ -7,6 +7,7 @@ import Team from "../players/core/models/TeamModel";
 import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
 import TimeSlot from "../timeSlot/TimeSlotModel";
+import Category from "../players/core/models/CategoryModel";
 
 interface MatchCreateInput {
   roofed: number;
