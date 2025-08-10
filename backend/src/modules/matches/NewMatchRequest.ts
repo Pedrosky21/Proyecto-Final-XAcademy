@@ -6,7 +6,7 @@ export class NewMatchRequest {
   wallMaterialId: number;
   floorMaterialId: number;
   matchStateId: number;
-  timeSlot: NewTSREquest;
+  timeSlots: NewTSREquest[];
 
   constructor(data: any) {
     this.roofed = data.roofed;
@@ -14,7 +14,9 @@ export class NewMatchRequest {
     this.wallMaterialId = data.wallMaterialId;
     this.floorMaterialId = data.floorMaterialId;
     this.matchStateId = data.matchStateId;
-    this.timeSlot = data.timeSlot;
+    this.timeSlots = Array.isArray(data.timeSlots)
+      ? data.timeSlots.map((ts: any) => new NewTSREquest(ts))
+      : [];
   }
 
   public validate(): string | null {
@@ -34,6 +36,9 @@ export class NewMatchRequest {
     }
     if (!this.matchStateId || typeof this.matchStateId !== "number") {
       return "MatchState es un campo obligatorio y debe ser un numero";
+    }
+    if (!Array.isArray(this.timeSlots)) {
+      return "TimeSlots es un campo obligatorio y debe ser un array";
     }
 
     return null;

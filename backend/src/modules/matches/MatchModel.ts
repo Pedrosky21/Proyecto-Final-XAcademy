@@ -59,14 +59,6 @@ Match.init({
             model: TurnState,
             key: "id"
         }
-    },
-    timeSlotId: {
-        type: DataTypes.INTEGER,
-        field: "franjahoraria_idfranjahoraria",
-        references: {
-            model: TimeSlot,
-            key: "id"
-        }
     }
 }, {
     sequelize,
@@ -78,11 +70,11 @@ Match.init({
 Match.belongsTo(MatchState, {foreignKey: "matchStateId"});
 Match.belongsTo(WallMaterial, {foreignKey: "wallMaterialId"});
 Match.belongsTo(FloorMaterial, {foreignKey: "floorMaterialId"});
-Match.belongsTo(TimeSlot, {foreignKey: "timeSlotId"});
+TimeSlot.belongsTo(Match, {foreignKey: "matchId"});
 
 MatchState.hasMany(Match, {foreignKey: "matchStateId"});
 WallMaterial.hasMany(Match, {foreignKey: "wallMaterialId"});
 FloorMaterial.hasMany(Match, {foreignKey: "floorMaterialId"});
-TimeSlot.hasOne(Match, {foreignKey: "timeSlotId"});
+Match.hasMany(TimeSlot, {foreignKey: "matchId", as: "timeSlots"});
 
 export default Match;

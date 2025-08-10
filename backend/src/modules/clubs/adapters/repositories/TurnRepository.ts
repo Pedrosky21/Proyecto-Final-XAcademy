@@ -1,6 +1,7 @@
-import { Transaction } from "sequelize"
+import { Op, Transaction } from "sequelize"
 import { NewTurn } from "../../core/models/classes/NewTurn"
 import Turn from "../../core/models/sequelize/Turn"
+import TurnState from "../../core/models/sequelize/TurnState"
 
 export class TurnRepository{
 
@@ -9,7 +10,40 @@ export class TurnRepository{
       startDateTime:newTurn.startDate,
       endDateTime:newTurn.endDate,
       turnStateId:1,
-      courtId:newTurn.courtId
+      courtId:newTurn.courtId,
+      playerName:""
     },{transaction})
+  }
+
+  getCourtTurnsByWeek=async(courtId:number, startDate:Date,endDate:Date):Promise<Turn[]>=>{
+    const turnsByWeek = await Turn.findAll({
+    where: {
+      courtId: courtId,
+      startDateTime: {
+        [Op.gte]: startDate,
+        [Op.lte]: endDate
+      }
+    },
+    include: [{
+      model: TurnState,
+      as: "turnState"
+    }]
+  });
+
+    return turnsByWeek
+  }
+
+  updateTurnState=async(turnId:number, nextState:number, transaction?: Transaction):Promise<any>=>{
+    return await Turn.update(
+      {turnStateId:nextState},
+      {
+        where:{id:turnId},
+        transaction
+      },
+    )
+  }
+
+  getTurnById=async(turnId:number):Promise<Turn|null>=>{
+    return await Turn.findByPk(turnId)
   }
 }

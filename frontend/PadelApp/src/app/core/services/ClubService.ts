@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './AuthService';
 import { DiagramatingTurnsCourt } from '../../model/DiagramatedTurn';
+import { WeekDayEnum } from '../../components/turn-table/enums/WeekDayEnum';
 
 @Injectable({
   providedIn: 'root',
@@ -48,7 +49,18 @@ export class ClubService {
     const body={
       "year":selectedMonth.split("-")[0],
       "month":selectedMonth.split("-")[1],
-      "courts":turns
+      "courts":turns.map((turn)=>{
+        return{
+          courtId:turn.courtId,
+          days:turn.days.map((day)=>{
+            return{
+              weekDay: WeekDayEnum[day.label as keyof typeof WeekDayEnum],
+              turns:day.startHours
+
+            }
+          })
+        }
+      })
     }
     
     const token = this.authService.getToken();
@@ -59,5 +71,23 @@ export class ClubService {
           Authorization: `Bearer ${token}`,
         },
       });
+  }
+
+  getCourtTurnsByWeek(courtId:number,day:string): Observable<any>{
+    const params:any ={
+      "courtId":courtId,
+      "startDate":day
+    }
+    console.log(day)
+    return this.http.get(this.apiUrl+"/clubs/court-turns",{params})
+  }
+
+  markTurnAsReserved(turnId:number,fullName:string): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+      "playerName":fullName
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/reserve-turn",body)
   }
 }

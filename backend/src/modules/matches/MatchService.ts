@@ -7,6 +7,9 @@ import { NewMatchesTeams } from "./MXTRequest";
 import { WallMaterialService } from "../wallMaterials/services/WallMaterialService";
 import { FloorMaterialService } from "../floorMaterials/services/FloorMaterialService";
 import { TimeSlotService } from "../timeSlot/TimeSlotService";
+import { NewTSREquest } from "../timeSlot/NewTSRequest";
+import MatchesTeams from "./MXTModel";
+import { Transaction } from "sequelize";
 
 export class MatchService {
   matchRepository = new MatchRepository();
@@ -39,20 +42,29 @@ export class MatchService {
     const transaction = await sequelize.transaction();
 
     try {
-      const { timeSlot, ...matchData } = newMatch;
-
-      const timeSlotCreated = await this.timeSlotService.createTimeSlot(
-        timeSlot,
-        transaction
-      );
+      const { timeSlots, ...matchData } = newMatch;
 
       const match = await this.matchRepository.createMatch(
         {
           ...matchData,
-          timeSlotId: timeSlotCreated.id,
         },
         transaction
       );
+
+      const timeSlotsCreated = [];
+
+      for (const timeSlot of timeSlots) {
+        const timeSlotData = new NewTSREquest({
+          ...timeSlot,
+          matchId: match.id,
+        });
+        console.log(timeSlotData);
+        const timeSlotCreated = await this.timeSlotService.createTimeSlot(
+          timeSlotData,
+          transaction
+        );
+        timeSlotsCreated.push(timeSlotCreated);
+      }
 
       const matchesTeams = new NewMatchesTeams({
         isCreator: 1,
@@ -61,8 +73,11 @@ export class MatchService {
       });
       await this.matchRepository.createMatchesTeams(matchesTeams, transaction);
 
+      const matchWithTimeSlots = await this.getMatchById(match.id, transaction);
+
       await transaction.commit();
-      return match;
+
+      return matchWithTimeSlots;
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -84,5 +99,71 @@ export class MatchService {
       floorMaterial
     );
     return matches;
+  };
+
+  getMatchById = async (id: number, transaction: Transaction): Promise<any> => {
+    const match = await this.matchRepository.getMatchById(id, transaction);
+    return match;
+  };
+
+  getMatchTeam = async (teamId: number, matchId: number): Promise<any> => {
+    const matchTeam = await this.matchRepository.getMatchTeam(teamId, matchId);
+    return matchTeam;
+  };
+
+  setMatchToPending = async (
+    matchId: number,
+    transaction: Transaction
+  ): Promise<any> => {
+    const matchUpdated = await this.matchRepository.setMatchToPending(
+      matchId,
+      transaction
+    );
+    return matchUpdated;
+  };
+
+  acceptMatch = async (teamId: number, matchId: number): Promise<any> => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      // ver si equipo existe
+      const team = await this.teamService.getTeamById(teamId);
+      if (!team) {
+        throw new NotFoundError("No existe el equipo");
+      }
+      // ver si partido existe
+      const match = await this.getMatchById(matchId, transaction);
+      if (!match) {
+        throw new NotFoundError("No existe el partido");
+      }
+      // ver si partido no tiene equipo asociado
+      const matchXTeam = await this.getMatchTeam(teamId, matchId);
+      if (matchXTeam) {
+        throw new NotFoundError("El partido ya tiene equipo");
+      }
+      // crear matchXTeam
+      const toCreateMatchXTeam = new NewMatchesTeams({
+        isCreator: 0,
+        matchId: matchId,
+        teamId: teamId,
+      });
+      const createdMatchXTeam = await this.matchRepository.createMatchesTeams(
+        toCreateMatchXTeam,
+        transaction
+      );
+
+      // cambiar estado partido
+      const updatedMatch = await this.setMatchToPending(matchId, transaction);
+      if (!updatedMatch) {
+        throw new NotFoundError("No se pudo actualizar el estado del partido");
+      }
+
+      await transaction.commit();
+
+      return updatedMatch;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   };
 }
