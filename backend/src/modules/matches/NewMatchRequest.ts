@@ -16,7 +16,7 @@ export class NewMatchRequest {
     this.matchStateId = data.matchStateId;
     this.timeSlots = Array.isArray(data.timeSlots)
       ? data.timeSlots.map((ts: any) => new NewTSREquest(ts))
-      : [];
+      : data.timeSlots;
   }
 
   public validate(): string | null {
@@ -39,6 +39,9 @@ export class NewMatchRequest {
     }
     if (!Array.isArray(this.timeSlots)) {
       return "TimeSlots es un campo obligatorio y debe ser un array";
+    }
+    if (this.timeSlots.length === 0) {
+      return "TimeSlots no puede estar vacío";
     }
 
     return null;
