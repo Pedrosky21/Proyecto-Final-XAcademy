@@ -53,7 +53,7 @@ export class TurnService{
 
     currentTurn.state.setAsPaid(userType)
 
-    return await this.turnRepository.updateTurnState(turnId,3)
+    return await this.turnRepository.updateTurnState(turnId,3,playerName)
 
   }
   reserveTurn=async(turnId:number,userType:UserTypeEnum,playerName?:string):Promise<any>=>{
@@ -65,7 +65,7 @@ export class TurnService{
 
     currentTurn.state.setAsReserved(userType)
 
-    return await this.turnRepository.updateTurnState(turnId,2)
+    return await this.turnRepository.updateTurnState(turnId,2,playerName)
 
   }
 
@@ -78,7 +78,7 @@ export class TurnService{
 
     currentTurn.state.cancelPayment(userType)
 
-    return await this.turnRepository.updateTurnState(turnId,2)
+    return await this.turnRepository.updateTurnState(turnId,2,undefined)
 
   }
   cancelReserve=async(turnId:number,userType:UserTypeEnum):Promise<any>=>{
@@ -90,7 +90,7 @@ export class TurnService{
 
     currentTurn.state.cancelReserved(userType)
 
-    return await this.turnRepository.updateTurnState(turnId,1)
+    return await this.turnRepository.updateTurnState(turnId,1,undefined)
 
   }
 }

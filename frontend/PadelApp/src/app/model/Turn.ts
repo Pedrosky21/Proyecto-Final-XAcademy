@@ -4,6 +4,7 @@ export class Turn{
   date:string
   startHour:string
   stateId:number
+  playerName?:string
   stateName:string
 
   constructor(data:any){
@@ -14,5 +15,6 @@ export class Turn{
     this.startHour=(turnDate.getHours().toString().padStart(2, '0')+":"+turnDate.getMinutes().toString().padStart(2, '0')).padStart(2, '0');
     this.stateId=data.turnStateId
     this.stateName=data.turnState.name
+    this.playerName=data.playerName
   }
 }

@@ -24,7 +24,8 @@ export class CourtModalComponent implements OnChanges {
   @Input() court: Court | null | undefined = null;
   @Input() columns: string[] = [];
 
-  constructor(private readonly clubService: ClubService,
+  constructor(
+    private readonly clubService: ClubService,
     private readonly confirmationModalService: ConfirmationModalService,
     private readonly loadingScreenService: loadingScreenService
   ) {}
@@ -81,7 +82,7 @@ export class CourtModalComponent implements OnChanges {
 
   setTurns(turns: Turn[]) {
     const [day, month, year] = this.currentSunday.split('/').map(Number);
-    const seenDate= new Set<string>()
+    const seenDate = new Set<string>();
     const baseDate = new Date(year, month - 1, day);
     for (let i = 0; i < 7; i++) {
       const date = new Date(baseDate);
@@ -100,11 +101,11 @@ export class CourtModalComponent implements OnChanges {
         label: label,
         startHours: turns
           .filter((turn) => turn.date === label)
-          .map((turn) =>{
-            return{
-              hour:turn.startHour,
-              idState:turn.stateId
-            }
+          .map((turn) => {
+            return {
+              hour: turn.startHour,
+              idState: turn.stateId,
+            };
           }),
       };
     });
@@ -155,81 +156,297 @@ export class CourtModalComponent implements OnChanges {
     }
     this.loadTurns();
   }
-  selectedTurn:Turn|undefined=undefined
+  selectedTurn: Turn | undefined = undefined;
   clickRow(event: { weekDay: number; column: string }) {
-    const columnIndex= this.columns.findIndex((col)=>col===event.column)
-    const clickTurn = this.turns!.find((col) => col.date===this.tableTurns[event.weekDay].label && col.startHour===this.columns[columnIndex]);
+    const columnIndex = this.columns.findIndex((col) => col === event.column);
+    const existingHours = new Set(
+      this.tableTurns[event.weekDay].startHours.map((e) => e.hour)
+    );
 
-    this.selectedTurn=clickTurn
+    const colHour = this.columns[columnIndex];
+    const prevHour1 = this.columns[columnIndex - 1];
+    const prevHour2 = this.columns[columnIndex - 2];
+
+    let clickTurn: any;
+    if (existingHours.has(colHour)) {
+      clickTurn = this.turns!.find(
+        (col) =>
+          col.date === this.tableTurns[event.weekDay].label &&
+          col.startHour === colHour
+      );
+    }
+    if (existingHours.has(prevHour1)) {
+      clickTurn = this.turns!.find(
+        (col) =>
+          col.date === this.tableTurns[event.weekDay].label &&
+          col.startHour === prevHour1
+      );
+    }
+    if (existingHours.has(prevHour2)) {
+      clickTurn = this.turns!.find(
+        (col) =>
+          col.date === this.tableTurns[event.weekDay].label &&
+          col.startHour === prevHour2
+      );
+    }
+    if (clickTurn?.playerName) {
+      this.playerName = clickTurn.playerName;
+    }
+    this.selectedTurn = clickTurn;
+  }
+  closeChangeModal() {
+    this.selectedTurn = undefined;
   }
 
-  playerName:string=""
+  playerName: string = '';
   markAsReserved() {
-      if (!this.playerName) {
-        this.confirmationModalService.openModal({
-          icon: ModalIconEnum.error,
-          title: 'Error',
-          message: 'Debe ingresar el nombre de la persona que pidio el turno',
-          accept: {
-            title: 'Aceptar',
-            action: () => {
-              this.confirmationModalService.closeModal();
-            },
+    if (!this.playerName) {
+      this.confirmationModalService.openModal({
+        icon: ModalIconEnum.error,
+        title: 'Error',
+        message: 'Debe ingresar el nombre de la persona que pidio el turno',
+        accept: {
+          title: 'Aceptar',
+          action: () => {
+            this.confirmationModalService.closeModal();
           },
-        });
-      } else {
-        this.confirmationModalService.openModal({
-          title: 'Marcar turno como reservado',
-          message: `¿Desea confirmar la reserva del turno a nombre de ${this.playerName}?`,
-          reject: {
-            title: 'Cancelar',
-            action: () => {
-              this.confirmationModalService.closeModal();
-            },
+        },
+      });
+    } else {
+      this.confirmationModalService.openModal({
+        title: 'Marcar turno como reservado',
+        message: `¿Desea confirmar la reserva del turno a nombre de ${this.playerName}?`,
+        reject: {
+          title: 'Cancelar',
+          action: () => {
+            this.confirmationModalService.closeModal();
           },
-          accept: {
-            title: 'Confirmar',
-            action: () => {
-              this.confirmationModalService.closeModal();
-              this.loadingScreenService.showLoadingScreen('Registrando reserva...');
-              this.clubService
-                .markTurnAsReserved(this.selectedTurn?.id!,this.playerName)
-                .subscribe({
-                  next: (response) => {
-                    setTimeout(() => {
-                      this.loadingScreenService.showLoadingScreen(null);
-                      this.confirmationModalService.openModal({
-                        icon: ModalIconEnum.ok,
-                        title: 'Reserva registrada',
-                        message: 'Se ha actualizado el estado del turno con éxito',
-                        accept: {
-                          title: 'Aceptar',
-                          action: () => {
-                            this.confirmationModalService.closeModal();
-                          },
-                        },
-                      });
-                    }, 1500);
-                  },
-                  error: (error) => {
+        },
+        accept: {
+          title: 'Confirmar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+            this.loadingScreenService.showLoadingScreen(
+              'Registrando reserva...'
+            );
+            this.clubService
+              .markTurnAsReserved(this.selectedTurn?.id!, this.playerName)
+              .subscribe({
+                next: (response) => {
+                  setTimeout(() => {
                     this.loadingScreenService.showLoadingScreen(null);
                     this.confirmationModalService.openModal({
-                      icon: ModalIconEnum.error,
-                      title: 'Error',
+                      icon: ModalIconEnum.ok,
+                      title: 'Reserva registrada',
                       message:
-                        'Ocurrio un problema registrar la reserva. Intente de nuevo mas tarde',
+                        'Se ha actualizado el estado del turno con éxito',
                       accept: {
                         title: 'Aceptar',
                         action: () => {
                           this.confirmationModalService.closeModal();
+                          this.loadTurns()
                         },
                       },
                     });
+                  }, 1500);
+                },
+                error: (error) => {
+                  this.loadingScreenService.showLoadingScreen(null);
+                  this.confirmationModalService.openModal({
+                    icon: ModalIconEnum.error,
+                    title: 'Error',
+                    message:
+                      'Ocurrio un problema registrar la reserva. Intente de nuevo mas tarde',
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        this.confirmationModalService.closeModal();
+                      },
+                    },
+                  });
+                },
+              });
+          },
+        },
+      });
+    }
+  }
+  markAsPaid() {
+    if (!this.playerName) {
+      this.confirmationModalService.openModal({
+        icon: ModalIconEnum.error,
+        title: 'Error',
+        message: 'Debe ingresar el nombre de la persona que pago el turno',
+        accept: {
+          title: 'Aceptar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+          },
+        },
+      });
+    } else {
+      this.confirmationModalService.openModal({
+        title: 'Marcar turno como pagado',
+        message: `¿Desea marcar el turno reservado por ${this.playerName} como pagado?`,
+        reject: {
+          title: 'Cancelar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+          },
+        },
+        accept: {
+          title: 'Confirmar',
+          action: () => {
+            this.confirmationModalService.closeModal();
+            this.loadingScreenService.showLoadingScreen(
+              'Registrando cambios...'
+            );
+            this.clubService
+              .markTurnAsPaid(this.selectedTurn?.id!, this.playerName)
+              .subscribe({
+                next: (response) => {
+                  setTimeout(() => {
+                    this.loadingScreenService.showLoadingScreen(null);
+                    this.confirmationModalService.openModal({
+                      icon: ModalIconEnum.ok,
+                      title: 'Cobro registrado',
+                      message:
+                        'Se ha actualizado el estado del turno con éxito',
+                      accept: {
+                        title: 'Aceptar',
+                        action: () => {
+                          this.confirmationModalService.closeModal();
+                          this.loadTurns()
+                        },
+                      },
+                    });
+                  }, 1500);
+                },
+                error: (error) => {
+                  this.loadingScreenService.showLoadingScreen(null);
+                  this.confirmationModalService.openModal({
+                    icon: ModalIconEnum.error,
+                    title: 'Error',
+                    message:
+                      'Ocurrio un problema al registrar el cobro. Intente de nuevo mas tarde',
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        this.confirmationModalService.closeModal();
+                      },
+                    },
+                  });
+                },
+              });
+          },
+        },
+      });
+    }
+  }
+  cancelReservation() {
+    this.confirmationModalService.openModal({
+      title: 'Cancelar la reserva del turno',
+      message: `¿Desea cancelar la reserva hecha por ${this.playerName}?`,
+      reject: {
+        title: 'Cancelar',
+        action: () => {
+          this.confirmationModalService.closeModal();
+        },
+      },
+      accept: {
+        title: 'Confirmar',
+        action: () => {
+          this.confirmationModalService.closeModal();
+          this.loadingScreenService.showLoadingScreen('Cancelando reserva...');
+          this.clubService.cancelReservation(this.selectedTurn?.id!).subscribe({
+            next: (response) => {
+              setTimeout(() => {
+                this.loadingScreenService.showLoadingScreen(null);
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.ok,
+                  title: 'Reservación cancelada',
+                  message: 'Se ha actualizado el estado del turno con éxito',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                      this.loadTurns()
+                    },
                   },
                 });
+              }, 1500);
             },
-          },
-        });
-      }
-    }
+            error: (error) => {
+              this.loadingScreenService.showLoadingScreen(null);
+              this.confirmationModalService.openModal({
+                icon: ModalIconEnum.error,
+                title: 'Error',
+                message:
+                  'Ocurrio un problema al cancelar la reserva. Intente de nuevo mas tarde',
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    this.confirmationModalService.closeModal();
+                  },
+                },
+              });
+            },
+          });
+        },
+      },
+    });
+  }
+  cancelPayment() {
+    this.confirmationModalService.openModal({
+      title: 'Anular pago de turno',
+      message: `¿Desea cancelar el pago hecho por ${this.playerName}?`,
+      reject: {
+        title: 'Cancelar',
+        action: () => {
+          this.confirmationModalService.closeModal();
+        },
+      },
+      accept: {
+        title: 'Confirmar',
+        action: () => {
+          this.confirmationModalService.closeModal();
+          this.loadingScreenService.showLoadingScreen('Cancelando pago...');
+          this.clubService.cancelPayment(this.selectedTurn?.id!).subscribe({
+            next: (response) => {
+              setTimeout(() => {
+                this.loadingScreenService.showLoadingScreen(null);
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.ok,
+                  title: 'Pago cancelado',
+                  message: 'Se ha actualizado el estado del turno con éxito',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                      this.loadTurns()
+                    },
+                  },
+                });
+              }, 1500);
+            },
+            error: (error) => {
+              this.loadingScreenService.showLoadingScreen(null);
+              this.confirmationModalService.openModal({
+                icon: ModalIconEnum.error,
+                title: 'Error',
+                message:
+                  'Ocurrio un problema al cancelar el pago. Intente de nuevo mas tarde',
+                accept: {
+                  title: 'Aceptar',
+                  action: () => {
+                    this.confirmationModalService.closeModal();
+                  },
+                },
+              });
+            },
+          });
+        },
+      },
+    });
+  }
 }

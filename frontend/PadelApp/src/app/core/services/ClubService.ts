@@ -89,4 +89,26 @@ export class ClubService {
     
     return this.http.post(this.apiUrl+"/clubs/reserve-turn",body)
   }
+  markTurnAsPaid(turnId:number,fullName:string): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+      "playerName":fullName
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/pay-turn",body)
+  }
+  cancelReservation(turnId:number): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/cancel-reservation",body)
+  }
+  cancelPayment(turnId:number): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/cancel-payment",body)
+  }
 }
