@@ -177,13 +177,13 @@ export class ModalCreateMatchComponent {
             wallMaterialId: this.matchGroup.value.wallMaterialId,
             floorMaterialId: this.matchGroup.value.floorMaterialId,
 
-            timeSlot: this.newTimeSlots.map((slot) => ({
+            timeSlots: this.newTimeSlots.map((slot) => ({
               date: slot.date,
               startTime: slot.startTime,
               endTime: slot.endTime,
             })),
           };
-          console.log(newMatch);
+          console.log('hola:', newMatch);
           this.matchService.createMatch(newMatch).subscribe({
             next: () => {
               setTimeout(() => {

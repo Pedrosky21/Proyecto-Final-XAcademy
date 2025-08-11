@@ -7,6 +7,7 @@ import { ModalCreateTeamComponent } from './explore-matches/modal-create-team/mo
 import { ModalCreateMatchComponent } from './explore-matches/modal-create-match/modal-create-match.component';
 import { ComponentsModule } from '../../components/components.module';
 import { BrowseMatchesComponent } from './browse-matches/browse-matches.component';
+import { ModalAcceptMatchComponent } from './browse-matches/modal-accept-match/modal-accept-match/modal-accept-match.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { BrowseMatchesComponent } from './browse-matches/browse-matches.componen
     ModalCreateTeamComponent,
     ModalCreateMatchComponent,
     BrowseMatchesComponent,
+    ModalAcceptMatchComponent,
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, ComponentsModule],
 })
