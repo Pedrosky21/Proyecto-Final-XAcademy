@@ -10,6 +10,7 @@ import { TimeSlotService } from "../timeSlot/TimeSlotService";
 import { NewTSREquest } from "../timeSlot/NewTSRequest";
 import MatchesTeams from "./MXTModel";
 import { Transaction } from "sequelize";
+import AppError from "../../errors/AppError";
 
 export class MatchService {
   matchRepository = new MatchRepository();
@@ -58,7 +59,6 @@ export class MatchService {
           ...timeSlot,
           matchId: match.id,
         });
-        console.log(timeSlotData);
         const timeSlotCreated = await this.timeSlotService.createTimeSlot(
           timeSlotData,
           transaction
@@ -89,14 +89,16 @@ export class MatchService {
     page: number,
     roofed: number | null,
     wallMaterial: number | null,
-    floorMaterial: number | null
+    floorMaterial: number | null,
+    playerId: number
   ): Promise<any> => {
     const matches = this.matchRepository.getMatchesWithTeams(
       limit,
       page,
       roofed,
       wallMaterial,
-      floorMaterial
+      floorMaterial,
+      playerId
     );
     return matches;
   };
@@ -113,6 +115,11 @@ export class MatchService {
     const matchTeam = await this.matchRepository.getMatchTeam(teamId, matchId);
     return matchTeam;
   };
+
+  countTeamsByMatchId = async (matchId:number): Promise<any> => {
+    const count = await this.matchRepository.countTeamsByMatchId(matchId);
+    return count
+  }
 
   setMatchToPending = async (
     matchId: number,
@@ -139,10 +146,15 @@ export class MatchService {
       if (!match) {
         throw new NotFoundError("No existe el partido");
       }
-      // ver si partido no tiene equipo asociado
+      // ver si partido ya tiene equipo asociado
+      const countedTeams = await this.countTeamsByMatchId(matchId);
+      if (countedTeams > 1) {
+        throw new AppError("El partido ya tiene un equipo asociado")
+      }
+      // ver si el equipo asociado es el mismo que intenta aceptar
       const matchXTeam = await this.getMatchTeam(teamId, matchId);
-      if (matchXTeam) {
-        throw new NotFoundError("El partido ya tiene equipo");
+      if (matchXTeam.teamId === teamId) {
+        throw new AppError("No puede aceptar partidos de su mismo equipo")
       }
       // crear matchXTeam
       const toCreateMatchXTeam = new NewMatchesTeams({
@@ -156,10 +168,10 @@ export class MatchService {
       );
 
       // cambiar estado partido
-      const updatedMatch = await this.setMatchToPending(matchId, transaction);
-      if (!updatedMatch) {
-        throw new NotFoundError("No se pudo actualizar el estado del partido");
-      }
+      await this.setMatchToPending(matchId, transaction);
+
+      // Obtener datos completos partido con estado actualizado
+      const updatedMatch = this.getMatchById(matchId, transaction);
 
       await transaction.commit();
 

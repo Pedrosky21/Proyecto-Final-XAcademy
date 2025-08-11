@@ -55,29 +55,42 @@ export class DiagramTurnModalComponent implements OnChanges {
   clickRow(event: { weekDay: number; column: string }) {
     const columnIndex = this.columns.findIndex((col) => col === event.column);
     const days = this.courtsDiagram[this.selectedCourt].days[event.weekDay];
-    const turns = days.startHours;
+    const existingHours = new Set(days.startHours.map(e => e.hour));
+
+    const colHour = this.columns[columnIndex];
+    const prevHour1 = this.columns[columnIndex - 1];
+    const prevHour2 = this.columns[columnIndex - 2];
+    const nextHour1= this.columns[columnIndex + 1];
+    const nextHour2=this.columns[columnIndex+2]
 
     let deleted = false;
 
-    // Buscar si esta celda pertenece a algún turno existente (que empieza en alguna de las 5 anteriores)
-    for (let i = columnIndex - 2; i <= columnIndex; i++) {
-      if (i < 0) continue;
-
-      const potentialStart = this.columns[i];
-      if (turns.includes({hour:potentialStart,idState:0})) {
-        // Si la columna clickeada está dentro del rango de ese turno (start, start+1, start+2)
-        const startIdx = this.columns.findIndex(
-          (col) => col === potentialStart
-        );
-        if (columnIndex >= startIdx && columnIndex <= startIdx + 2) {
-          // Eliminar ese turno
-          days.startHours = turns.filter((t:any) => t !== potentialStart);
-          deleted = true;
-          break;
-        }
-      }
+    if(existingHours.has(colHour)){
+      deleted=true
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==colHour)
     }
-
+    if(existingHours.has(prevHour1)){
+      deleted=true
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==prevHour1)
+    }
+    if(existingHours.has(prevHour2)){
+      deleted=true
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==prevHour2)
+    }
+    if(existingHours.has(nextHour1)){
+      deleted=true
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==nextHour1)
+    }
+    if(existingHours.has(nextHour2)){
+      deleted=true
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
+      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==nextHour2)
+    }
+    
     // Si no se eliminó nada, es porque no pertenece a un turno → crear uno
     if (!deleted) {
       days.startHours.push({hour:event.column,idState:0});

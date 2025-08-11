@@ -33,14 +33,22 @@ export class TurnRepository{
     return turnsByWeek
   }
 
-  updateTurnState=async(turnId:number, nextState:number, transaction?: Transaction):Promise<any>=>{
-    return await Turn.update(
-      {turnStateId:nextState},
+  updateTurnState=async(turnId:number, nextState:number,playerName?:string, transaction?: Transaction):Promise<any>=>{
+     const updateFields: any = {
+      turnStateId: nextState,
+    };
+    if (playerName !== undefined) {
+      updateFields.playerName = playerName;
+    }
+    
+    const turn=await Turn.update(
+      updateFields,
       {
         where:{id:turnId},
         transaction
       },
     )
+    return turn
   }
 
   getTurnById=async(turnId:number):Promise<Turn|null>=>{

@@ -1,4 +1,3 @@
-import { NewMatchRequest } from "./NewMatchRequest";
 import { NewMatchesTeams } from "./MXTRequest";
 import Match from "./MatchModel";
 import MatchesTeams from "./MXTModel";
@@ -8,14 +7,8 @@ import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
 import TimeSlot from "../timeSlot/TimeSlotModel";
 import Category from "../players/core/models/CategoryModel";
-
-interface MatchCreateInput {
-  roofed: number;
-  turnId: number;
-  wallMaterialId: number;
-  floorMaterialId: number;
-  matchStateId: number;
-}
+import { MatchCreateInput } from "./MatchCreateInput";
+import { Op } from "sequelize";
 
 export class MatchRepository {
   createMatch = async (
@@ -72,6 +65,13 @@ export class MatchRepository {
                     {
                       model: Player,
                       as: "player",
+                      include: [
+                        {
+                          model: Category,
+                          as: "category",
+                          attributes: ["id", "name"],
+                        },
+                      ],
                     },
                   ],
                 },
@@ -91,8 +91,10 @@ export class MatchRepository {
     page: number,
     roofed: number | null,
     wallMaterial: number | null,
-    floorMaterial: number | null
+    floorMaterial: number | null,
+    playerId: number
   ): Promise<Match[]> => {
+    console.log(playerId);
     const whereClause: any = {};
 
     if (roofed !== null) {
@@ -121,6 +123,13 @@ export class MatchRepository {
                 {
                   model: PlayersTeams,
                   as: "PlayersTeams",
+                  where: {
+                    [Op.or]: [
+                      { playerId: { [Op.ne]: playerId } }, // jugador distinto
+                      { playerId: null }, // o sin jugador
+                    ],
+                  },
+                  required: false,
                   include: [
                     {
                       model: Player,
@@ -162,6 +171,15 @@ export class MatchRepository {
     });
     return matchTeam;
   };
+
+  countTeamsByMatchId = async (matchId:number): Promise<number> => {
+    const count = await MatchesTeams.count({
+      where: {
+        matchId: matchId
+      }
+    })
+    return count
+  }
 
   setMatchToPending = async (
     matchId: number,

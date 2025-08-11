@@ -79,7 +79,6 @@ export class ClubController {
   getTurnsByWeek = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const clubUser = req.user?.id;
-      console.log(clubUser)
       if (!clubUser) {
         throw new BadRequestError(
           "Debe pasar el id de un usuario que tenga un club"
@@ -213,7 +212,7 @@ export class ClubController {
       const {turnId}=req.body
 
 
-      if(!turnId || typeof(turnId)==="number"){
+      if(!turnId || typeof(turnId)!=="number"){
         throw new BadRequestError("El turnId debe ser un número")
       }
       await this.turnService.cancelPayment(Number(turnId),UserTypeEnum.Club)

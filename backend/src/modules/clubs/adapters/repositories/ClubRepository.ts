@@ -34,8 +34,9 @@ export class ClubRepository {
       { transaction }
     );
   };
-  getClubByUserId = async (userId: number): Promise<ClubByUserIdResponse> => {
+  getClubByUserId = async (userId: number): Promise<ClubByUserIdResponse|null> => {
     const club = await Club.findOne({
+
       where: { userId: userId },
       include: [
         {
@@ -72,7 +73,9 @@ export class ClubRepository {
         },
       ],
     });
-
+    if(!club){
+      return null
+    }
     const toReturnClub:ClubByUserIdResponse= new ClubByUserIdResponse(club)
     return toReturnClub;
   };

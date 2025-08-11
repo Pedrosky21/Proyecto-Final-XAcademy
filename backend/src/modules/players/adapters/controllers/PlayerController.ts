@@ -8,6 +8,7 @@ import { TeamService } from "../../services/TeamService";
 import { NewTeamRequest } from "../../core/dtos/request/NewTeamRequest";
 import { UnauhtorizedError } from "../../../../errors/UnauthorizedError";
 import { NewMatchRequest } from "../../../matches/NewMatchRequest";
+import { NewMatchesTeams } from "../../../matches/MXTRequest";
 import { MatchService } from "../../../matches/MatchService";
 import { Sequelize, Transaction } from "sequelize";
 
@@ -192,7 +193,6 @@ export class PlayerController {
     next: NextFunction
   ): Promise<void> => {
     try {
-      console.log("Received createMatch request body:", req.body);
       const creatorTeamId = req.body.teamId;
 
       const match = new NewMatchRequest(req.body);
@@ -215,6 +215,14 @@ export class PlayerController {
     next: NextFunction
   ): Promise<void> => {
     try {
+      const userId = req.user?.id; // es la id del usuario, deberia extraerse del token
+
+      if (!userId) {
+        throw new UnauhtorizedError("No existe el usuario");
+      }
+
+      const player = await this.playerService.getPlayerByUserId(userId);
+
       const limit = req.query.limit || 12;
       const page = req.query.page || 1;
 
@@ -235,10 +243,37 @@ export class PlayerController {
         Number(page),
         roofed,
         wallMaterial,
-        floorMaterial
+        floorMaterial,
+        player.id
       );
 
       res.status(200).json(matches);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // Accept match
+  acceptMatch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { teamId, matchId } = req.body;
+
+      const accepted = new NewMatchesTeams({
+        teamId: teamId,
+        matchId: matchId,
+        isCreator: 0,
+      });
+
+      const acceptedMatch = this.matchService.acceptMatch(
+        accepted.teamId,
+        accepted.matchId
+      );
+
+      res.json(acceptedMatch);
     } catch (error) {
       next(error);
     }

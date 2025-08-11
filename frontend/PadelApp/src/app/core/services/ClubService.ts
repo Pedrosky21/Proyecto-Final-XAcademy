@@ -55,7 +55,7 @@ export class ClubService {
           days:turn.days.map((day)=>{
             return{
               weekDay: WeekDayEnum[day.label as keyof typeof WeekDayEnum],
-              turns:day.startHours
+              turns:day.startHours.map((turn)=>turn.hour)
 
             }
           })
@@ -78,7 +78,6 @@ export class ClubService {
       "courtId":courtId,
       "startDate":day
     }
-    console.log(day)
     return this.http.get(this.apiUrl+"/clubs/court-turns",{params})
   }
 
@@ -89,5 +88,27 @@ export class ClubService {
     }
     
     return this.http.post(this.apiUrl+"/clubs/reserve-turn",body)
+  }
+  markTurnAsPaid(turnId:number,fullName:string): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+      "playerName":fullName
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/pay-turn",body)
+  }
+  cancelReservation(turnId:number): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/cancel-reservation",body)
+  }
+  cancelPayment(turnId:number): Observable<any>{
+    const body:any ={
+      "turnId":turnId,
+    }
+    
+    return this.http.post(this.apiUrl+"/clubs/cancel-payment",body)
   }
 }
