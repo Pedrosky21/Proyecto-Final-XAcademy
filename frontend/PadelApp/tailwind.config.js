@@ -7,6 +7,7 @@ module.exports = {
       backgroundImage: {
         loginbg: "url('/imgs/POP_Tennis_paddle.jpg')",
         splash: "url('/imgs/splash.svg')",
+        draw: "url('/imgs/draw.svg')",
       },
       colors: {
         appWhiteText: "#FFFFFF",

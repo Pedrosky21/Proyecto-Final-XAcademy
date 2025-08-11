@@ -9,6 +9,7 @@ import { NewTeamRequest } from "../../core/dtos/request/NewTeamRequest";
 import { UnauhtorizedError } from "../../../../errors/UnauthorizedError";
 import { NewMatchRequest } from "../../../matches/NewMatchRequest";
 import { MatchService } from "../../../matches/MatchService";
+import { Sequelize, Transaction } from "sequelize";
 
 export class PlayerController {
   playerService = new PlayerService();
@@ -240,6 +241,19 @@ export class PlayerController {
       res.status(200).json(matches);
     } catch (error) {
       next(error);
+    }
+  };
+
+  getMatchById = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const match = await this.matchService.getMatchById(Number(id));
+      if (!match) {
+        return res.status(404).json({ message: "Match not found" });
+      }
+      res.json(match);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching match", error });
     }
   };
 }

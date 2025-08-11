@@ -53,7 +53,7 @@ export class MatchRepository {
 
   getMatchById = async (
     id: number,
-    transaction: Transaction
+    transaction?: Transaction
   ): Promise<Match | null> => {
     const match = await Match.findByPk(id, {
       include: [
@@ -141,7 +141,7 @@ export class MatchRepository {
         },
         {
           model: TimeSlot,
-
+          as: "timeSlots",
           attributes: ["date", "startTime", "endTime"],
         },
       ],

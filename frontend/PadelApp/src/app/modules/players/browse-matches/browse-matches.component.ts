@@ -22,6 +22,8 @@ export class BrowseMatchesComponent implements OnInit {
     private readonly floorMaterialService: FloorMaterialService,
     private readonly wallMaterialService: WallMaterialService
   ) {}
+
+  selectedMatch: Match | null = null;
   showAcceptMatchModal = false;
   filters = {
     materialPiso: '',
@@ -31,6 +33,7 @@ export class BrowseMatchesComponent implements OnInit {
   filteredPartidos: Match[] = [];
   floorMaterials: FloorMaterial[] = [];
   wallMaterials: WallMaterial[] = [];
+
   page = 1;
   limit = 30;
   totalMatches = 0;
@@ -82,10 +85,14 @@ export class BrowseMatchesComponent implements OnInit {
     this.page = 1;
     this.buscar();
   }
-
-  openAcceptMatchModal() {
+  openAcceptMatchModal(match: Match) {
+    this.selectedMatch = match;
     this.showAcceptMatchModal = true;
   }
 
+  onCloseAcceptMatchModal() {
+    this.showAcceptMatchModal = false;
+    this.selectedMatch = null;
+  }
   onConfirmAcceptMatchModal() {}
 }
