@@ -16,7 +16,6 @@ playerRouter.post("/match", playerController.createMatch);
 playerRouter.get("/matches", verifyToken, playerController.getMatchesWithTeams);
 playerRouter.post("/accept-match", playerController.acceptMatch);
 playerRouter.get("/match/:id", playerController.getMatchById);
-
 playerRouter.get("/:id", playerController.getPlayerById); // DEJAR AL FINAL
 
 export default playerRouter;
