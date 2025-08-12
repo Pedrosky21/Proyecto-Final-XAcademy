@@ -277,7 +277,7 @@ export class PlayerController {
         isCreator: 0,
       });
 
-      const acceptedMatch = this.matchService.acceptMatch(
+      const acceptedMatch = await this.matchService.acceptMatch(
         accepted.teamId,
         accepted.matchId
       );
