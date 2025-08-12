@@ -46,7 +46,7 @@ export class MatchRepository {
 
   getMatchById = async (
     id: number,
-    transaction: Transaction
+    transaction?: Transaction
   ): Promise<Match | null> => {
     const match = await Match.findByPk(id, {
       include: [

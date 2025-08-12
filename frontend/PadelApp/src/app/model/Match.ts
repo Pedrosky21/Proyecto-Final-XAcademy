@@ -1,3 +1,5 @@
+import { TimeSlots } from './TimeSlots';
+
 export interface TimeSlotRequest {
   date: string;
   startTime: string;
@@ -9,7 +11,7 @@ export interface NewMatchRequest {
   roofed: number;
   wallMaterialId: number;
   floorMaterialId: number;
-  timeSlot: TimeSlotRequest[];
+  timeSlots: TimeSlotRequest[];
 }
 
 export interface PlayerCategory {
@@ -35,6 +37,7 @@ export interface PlayersTeams {
 export interface Team {
   id: number;
   name: string;
+  description: string;
   PlayersTeams?: PlayersTeams[];
 }
 
@@ -52,4 +55,5 @@ export interface Match {
   floorMaterialId: number;
   matchStateId: number;
   MatchesTeams: MatchesTeams[];
+  timeSlots: TimeSlots[];
 }

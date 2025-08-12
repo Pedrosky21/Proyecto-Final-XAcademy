@@ -38,4 +38,8 @@ export class MatchService {
   createMatch(newMatch: NewMatchRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/match`, newMatch);
   }
+
+  getMatchById(id: number): Observable<Match> {
+    return this.http.get<Match>(`${this.apiUrl}/match/${id}`);
+  }
 }

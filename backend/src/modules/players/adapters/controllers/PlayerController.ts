@@ -11,6 +11,7 @@ import { NewMatchRequest } from "../../../matches/NewMatchRequest";
 import { NewMatchesTeams } from "../../../matches/MXTRequest";
 import { MatchService } from "../../../matches/MatchService";
 import AppError from "../../../../errors/AppError";
+import { Sequelize, Transaction } from "sequelize";
 
 export class PlayerController {
   playerService = new PlayerService();
@@ -262,17 +263,41 @@ export class PlayerController {
   };
 
   // Accept match
-  acceptMatch = async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+  acceptMatch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     try {
-      const {teamId, matchId} = req.body;
+      const { teamId, matchId } = req.body;
 
-      const accepted = new NewMatchesTeams({teamId: teamId, matchId: matchId, isCreator:0});
+      const accepted = new NewMatchesTeams({
+        teamId: teamId,
+        matchId: matchId,
+        isCreator: 0,
+      });
 
-      const acceptedMatch = await this.matchService.acceptMatch(accepted.teamId, accepted.matchId);
-      
+      const acceptedMatch = this.matchService.acceptMatch(
+        accepted.teamId,
+        accepted.matchId
+      );
+
       res.json(acceptedMatch);
     } catch (error) {
       next(error);
     }
-  }
+  };
+
+  getMatchById = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const match = await this.matchService.getMatchById(Number(id));
+      if (!match) {
+        return res.status(404).json({ message: "Match not found" });
+      }
+      res.json(match);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching match", error });
+    }
+  };
 }

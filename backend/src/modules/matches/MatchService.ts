@@ -108,7 +108,10 @@ export class MatchService {
     return matches;
   };
 
-  getMatchById = async (id: number, transaction: Transaction): Promise<any> => {
+  getMatchById = async (
+    id: number,
+    transaction?: Transaction
+  ): Promise<any> => {
     const match = await this.matchRepository.getMatchById(id, transaction);
     return match;
   };
