@@ -266,10 +266,17 @@ export class PlayerController {
     try {
       const {teamId, matchId} = req.body;
 
-      const accepted = new NewMatchesTeams({teamId: teamId, matchId: matchId, isCreator:0});
+      const accepted = new NewMatchesTeams({
+        teamId: teamId,
+        matchId: matchId,
+        isCreator: 0,
+      });
 
-      const acceptedMatch = await this.matchService.acceptMatch(accepted.teamId, accepted.matchId);
-      
+      const acceptedMatch = await this.matchService.acceptMatch(
+        accepted.teamId,
+        accepted.matchId
+      );
+
       res.json(acceptedMatch);
     } catch (error) {
       next(error);
