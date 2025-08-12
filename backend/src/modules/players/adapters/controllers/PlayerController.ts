@@ -10,6 +10,7 @@ import { UnauhtorizedError } from "../../../../errors/UnauthorizedError";
 import { NewMatchRequest } from "../../../matches/NewMatchRequest";
 import { NewMatchesTeams } from "../../../matches/MXTRequest";
 import { MatchService } from "../../../matches/MatchService";
+import AppError from "../../../../errors/AppError";
 
 export class PlayerController {
   playerService = new PlayerService();
@@ -163,11 +164,16 @@ export class PlayerController {
   // limit 5 in repository
   getTeamsByName = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const playerId = req.user?.id;
+      const userId = req.user?.id;
       const { teamName } = req.query as { teamName?: string };
 
-      if (!playerId) {
+      if (!userId) {
         throw new UnauhtorizedError("No autorizado");
+      }
+
+      const player = await this.playerService.getPlayerByUserId(userId);
+      if (!player) {
+        throw new AppError("El usuario no es un jugador");
       }
 
       if (!teamName || teamName.trim() === "") {
@@ -176,7 +182,7 @@ export class PlayerController {
 
       const teams = await this.teamService.getTeamsPlayerByName(
         teamName,
-        Number(playerId)
+        Number(player.id)
       );
 
       return res.status(200).json(teams);
@@ -221,6 +227,9 @@ export class PlayerController {
       }
 
       const player = await this.playerService.getPlayerByUserId(userId);
+      if (!player) {
+        throw new AppError("El usuario no es un jugador");
+      }
 
       const limit = req.query.limit || 12;
       const page = req.query.page || 1;
@@ -259,8 +268,8 @@ export class PlayerController {
 
       const accepted = new NewMatchesTeams({teamId: teamId, matchId: matchId, isCreator:0});
 
-      const acceptedMatch = this.matchService.acceptMatch(accepted.teamId, accepted.matchId);
-
+      const acceptedMatch = await this.matchService.acceptMatch(accepted.teamId, accepted.matchId);
+      
       res.json(acceptedMatch);
     } catch (error) {
       next(error);
