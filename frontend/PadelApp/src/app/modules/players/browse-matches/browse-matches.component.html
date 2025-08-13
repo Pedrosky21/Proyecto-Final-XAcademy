@@ -1,4 +1,4 @@
-<div class="bg-appBackground min-h-[calc(100vh-68px)] w-full">
+<div class="bg-splash bg-cover min-h-[calc(100vh-68px)] w-full">
   <h1 class="text-5xl pt-8 ml-6 font-bold text-appWhiteText text-center">
     Busca <span class="text-appPrimary">Partidos</span><br />
   </h1>
@@ -64,25 +64,35 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
       <div
         *ngFor="let partido of filteredPartidos"
-        class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-48 text-center"
-        (click)="openAcceptMatchModal()"
+        class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 text-center"
+        (click)="openAcceptMatchModal(partido)"
       >
         <!-- Teams list -->
-        <div class="gap-2 font-bold text-center">
+        <div class="font-bold text-center w-48">
           <span *ngFor="let mt of partido.MatchesTeams">
             <i class="fa-solid fa-people-group"></i> {{ mt.team?.name }}
           </span>
         </div>
 
-        <div class="text-sm text-center pt-2">
+        <div class="text-sm pt-2 w-48">
           <span *ngFor="let mt of partido.MatchesTeams">
-            <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+            <i class="fa-solid fa-table-tennis-paddle-ball w-4"></i>
             <span *ngFor="let pt of mt.team?.PlayersTeams; let last = last">
               {{ pt.player?.category?.name }}<span *ngIf="!last"> /</span>
             </span>
           </span>
         </div>
+        <div class="text-sm pt-2 w-48">
+          <span *ngFor="let ts of partido.timeSlots">
+            <i class="fa-solid fa-calendar"></i> {{ ts.date }}
+          </span>
+        </div>
       </div>
     </div>
   </section>
+  <app-modal-accept-match
+    [showAcceptMatchModal]="showAcceptMatchModal"
+    [match]="selectedMatch"
+    (close)="onCloseAcceptMatchModal()"
+  ></app-modal-accept-match>
 </div>
