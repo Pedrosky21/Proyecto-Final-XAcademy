@@ -8,9 +8,13 @@ import { WallMaterialService } from "../wallMaterials/services/WallMaterialServi
 import { FloorMaterialService } from "../floorMaterials/services/FloorMaterialService";
 import { TimeSlotService } from "../timeSlot/TimeSlotService";
 import { NewTSREquest } from "../timeSlot/NewTSRequest";
-import MatchesTeams from "./MXTModel";
 import { Transaction } from "sequelize";
 import AppError from "../../errors/AppError";
+import { ClubService } from "../clubs/services/ClubService";
+import { TurnService } from "../clubs/services/TurnService";
+import { PlayerService } from "../players/services/PlayerService";
+import { match } from "assert";
+import { UserTypeEnum } from "../auth/core/models/enums/UserTypeEnum";
 
 export class MatchService {
   matchRepository = new MatchRepository();
@@ -18,6 +22,10 @@ export class MatchService {
   wallMaterialService = new WallMaterialService();
   floorMaterialService = new FloorMaterialService();
   timeSlotService = new TimeSlotService();
+  clubService= new ClubService()
+  turnService= new TurnService()
+  playerService= new PlayerService()
+
 
   createMatch = async (
     creatorTeamId: number,
@@ -178,4 +186,82 @@ export class MatchService {
       throw error;
     }
   };
+  getClubsForMatch=async(matchId:number):Promise<any>=>{
+    const transaction = await sequelize.transaction();
+    try{
+      const match= await this.matchRepository.getMatchById(matchId,transaction)
+
+      if(!match){
+        throw new NotFoundError("Partido no encontrado")
+      }
+      const preferences= await this.matchRepository.getMatchPreferences(matchId)
+
+      const clubs= await this.clubService.getClubsForMatch(preferences)
+      return clubs
+    }catch(error){
+      await transaction.rollback();
+      throw error;
+      
+    }
+  }
+
+  getCourtsForMatch=async(matchId:number,clubId:number):Promise<any>=>{
+    const transaction = await sequelize.transaction();
+    try{
+      const match= await this.matchRepository.getMatchById(matchId,transaction)
+
+      if(!match){
+        throw new NotFoundError("Partido no encontrado")
+      }
+      const preferences= await this.matchRepository.getMatchPreferences(matchId)
+
+      const club= await this.clubService.getCourtsForMatch(preferences,clubId)
+
+      return club
+    }catch(error){
+      await transaction.rollback();
+      throw error;
+      
+    }
+
+  }
+  getTurnsForMatch=async(matchId:number,courtId:number,startDay:Date):Promise<any>=>{
+    const transaction = await sequelize.transaction();
+    try{
+      const match= await this.matchRepository.getMatchById(matchId,transaction)
+
+      if(!match){
+        throw new NotFoundError("Partido no encontrado")
+      }
+      const preferences= await this.matchRepository.getMatchPreferences(matchId)
+
+      const turns= await this.turnService.getCourtTurnsByWeek(courtId,startDay,preferences)
+
+      return turns
+    }catch(error){
+      await transaction.rollback();
+      throw error;
+      
+    }
+
+  }
+
+  reserveTurnForMatch=async(matchId:number,turnId:number,userId:number,):Promise<any>=>{
+    const player= await this.playerService.getPlayerByUserId(userId)
+
+    const fullName= player.getDataValue("lastName")+ " " + player.getDataValue("firstName")
+
+    const transaction= await sequelize.transaction()
+    try{
+      await this.turnService.reserveTurn(turnId,UserTypeEnum.Player,fullName,transaction)
+
+      await this.matchRepository.reserveTurn(matchId,turnId,transaction)
+
+      transaction.commit()
+
+    }catch(error){
+      transaction.rollback()
+      throw error
+    }
+  }
 }

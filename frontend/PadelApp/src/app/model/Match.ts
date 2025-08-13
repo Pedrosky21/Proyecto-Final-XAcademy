@@ -9,7 +9,7 @@ export interface NewMatchRequest {
   roofed: number;
   wallMaterialId: number;
   floorMaterialId: number;
-  timeSlot: TimeSlotRequest[];
+  timeSlots: TimeSlotRequest[];
 }
 
 export interface PlayerCategory {

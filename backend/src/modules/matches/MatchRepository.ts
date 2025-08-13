@@ -9,6 +9,9 @@ import TimeSlot from "../timeSlot/TimeSlotModel";
 import Category from "../players/core/models/CategoryModel";
 import { MatchCreateInput } from "./MatchCreateInput";
 import { Op } from "sequelize";
+import WallMaterial from "../wallMaterials/core/models/WallMaterial";
+import FloorMaterial from "../floorMaterials/core/FloorMaterial";
+import { MatchPreferences } from "./core/models/MatchPreferences";
 
 export class MatchRepository {
   createMatch = async (
@@ -195,4 +198,38 @@ export class MatchRepository {
       }
     );
   };
+
+  getMatchPreferences = async(
+    matchId:number,
+  ):Promise<MatchPreferences>=>{
+     const match = await Match.findByPk(matchId, {
+      attributes:["roofed"],
+      include: [
+            {
+              model:WallMaterial,
+              attributes:["id"]
+            },{
+              model:FloorMaterial,
+              attributes:["id"]
+            },
+            { model: TimeSlot, 
+              as: "timeSlots",
+              attributes:["date","startTime","endTime"]},
+      ],
+    });
+    const matchPreferences= new MatchPreferences(match)
+    return matchPreferences
+  }
+
+  reserveTurn=async(matchId:number,turnId:number,transaction:Transaction):Promise<any>=>{
+     return await Match.update(
+      { turnId: turnId },
+      {
+        where: {
+          id: matchId,
+        },
+        transaction,
+      }
+    );
+  }
 }

@@ -11,6 +11,8 @@ import Club from "../core/models/sequelize/Club";
 import { DiagramTurnRequest } from "../core/dtos/request/DiagramTurnsRequest";
 import { ClubByUserIdResponse } from "../core/dtos/responses/ClubByUserIdResponse";
 import Turn from "../core/models/sequelize/Turn";
+import { MatchPreferences } from "../../matches/core/models/MatchPreferences";
+import Match from "../../matches/MatchModel";
 
 export class ClubService{
   clubRepository = new ClubRepository();
@@ -90,5 +92,13 @@ export class ClubService{
 
   getCourtTurnsByWeek=async(courtId:number,startDate:Date):Promise<Turn[]>=>{
     return await this.courtService.getCourtTurnsByWeek(courtId,startDate)
+  }
+
+  getClubsForMatch=async(preferences: MatchPreferences):Promise<any>=>{
+    return await this.clubRepository.getClubsForMatches(preferences)
+  }
+
+  getCourtsForMatch=async(preferences:MatchPreferences,clubId:number):Promise<any>=>{
+    return await this.clubRepository.getCourtsForMatch(preferences,clubId)
   }
 }

@@ -1,6 +1,7 @@
 import {Model, DataTypes, Optional} from 'sequelize';
 import sequelize from '../../../../../config/db.config';
 import User from '../../../../auth/core/models/UserModel';
+import Court from './Courts';
 interface ClubAttributes {
   id: number;
   name: string;
@@ -14,6 +15,7 @@ interface ClubAttributes {
   admisionRules: string;
   cancelationRules: string;
   userId:number
+  courts?: Court[];
 }
 
 
@@ -31,7 +33,7 @@ class Club  extends Model<ClubAttributes,ClubCreationAttributes> implements Club
   public admisionRules!: string;
   public cancelationRules!: string;
   public userId!:number
-
+  public courts?: Court[];
 };
 
 Club.init({

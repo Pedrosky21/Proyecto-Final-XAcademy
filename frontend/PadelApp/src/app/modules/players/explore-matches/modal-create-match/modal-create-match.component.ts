@@ -105,7 +105,7 @@ export class ModalCreateMatchComponent {
 
       const diffMinutes = finishTotalMinutes - startTotalMinutes;
 
-      return diffMinutes > 90;
+      return diffMinutes < 90;
     });
 
     if (hasInvalidDuration) {
@@ -177,7 +177,7 @@ export class ModalCreateMatchComponent {
             wallMaterialId: this.matchGroup.value.wallMaterialId,
             floorMaterialId: this.matchGroup.value.floorMaterialId,
 
-            timeSlot: this.newTimeSlots.map((slot) => ({
+            timeSlots: this.newTimeSlots.map((slot) => ({
               date: slot.date,
               startTime: slot.startTime,
               endTime: slot.endTime,
