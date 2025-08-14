@@ -9,6 +9,7 @@ import { FloorMaterial } from '../../../model/FloorMaterial';
 import { WallMaterial } from '../../../model/WallMaterial';
 import { FloorMaterialService } from '../../../core/services/FloorMaterialService';
 import { WallMaterialService } from '../../../core/services/WallMaterialService';
+import { AuthService } from '../../../core/services/AuthService';
 
 @Component({
   selector: 'app-browse-matches',
@@ -87,6 +88,7 @@ export class BrowseMatchesComponent implements OnInit {
   }
   openAcceptMatchModal(match: Match) {
     this.selectedMatch = match;
+
     this.showAcceptMatchModal = true;
   }
 
@@ -94,5 +96,4 @@ export class BrowseMatchesComponent implements OnInit {
     this.showAcceptMatchModal = false;
     this.selectedMatch = null;
   }
-  onConfirmAcceptMatchModal() {}
 }

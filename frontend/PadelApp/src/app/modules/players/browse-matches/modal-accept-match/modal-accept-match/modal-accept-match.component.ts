@@ -94,19 +94,23 @@ export class ModalAcceptMatchComponent {
   }
   ngOnInit() {}
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.acceptMatchForm.invalid) {
       this.acceptMatchForm.markAllAsTouched();
+      this.confirmationService.openModal({
+        icon: ModalIconEnum.error,
+        title: 'Error en el formulario',
+        message: 'Seleccione un equipo para continuar.',
+        accept: {
+          title: 'Aceptar',
+          action: () => this.confirmationService.closeModal(),
+        },
+      });
       return;
     }
-    this.close.emit();
 
-    const { selectedTeam } = this.acceptMatchForm.value;
-
-    const selectedTeamId = this.acceptMatchForm.value.selectedTeam;
-    const selectedTeamObj = this.teams.find(
-      (team) => team.id === Number(selectedTeamId)
-    );
+    const selectedTeamId = Number(this.acceptMatchForm.value.selectedTeam);
+    const selectedTeamObj = this.teams.find((t) => t.id === selectedTeamId);
     const selectedTeamName = selectedTeamObj
       ? selectedTeamObj.name
       : 'Equipo desconocido';
@@ -115,34 +119,53 @@ export class ModalAcceptMatchComponent {
     this.confirmationService.openModal({
       title: '¿Confirmar Partido?',
       message: `¿Desea aceptar el partido vs ${rivalTeam} con tu equipo ${selectedTeamName}?`,
-      icon: ModalIconEnum.ok,
+      reject: {
+        title: 'Cancelar',
+        action: () => this.confirmationService.closeModal(),
+      },
       accept: {
         title: 'Confirmar',
         action: () => {
           this.confirmationService.closeModal();
           this.loadingScreenService.showLoadingScreen('Creando Partido...');
+          console.log(this.match);
+          this.matchService
+            .acceptMatch(this.match!.id, selectedTeamId)
+            .subscribe({
+              next: () => {
+                setTimeout(() => {
+                  this.loadingScreenService.showLoadingScreen(null); // hide loader
 
-          setTimeout(() => {
-            this.loadingScreenService.showLoadingScreen(null);
-          }, 2000);
-
-          this.confirmationService.openModal({
-            icon: ModalIconEnum.ok,
-            title: 'Partido creado con exito',
-            message: 'Se ha creado el partido correctamente.',
-            accept: {
-              title: 'Aceptar',
-              action: () => {
-                this.confirmationService.closeModal();
+                  this.confirmationService.openModal({
+                    icon: ModalIconEnum.ok,
+                    title: 'Partido creado con éxito',
+                    message: 'Se ha creado el partido correctamente.',
+                    accept: {
+                      title: 'Aceptar',
+                      action: () => {
+                        this.confirmationService.closeModal();
+                      },
+                    },
+                  });
+                }, 2000);
               },
-            },
-          });
-        },
-      },
-      reject: {
-        title: 'Cancelar',
-        action: () => {
-          this.confirmationService.closeModal();
+              error: (err) => {
+                this.loadingScreenService.showLoadingScreen(null);
+                console.error('Error accepting match', err);
+
+                this.confirmationService.openModal({
+                  icon: ModalIconEnum.error,
+                  title: 'Error',
+                  message:
+                    (err?.error?.message || err?.message) ??
+                    'Ocurrió un error al aceptar el partido.',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => this.confirmationService.closeModal(),
+                  },
+                });
+              },
+            });
         },
       },
     });

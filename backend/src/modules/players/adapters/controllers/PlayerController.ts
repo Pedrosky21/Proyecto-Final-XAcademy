@@ -11,6 +11,7 @@ import { NewMatchRequest } from "../../../matches/NewMatchRequest";
 import { NewMatchesTeams } from "../../../matches/MXTRequest";
 import { MatchService } from "../../../matches/MatchService";
 import { Sequelize, Transaction } from "sequelize";
+import AppError from "../../../../errors/AppError";
 
 export class PlayerController {
   playerService = new PlayerService();
@@ -222,6 +223,9 @@ export class PlayerController {
       }
 
       const player = await this.playerService.getPlayerByUserId(userId);
+      if (!player) {
+        throw new AppError("El usuario no es un jugador");
+      }
 
       const limit = req.query.limit || 12;
       const page = req.query.page || 1;

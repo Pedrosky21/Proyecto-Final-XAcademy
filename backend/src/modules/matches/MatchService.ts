@@ -116,10 +116,10 @@ export class MatchService {
     return matchTeam;
   };
 
-  countTeamsByMatchId = async (matchId:number): Promise<any> => {
+  countTeamsByMatchId = async (matchId: number): Promise<any> => {
     const count = await this.matchRepository.countTeamsByMatchId(matchId);
-    return count
-  }
+    return count;
+  };
 
   setMatchToPending = async (
     matchId: number,
@@ -149,12 +149,12 @@ export class MatchService {
       // ver si partido ya tiene equipo asociado
       const countedTeams = await this.countTeamsByMatchId(matchId);
       if (countedTeams > 1) {
-        throw new AppError("El partido ya tiene un equipo asociado")
+        throw new AppError("El partido ya tiene un equipo asociado");
       }
       // ver si el equipo asociado es el mismo que intenta aceptar
       const matchXTeam = await this.getMatchTeam(teamId, matchId);
       if (matchXTeam.teamId === teamId) {
-        throw new AppError("No puede aceptar partidos de su mismo equipo")
+        throw new AppError("No puede aceptar partidos de su mismo equipo");
       }
       // crear matchXTeam
       const toCreateMatchXTeam = new NewMatchesTeams({

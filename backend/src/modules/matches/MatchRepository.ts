@@ -1,7 +1,7 @@
 import { NewMatchesTeams } from "./MXTRequest";
 import Match from "./MatchModel";
 import MatchesTeams from "./MXTModel";
-import { Transaction } from "sequelize";
+import { Sequelize, Transaction } from "sequelize";
 import Team from "../players/core/models/TeamModel";
 import Player from "../players/core/models/PlayerModel";
 import PlayersTeams from "../players/core/models/PXTModel";
@@ -94,7 +94,6 @@ export class MatchRepository {
     floorMaterial: number | null,
     playerId: number
   ): Promise<Match[]> => {
-    console.log(playerId);
     const whereClause: any = {};
 
     if (roofed !== null) {
@@ -108,7 +107,19 @@ export class MatchRepository {
     }
 
     const matches = await Match.findAll({
-      where: whereClause,
+      where: {
+        ...whereClause,
+        id: {
+          [Op.notIn]: Sequelize.literal(`
+          (SELECT m.idpartido
+          FROM partido m
+          JOIN equipoxpartido mt ON mt.partido_idpartido = m.idpartido
+          JOIN equipo t ON t.idequipo = mt.equipo_idequipo
+          JOIN jugadorxequipo pt ON pt.equipo_idequipo = t.idequipo
+          WHERE pt.jugador_idjugador = ${playerId})
+      `),
+        },
+      },
       limit,
       offset: (page - 1) * limit,
       include: [
@@ -123,13 +134,13 @@ export class MatchRepository {
                 {
                   model: PlayersTeams,
                   as: "PlayersTeams",
+                  required: false,
                   where: {
                     [Op.or]: [
                       { playerId: { [Op.ne]: playerId } }, // jugador distinto
                       { playerId: null }, // o sin jugador
                     ],
                   },
-                  required: false,
                   include: [
                     {
                       model: Player,
@@ -172,14 +183,14 @@ export class MatchRepository {
     return matchTeam;
   };
 
-  countTeamsByMatchId = async (matchId:number): Promise<number> => {
+  countTeamsByMatchId = async (matchId: number): Promise<number> => {
     const count = await MatchesTeams.count({
       where: {
-        matchId: matchId
-      }
-    })
-    return count
-  }
+        matchId: matchId,
+      },
+    });
+    return count;
+  };
 
   setMatchToPending = async (
     matchId: number,
