@@ -89,9 +89,7 @@ export class EditProfileComponent {
         message: 'Revise los campos e intente nuevamente.',
         accept: {
           title: 'Aceptar',
-          action: () => {
-            this.confirmationModalService.closeModal();
-          },
+          action: () => this.confirmationModalService.closeModal(),
         },
       });
       return;
@@ -103,9 +101,7 @@ export class EditProfileComponent {
         '¿Desea guardar la configuración ingresada? Podrá modificarla en cualquier momento.',
       reject: {
         title: 'Seguir editando',
-        action: () => {
-          this.confirmationModalService.closeModal();
-        },
+        action: () => this.confirmationModalService.closeModal(),
       },
       accept: {
         title: 'Confirmar',
@@ -126,21 +122,20 @@ export class EditProfileComponent {
             positionId: Number(this.form.value.posicion),
           };
 
-          // Create player
           this.playerService.createPlayer(dataToSend).subscribe({
             next: () => {
-              this.loadingScreenService.showLoadingScreen(null);
-              this.confirmationModalService.openModal({
-                icon: ModalIconEnum.ok,
-                title: 'Cambios guardados',
-                message: 'Se ha guardado la configuración correctamente',
-                accept: {
-                  title: 'Aceptar',
-                  action: () => {
-                    this.confirmationModalService.closeModal();
+              setTimeout(() => {
+                this.loadingScreenService.showLoadingScreen(null);
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.ok,
+                  title: 'Cambios guardados',
+                  message: 'Se ha guardado la configuración correctamente',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => this.confirmationModalService.closeModal(),
                   },
-                },
-              });
+                });
+              }, 1500);
             },
             error: () => {
               this.loadingScreenService.showLoadingScreen(null);
@@ -152,9 +147,7 @@ export class EditProfileComponent {
                   'Ha ocurrido un error al guardar la configuración, intente de nuevo más tarde.',
                 accept: {
                   title: 'Aceptar',
-                  action: () => {
-                    this.confirmationModalService.closeModal();
-                  },
+                  action: () => this.confirmationModalService.closeModal(),
                 },
               });
             },
