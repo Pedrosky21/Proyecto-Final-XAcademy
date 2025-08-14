@@ -1,0 +1,51 @@
+<div
+  *ngIf="match"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+>
+  <div
+    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[500px] p-6 relative"
+  >
+    <button
+      (click)="onClose()"
+      class="absolute top-3 right-3 text-appWhiteText hover:text-appError"
+    >
+      ✕
+    </button>
+
+    <h2 class="text-2xl font-bold text-center mb-6">Partido pendiente</h2>
+    <div>
+      <h3 class="text-xl font-bold text-center mb-2">Equipo seleccionado</h3>
+      <div class="flex flex-row gap-4">
+        <label class="flex text-lg font-roboto font-semibold">Nombre: <span class="font-normal">{{match?.ownTeam?.name}}</span></label>
+        <label class="flex text-lg font-roboto font-semibold">Compañero: <span class="font-normal">{{match?.ownTeam?.partner}}</span></label>
+      </div>
+    </div>
+    <div>
+      <h3 class="text-xl font-bold text-center mb-2">Equipo rival</h3>
+      <div>
+        <label class="flex text-lg font-roboto font-semibold">Nombre: <span class="font-normal">{{match?.rivalTeam?.name}}</span></label>
+        <label class="flex text-lg font-roboto font-semibold">Jugadores: <span class="font-normal">Cambiar despues</span></label>
+      </div>
+    </div>
+    <div>
+      <h3 class="text-xl font-bold text-center mb-2">Preferencias de cancha</h3>
+      <div>
+        <label class="flex text-lg font-roboto font-semibold">Material piso: <span class="font-normal">{{match?.preferences?.floorMaterial?.name}}</span></label>
+        <label class="flex text-lg font-roboto font-semibold">Material pared:<span class="font-normal"> {{match?.preferences?.wallMaterial?.name}}</span></label>
+        <label class="flex text-lg font-roboto font-semibold">Techada: <span class="font-normal">{{match?.preferences?.roofed}}</span></label>
+      </div>
+    </div>
+    <div>
+      <h3 class="text-xl font-bold text-center mb-2">Franjas Horarias</h3>
+      <div>
+        <app-table
+        [columns]="columns"
+        [rows]="this.match.timeSlot"
+        ></app-table>
+      </div>
+    </div>
+    <button>
+      Reservar turno
+    </button>
+  </div>
+</div>

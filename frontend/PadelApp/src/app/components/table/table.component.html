@@ -1,0 +1,28 @@
+
+<div class="flex flex-col justify-center align-middle">
+  <table class="overflow-auto">
+    <thead>
+      <tr class="bg-appPrimary">
+        <th
+          *ngFor="let column of columns; let index = index"
+          class="py-1 px-3 text-center align-middle text-wrap text-appBlackText font-roboto font-bold cursor-pointer"
+        >
+          <span>
+            {{ column.title }}
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index" class="hover:bg-gray-700">
+        <td
+          *ngFor="let col of columns"
+          class="h-full p-2 text-center align-middle font-roboto text-appWhiteText"
+        >
+          {{ row[col.key] }}
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
+</div>

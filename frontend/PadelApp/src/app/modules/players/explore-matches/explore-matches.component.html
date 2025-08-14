@@ -66,6 +66,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mt-6">
         <div
           *ngFor="let partido of hardcodedPartidos"
+          (click)="selectMatch()"
           class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-36 text-center"
         >
           <div class="gap-2 font-bold">
@@ -124,4 +125,10 @@
     (close)="closeCreateMatchModal()"
     (confirm)="onConfirmMatchModal()"
   ></app-modal-create-match>
+  <app-modal-pending-match
+    [match]="selectedMatch"
+    (onClose)="closePendingModal()"
+  >
+
+  </app-modal-pending-match>
 </div>
