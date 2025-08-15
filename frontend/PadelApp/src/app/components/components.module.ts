@@ -3,18 +3,21 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { EditTableComponent } from "./edit-table/edit-table.component";
 import { TurnTableComponent } from "./turn-table/turn-table.component";
+import { TableComponent } from "./table/table.component";
 
 @NgModule({
   declarations: [
     EditTableComponent,
-    TurnTableComponent
+    TurnTableComponent,
+    TableComponent
   ],
   imports: [
     CommonModule,
   ],
   exports:[
     EditTableComponent,
-    TurnTableComponent
+    TurnTableComponent,
+    TableComponent
   ]
 })
 export class ComponentsModule { }

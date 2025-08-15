@@ -1,11 +1,39 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../../../../../config/db.config";
 import Club from "./Club";
 import FloorMaterial from "../../../../floorMaterials/core/FloorMaterial";
 import WallMaterial from "../../../../wallMaterials/core/models/WallMaterial";
-import Turn from "./Turn";
 
-class Court extends Model {}
+interface CourtAttributes {
+  id: number;
+  clubId?: number;
+  floorMaterialId?: number;
+  wallMaterialId?: number;
+  roofed: number;
+
+  // Relaciones
+  floorMaterial?: {
+    id: number;
+    name: string;
+  };
+  wallMaterial?: {
+    id: number;
+    name: string;
+  };
+}
+interface CourtCreationAttributes extends Optional<CourtAttributes, 'id'> {}
+
+class Court extends Model<CourtAttributes,CourtCreationAttributes> implements CourtCreationAttributes {
+  public id!: number;
+  public clubId?: number;
+  public floorMaterialId?: number;
+  public wallMaterialId?: number;
+  public roofed!: number;
+
+  // Relaciones
+  public floorMaterial?: { id: number; name: string };
+  public wallMaterial?: { id: number; name: string };
+}
 
 Court.init(
   {

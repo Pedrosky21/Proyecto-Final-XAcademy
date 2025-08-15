@@ -320,5 +320,104 @@ export class PlayerController {
     } catch (error) {
       next(error);
     }
+  };
+
+  getClubsForMath= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const {id} = req.params;
+
+      if(!id || Number(id)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+
+      const clubs=await this.matchService.getClubsForMatch(Number(id))
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
   }
+
+  getCourtsForMatch= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const {matchId,clubId} = req.query;
+
+      if(!matchId || Number(matchId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if(!clubId || Number(clubId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+
+      const clubs=await this.matchService.getCourtsForMatch(Number(matchId),Number(clubId))
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  getTurnsForMatch= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const {matchId,courtId,startDate} = req.query;
+
+      if(!matchId || Number(matchId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if(!courtId || Number(courtId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if (!startDate) {
+        throw new BadRequestError(
+          "El query startDate debe ser una fecha valida"
+        );
+      }
+
+      let date: Date;
+        if ((startDate as string).includes('/')) {
+          // Asume formato DD/MM/YYYY
+          const [day, month, year] = (startDate as string).split('/').map(Number);
+          date = new Date(year, month - 1, day);
+        } else {
+          // Asume formato ISO
+          date = new Date(startDate as string);
+        }
+      if (isNaN(date.getTime())) {
+        throw new BadRequestError(
+          "El query startDate debe ser una fecha válida"
+        );
+      }
+      if (date.getDay() !== 0) {
+        throw new BadRequestError("El startDate debe ser un domingo");
+      }
+
+      const clubs=await this.matchService.getTurnsForMatch(Number(matchId),Number(courtId),date)
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  reserveTurn= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      
+      const userId = req.user?.id; 
+      const {matchId,turnId} = req.body;
+
+      if(!matchId || Number(matchId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if(!turnId || Number(turnId)<0){
+        throw new BadRequestError("El turnId debe ser un número entero mayor a 0")
+      }
+      const clubs=await this.matchService.reserveTurnForMatch(Number(matchId),Number(turnId),userId!)
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
 }

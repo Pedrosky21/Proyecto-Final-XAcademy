@@ -6,6 +6,7 @@ import TurnModel from "../core/models/sequelize/Turn";
 import { NotFoundError } from "../../../errors/NotFoundError";
 import { Turn } from "../core/models/classes/Turn";
 import { UserTypeEnum } from "../../auth/core/models/enums/UserTypeEnum";
+import { MatchPreferences } from "../../matches/core/models/MatchPreferences";
 
 export class TurnService{
   turnRepository= new TurnRepository()
@@ -38,10 +39,10 @@ export class TurnService{
     return new Date(year, month, 1 + offset);
   }
 
-  getCourtTurnsByWeek=async(courtId:number, startDate:Date):Promise<any>=>{
+  getCourtTurnsByWeek=async(courtId:number, startDate:Date,preferences?:MatchPreferences):Promise<any>=>{
     const endDate= new Date(startDate)
     endDate.setDate(startDate.getDate()+6)
-    return await this.turnRepository.getCourtTurnsByWeek(courtId,startDate,endDate)
+    return await this.turnRepository.getCourtTurnsByWeek(courtId,startDate,endDate,preferences)
   }
 
   payTurn=async(turnId:number,userType:UserTypeEnum, playerName?:string):Promise<any>=>{
@@ -56,7 +57,7 @@ export class TurnService{
     return await this.turnRepository.updateTurnState(turnId,3,playerName)
 
   }
-  reserveTurn=async(turnId:number,userType:UserTypeEnum,playerName?:string):Promise<any>=>{
+  reserveTurn=async(turnId:number,userType:UserTypeEnum,playerName?:string,transaction?:Transaction):Promise<any>=>{
     const getTurn:TurnModel|null= await this.turnRepository.getTurnById(turnId)
     if(!getTurn){
       throw new NotFoundError("Turno no encontrado")
@@ -65,7 +66,7 @@ export class TurnService{
 
     currentTurn.state.setAsReserved(userType)
 
-    return await this.turnRepository.updateTurnState(turnId,2,playerName)
+    return await this.turnRepository.updateTurnState(turnId,2,playerName,transaction)
 
   }
 

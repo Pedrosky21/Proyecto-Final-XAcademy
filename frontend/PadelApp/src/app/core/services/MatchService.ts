@@ -42,4 +42,33 @@ export class MatchService {
   getMatchById(id: number): Observable<Match> {
     return this.http.get<Match>(`${this.apiUrl}/match/${id}`);
   }
+
+  getClubsForMatch(matchId:number):Observable<any>{
+    return this.http.get(this.apiUrl+`/clubs/${matchId}`)
+  }
+  getCourtsForMatch(matchId:number,clubId:number):Observable<any>{
+    const params={
+      "clubId":clubId,
+      "matchId":matchId
+    }
+    return this.http.get(this.apiUrl+`/courts`, {params})
+  }
+  
+  getTurnsForMatch(matchId:number, courtId:number,day:string){
+    const params={
+      "courtId":courtId,
+      "matchId":matchId,
+      "startDate":day
+    }
+    return this.http.get(this.apiUrl+`/turns`, {params})
+
+  }
+
+  reserveTurn(matchId:number,turnId:number){
+    const body={
+      "matchId":matchId,
+      "turnId":turnId
+    }
+    return this.http.post(`${this.apiUrl}/reserve-turn`, body);
+  }
 }
