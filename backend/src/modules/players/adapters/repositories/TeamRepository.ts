@@ -6,25 +6,36 @@ import PlayersTeams from "../../core/models/PXTModel";
 import { Sequelize, Transaction } from "sequelize";
 import { Op } from "sequelize";
 
-
 export class TeamRepository {
-  createTeam = async (newTeam: NewTeamRequest, transaction: Transaction): Promise<Team> => {
-    const createdTeam = await Team.create({
-      name: newTeam.name,
-      description: newTeam.description,
-    }, {transaction});
+  createTeam = async (
+    newTeam: NewTeamRequest,
+    transaction: Transaction
+  ): Promise<Team> => {
+    const createdTeam = await Team.create(
+      {
+        name: newTeam.name,
+        description: newTeam.description,
+      },
+      { transaction }
+    );
     return createdTeam;
   };
 
-  createPlayersTeams = async (newPlayersTeams: NewPlayersTeams, transaction: Transaction): Promise<PlayersTeams> => {
-        const createdPlayersTeams = await PlayersTeams.create({
-            creator: newPlayersTeams.creator,
-            teamId: newPlayersTeams.teamId,
-            playerId: newPlayersTeams.playerId
-        }, {transaction});
+  createPlayersTeams = async (
+    newPlayersTeams: NewPlayersTeams,
+    transaction: Transaction
+  ): Promise<PlayersTeams> => {
+    const createdPlayersTeams = await PlayersTeams.create(
+      {
+        creator: newPlayersTeams.creator,
+        teamId: newPlayersTeams.teamId,
+        playerId: newPlayersTeams.playerId,
+      },
+      { transaction }
+    );
 
-        return createdPlayersTeams;
-    };
+    return createdPlayersTeams;
+  };
 
   getAllTeams = async (): Promise<Team[]> => {
     return await Team.findAll();
@@ -38,44 +49,47 @@ export class TeamRepository {
     });
   };
 
-  getTeamsPlayerByName = async (teamName: string, playerId:number): Promise<Team[]> => {
-  const words = teamName.trim().split(/\s+/);
+  getTeamsPlayerByName = async (
+    teamName: string,
+    playerId: number
+  ): Promise<Team[]> => {
+    const words = teamName.trim().split(/\s+/);
 
-  const conditions = words.map((word) => ({
-    name: {
-      [Op.like]: `%${word}%`
-    }
-  }));
+    const conditions = words.map((word) => ({
+      name: {
+        [Op.like]: `%${word}%`,
+      },
+    }));
 
-  return await Team.findAll({
-    where: {
-      [Op.or]: conditions
-    },
-    include: [
-      {
-        model: PlayersTeams,
-        as: "playersTeams",
-        where: { playerId },
-        attributes: []
-      }
-    ],
-    order: [["name", "ASC"]],
-    limit: 5
-  });
-};
+    return await Team.findAll({
+      where: {
+        [Op.or]: conditions,
+      },
+      include: [
+        {
+          model: PlayersTeams,
+          as: "playersTeams",
+          where: { playerId },
+          attributes: [],
+        },
+      ],
+      order: [["name", "ASC"]],
+      limit: 5,
+    });
+  };
 
-  arePlayersInSameTeam = async (id1:number, id2:number): Promise<boolean> => {
+  arePlayersInSameTeam = async (id1: number, id2: number): Promise<boolean> => {
     const teams = await PlayersTeams.findAll({
-      attributes: ['teamId'],
+      attributes: ["teamId"],
       where: {
         playerId: {
-          [Op.in]: [id1, id2]
-        }
+          [Op.in]: [id1, id2],
+        },
       },
-      group: ['teamId'],
-      having: Sequelize.literal('COUNT(DISTINCT jugador_idjugador) = 2')
+      group: ["teamId"],
+      having: Sequelize.literal("COUNT(DISTINCT jugador_idjugador) = 2"),
     });
 
     return teams.length > 0;
-  }
+  };
 }

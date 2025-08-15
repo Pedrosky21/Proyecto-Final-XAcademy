@@ -183,13 +183,34 @@ export class MatchRepository {
     return matchTeam;
   };
 
-  countTeamsByMatchId = async (matchId: number): Promise<number> => {
-    const count = await MatchesTeams.count({
+  teamsByMatchId = async (
+    matchId: number
+  ): Promise<{ count: number; rows: MatchesTeams[] }> => {
+    const matchesTeams = await MatchesTeams.findAndCountAll({
       where: {
         matchId: matchId,
       },
+      distinct: true,
+      include: [
+        {
+          model: Team,
+          as: "team",
+          include: [
+            {
+              model: PlayersTeams,
+              as: "PlayersTeams",
+              include: [
+                {
+                  model: Player,
+                  as: "player",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
-    return count;
+    return matchesTeams;
   };
 
   setMatchToPending = async (

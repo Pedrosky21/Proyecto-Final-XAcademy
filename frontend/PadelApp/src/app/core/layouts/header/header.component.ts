@@ -15,6 +15,7 @@ export class HeaderComponent {
   isAuthenticated = true;
   userEmail = '';
   userName = '';
+  userImg = '';
   menuItems: MenuItem[] = [
     {
       text: 'Inicio',
@@ -62,6 +63,7 @@ export class HeaderComponent {
                 const player = players.find((p: any) => p.userId === user.id);
                 if (player) {
                   this.userName = `${player.firstName} ${player.lastName}`;
+                  this.userImg = `${player.pictureUrl}`;
                 } else {
                   console.warn('Player not found for this user.');
                 }

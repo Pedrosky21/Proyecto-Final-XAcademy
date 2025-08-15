@@ -23,12 +23,18 @@
         <article class="p-3">
           <i class="fa-solid fa-table-tennis-paddle-ball pr-2"></i>Nombre:
           <br />
-          {{ match.MatchesTeams[0]?.team?.name || "No disponible" }}
+          <span class="font-medium">{{
+            match.MatchesTeams[0]?.team?.name || "No disponible"
+          }}</span>
         </article>
         <article class="p-3">
           <i class="fa-solid fa-comment pr-2"></i>Descripcion:
           <br />
-          {{ match.MatchesTeams[0]?.team?.description || "No disponible" }}
+          <span class="font-medium">
+            {{
+              match.MatchesTeams[0]?.team?.description || "No disponible"
+            }}</span
+          >
         </article>
         <article class="p-3">
           <i class="fa-solid fa-people-group pr-2"></i>Miembros:
@@ -38,6 +44,7 @@
               let pt of match.MatchesTeams[0]?.team?.PlayersTeams;
               let last = last
             "
+            class="font-medium"
           >
             {{ pt.player?.firstName }} {{ pt.player?.lastName }}
             <span *ngIf="!last">/</span>
@@ -49,10 +56,10 @@
         Especificaciones del Partido
       </h1>
       <section
-        class="match flex flex-col sm:flex-row mb-4 mt-6 font-bold justify-center border border-appPrimary p-2 rounded-lg"
+        class="match flex flex-col sm:flex-row mb-4 mt-6 font-medium justify-center border border-appPrimary p-2 rounded-lg"
       >
         <article *ngIf="match" class="mb-6 sm:mb-0 sm:mr-10">
-          Cancha:
+          <span class="font-bold">Cancha:</span>
           <p>
             Piso:
             {{ getFloorMaterialName(match.floorMaterialId) || "No disponible" }}
@@ -64,10 +71,15 @@
           <p>Techada: {{ match.roofed === 1 ? "Sí" : "No" }}</p>
         </article>
         <article>
-          <i class="fa-solid fa-calendar pr-2"></i>Horario Posible:
+          <i class="fa-solid fa-calendar pr-2"></i
+          ><span class="font-bold">Fecha y Hora Posible:</span>
           <ul>
             <li *ngFor="let ts of match?.timeSlots">
-              {{ ts.date }} {{ ts.startTime }} - {{ ts.endTime }}
+              {{ ts.date }}
+              <span class="pl-2 font-medium"
+                >{{ formatTimeToHourMinute(ts.startTime) }} -
+                {{ formatTimeToHourMinute(ts.endTime) }}
+              </span>
             </li>
           </ul>
         </article>

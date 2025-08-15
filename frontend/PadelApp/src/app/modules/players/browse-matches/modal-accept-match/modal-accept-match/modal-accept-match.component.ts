@@ -31,6 +31,7 @@ export class ModalAcceptMatchComponent {
 
   @Output() close = new EventEmitter<void>();
   @Output() confirm = new EventEmitter<void>();
+  @Output() accepted = new EventEmitter<number>();
 
   floorMaterialsMap: Map<number, string> = new Map();
   wallMaterialsMap: Map<number, string> = new Map();
@@ -135,7 +136,7 @@ export class ModalAcceptMatchComponent {
               next: () => {
                 setTimeout(() => {
                   this.loadingScreenService.showLoadingScreen(null); // hide loader
-
+                  this.accepted.emit(this.match!.id);
                   this.confirmationService.openModal({
                     icon: ModalIconEnum.ok,
                     title: 'Partido creado con éxito',
@@ -171,6 +172,14 @@ export class ModalAcceptMatchComponent {
     });
   }
 
+  formatTimeToHourMinute(time?: string | null): string {
+    if (!time) return '';
+    const parts = time.split(':');
+    if (parts.length < 2) return time;
+    const hh = parts[0].padStart(2, '0');
+    const mm = (parts[1] ?? '00').padStart(2, '0');
+    return `${hh}:${mm}`;
+  }
   onClose() {
     this.close.emit();
   }

@@ -8,67 +8,85 @@
   </h3>
 
   <div
-    class="flex flex-wrap justify-center items-center gap-4 mt-6 mb-6 font-roboto font-bold"
+    class="flex flex-col justify-center items-center gap-4 mt-6 mb-6 font-roboto font-bold"
   >
-    <!-- Material Piso -->
-    <select
-      [(ngModel)]="filters.materialPiso"
-      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
-    >
-      <option value="" disabled>Material Piso</option>
-      <option *ngFor="let material of floorMaterials" [value]="material.id">
-        {{ material.name }}
-      </option>
-    </select>
+    <div class="flex flex-wrap justify-center items-center gap-4">
+      <div class="flex flex-col">
+        <label class="mb-1 text-sm font-normal text-appWhiteText"
+          >Material Piso</label
+        >
+        <select
+          [(ngModel)]="filters.materialPiso"
+          class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
+        >
+          <option value="" disabled>Seleccione material</option>
+          <option *ngFor="let material of floorMaterials" [value]="material.id">
+            {{ material.name }}
+          </option>
+        </select>
+      </div>
 
-    <!-- Material Pared -->
-    <select
-      [(ngModel)]="filters.materialPared"
-      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
-    >
-      <option value="" disabled>Material Pared</option>
-      <option *ngFor="let material of wallMaterials" [value]="material.id">
-        {{ material.name }}
-      </option>
-    </select>
+      <!-- Material Pared -->
+      <div class="flex flex-col">
+        <label class="mb-1 text-sm font-normal text-appWhiteText"
+          >Material Pared</label
+        >
+        <select
+          [(ngModel)]="filters.materialPared"
+          class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
+        >
+          <option value="" disabled>Seleccione material</option>
+          <option *ngFor="let material of wallMaterials" [value]="material.id">
+            {{ material.name }}
+          </option>
+        </select>
+      </div>
 
-    <!-- Techada -->
-    <select
-      [(ngModel)]="filters.techada"
-      class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
-    >
-      <option class="bg-appBackground" value="" disabled>Techada</option>
-      <option class="bg-appBackground" value="true">Sí</option>
-      <option class="bg-appBackground" value="false">No</option>
-    </select>
+      <!-- Techada -->
+      <div class="flex flex-col">
+        <label class="mb-1 text-sm font-normal text-appWhiteText"
+          >Techada</label
+        >
+        <select
+          [(ngModel)]="filters.techada"
+          class="h-10 px-4 rounded-lg border border-appPrimary text-appWhiteText bg-appBackground focus:outline-none focus:ring-2 focus:ring-appPrimary"
+        >
+          <option value="" disabled>Seleccione</option>
+          <option value="true">Sí</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+    </div>
 
-    <!-- Buscar Button -->
-    <button
-      (click)="buscar()"
-      class="h-10 px-5 rounded-lg font-bold bg-appPrimary text-black hover:opacity-90 transition"
-    >
-      Buscar
-    </button>
+    <!-- Buttons Row -->
+    <div class="flex gap-4">
+      <button
+        (click)="buscar()"
+        class="h-10 px-5 rounded-lg font-bold bg-appPrimary text-black hover:opacity-90 transition hover:bg-transparent hover:text-appWhiteText transition hover:border border-appPrimary"
+      >
+        Buscar
+      </button>
 
-    <!-- Reiniciar Filtros Button -->
-    <button
-      (click)="reiniciarFiltros()"
-      class="h-10 px-5 rounded-lg font-bold border border-appPrimary text-appWhiteText hover:bg-appPrimary hover:text-black transition"
-    >
-      Reiniciar Filtros
-    </button>
+      <button
+        (click)="reiniciarFiltros()"
+        class="h-10 px-5 rounded-lg font-bold border border-appPrimary text-appWhiteText hover:bg-appPrimary hover:text-black transition"
+      >
+        Reiniciar Filtros
+      </button>
+    </div>
   </div>
+
   <!-- Matches List -->
 
-  <section class="flex flex-wrap justify-center items-center font-roboto">
+  <section class="flex flex-wrap justify-center font-roboto">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
       <div
         *ngFor="let partido of filteredPartidos"
-        class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 text-center"
+        class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32"
         (click)="openAcceptMatchModal(partido)"
       >
         <!-- Teams list -->
-        <div class="font-bold text-center w-48">
+        <div class="font-bold w-48">
           <span *ngFor="let mt of partido.MatchesTeams">
             <i class="fa-solid fa-people-group"></i> {{ mt.team?.name }}
           </span>
@@ -83,8 +101,9 @@
           </span>
         </div>
         <div class="text-sm pt-2 w-48">
-          <span *ngFor="let ts of partido.timeSlots">
-            <i class="fa-solid fa-calendar"></i> {{ ts.date }}
+          <span *ngFor="let ts of partido.timeSlots; let last = last">
+            <i class="fa-solid fa-calendar"></i> {{ ts.date
+            }}<span *ngIf="!last"> / </span>
           </span>
         </div>
       </div>
@@ -93,6 +112,7 @@
   <app-modal-accept-match
     [showAcceptMatchModal]="showAcceptMatchModal"
     [match]="selectedMatch"
+    (accepted)="onMatchAccepted($event)"
     (close)="onCloseAcceptMatchModal()"
   ></app-modal-accept-match>
 </div>

@@ -8,7 +8,6 @@ import { WallMaterialService } from "../wallMaterials/services/WallMaterialServi
 import { FloorMaterialService } from "../floorMaterials/services/FloorMaterialService";
 import { TimeSlotService } from "../timeSlot/TimeSlotService";
 import { NewTSREquest } from "../timeSlot/NewTSRequest";
-import MatchesTeams from "./MXTModel";
 import { Transaction } from "sequelize";
 import AppError from "../../errors/AppError";
 
@@ -44,6 +43,12 @@ export class MatchService {
 
     try {
       const { timeSlots, ...matchData } = newMatch;
+
+      if (!Array.isArray(timeSlots) || timeSlots.length === 0) {
+        throw new AppError(
+          "TimeSlots debe ser un array con al menos un elemento"
+        );
+      }
 
       const match = await this.matchRepository.createMatch(
         {
@@ -116,8 +121,8 @@ export class MatchService {
     return matchTeam;
   };
 
-  countTeamsByMatchId = async (matchId: number): Promise<any> => {
-    const count = await this.matchRepository.countTeamsByMatchId(matchId);
+  teamsByMatchId = async (matchId: number): Promise<any> => {
+    const count = await this.matchRepository.teamsByMatchId(matchId);
     return count;
   };
 
@@ -147,13 +152,37 @@ export class MatchService {
         throw new NotFoundError("No existe el partido");
       }
       // ver si partido ya tiene equipo asociado
-      const countedTeams = await this.countTeamsByMatchId(matchId);
-      if (countedTeams > 1) {
+      const matchesTeams = await this.teamsByMatchId(matchId);
+      if (matchesTeams.count > 1) {
         throw new AppError("El partido ya tiene un equipo asociado");
+      }
+      // ver si el equipo asociado tiene un jugador que tmb esta en el que intenta aceptar
+      if (matchesTeams.count > 0) {
+        // Obtener jugadores del equipo que solicitó el partido (primer equipo en matchesTeams)
+        const requestingTeamPlayers =
+          matchesTeams.rows[0].team.PlayersTeams.map(
+            (pt: { playerId: any }) => pt.playerId
+          );
+
+        // Obtener jugadores del equipo que quiere aceptar el partido
+        const acceptingTeamPlayers = team.PlayersTeams.map(
+          (pt: { playerId: any }) => pt.playerId
+        );
+
+        // Verificar si hay jugadores en común
+        const commonPlayers = requestingTeamPlayers.filter((playerId: any) =>
+          acceptingTeamPlayers.includes(playerId)
+        );
+
+        if (commonPlayers.length > 0) {
+          throw new AppError(
+            "No puede aceptar el partido porque tiene jugadores en común con el equipo solicitante"
+          );
+        }
       }
       // ver si el equipo asociado es el mismo que intenta aceptar
       const matchXTeam = await this.getMatchTeam(teamId, matchId);
-      if (matchXTeam.teamId === teamId) {
+      if (matchXTeam && matchXTeam.teamId === teamId) {
         throw new AppError("No puede aceptar partidos de su mismo equipo");
       }
       // crear matchXTeam
@@ -162,7 +191,7 @@ export class MatchService {
         matchId: matchId,
         teamId: teamId,
       });
-      const createdMatchXTeam = await this.matchRepository.createMatchesTeams(
+      await this.matchRepository.createMatchesTeams(
         toCreateMatchXTeam,
         transaction
       );
@@ -171,7 +200,7 @@ export class MatchService {
       await this.setMatchToPending(matchId, transaction);
 
       // Obtener datos completos partido con estado actualizado
-      const updatedMatch = this.getMatchById(matchId, transaction);
+      const updatedMatch = await this.getMatchById(matchId, transaction);
 
       await transaction.commit();
 

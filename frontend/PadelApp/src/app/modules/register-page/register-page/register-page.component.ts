@@ -36,8 +36,6 @@ export class RegisterPageComponent {
   }
 
   handleRegister() {
-    if (this.registerForm.invalid) return;
-
     const { password, confirmPassword } = this.registerForm.value;
     if (password !== confirmPassword) {
       this.confirmationModalService.openModal({
