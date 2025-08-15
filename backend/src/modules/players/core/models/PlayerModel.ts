@@ -30,7 +30,7 @@ Player.init(
       field: "fechaNac",
     },
     cellNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       field: "telefono",
     },
     pictureUrl: {
