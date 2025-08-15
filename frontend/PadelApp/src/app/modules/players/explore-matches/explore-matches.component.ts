@@ -10,6 +10,10 @@ import { TeamService } from '../../../core/services/TeamService';
 import { NewTeamRequest } from '../../../model/NewTeamRequest';
 import { AuthService } from '../../../core/services/AuthService';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { CreatedMatch } from '../../../model/CreatedMatch';
+import { WallMaterial } from '../../../model/WallMaterial';
+import { FloorMaterial } from '../../../model/FloorMaterial';
+import { TimeSlots } from '../../../model/TimeSlots';
 
 @Component({
   selector: 'app-explore-matches',
@@ -322,5 +326,52 @@ export class ExploreMatchesComponent {
         },
       },
     });
+  }
+  selectedMatch:CreatedMatch|null=null
+  mockSelectedMatch:CreatedMatch= {
+  id: 1,
+  ownTeam: {
+    name: "Los Invencibles",
+    partner: "Juan Pérez"
+  },
+  rivalTeam: {
+    name: "Los Retadores",
+    players: ["Carlos Gómez", "Luis Fernández"]
+  },
+  preferences: {
+    wallMaterial: new WallMaterial({ id: 1, name: "Vidrio" }),
+    floorMaterial: new FloorMaterial({ id: 2, name: "Césped sintético" }),
+    roofed: 1
+  },
+  timeSlot: [
+    new TimeSlots({
+      id: 101,
+      index: 0,
+      date: "01/09/2025",
+      startTime: "8:00",
+      endTime: "11:00"
+    }),
+    new TimeSlots({
+      id: 102,
+      index: 0,
+      date: "02/09/2025",
+      startTime: "9:00",
+      endTime: "12:00"
+    }),
+    new TimeSlots({
+      id: 103,
+      index: 0,
+      date: "02/09/2025",
+      startTime: "14:00",
+      endTime: "18:00"
+    }),
+  ]
+}
+
+  selectMatch(){
+    this.selectedMatch=this.mockSelectedMatch
+  }
+  closePendingModal(){
+    this.selectedMatch=null
   }
 }

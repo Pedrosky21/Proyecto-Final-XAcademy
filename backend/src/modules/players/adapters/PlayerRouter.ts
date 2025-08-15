@@ -15,6 +15,10 @@ playerRouter.get("/search-teams/by-name", playerController.getTeamsByName);
 playerRouter.post("/match", playerController.createMatch);
 playerRouter.get("/matches", verifyToken, playerController.getMatchesWithTeams);
 playerRouter.post("/accept-match", playerController.acceptMatch);
+playerRouter.get("/clubs/:id",playerController.getClubsForMath)
+playerRouter.get("/courts",playerController.getCourtsForMatch)
+playerRouter.get("/turns",playerController.getTurnsForMatch)
+playerRouter.post("/reserve-turn",verifyToken,playerController.reserveTurn)
 playerRouter.get("/match/:id", playerController.getMatchById);
 playerRouter.get("/:id", playerController.getPlayerById); // DEJAR AL FINAL
 
