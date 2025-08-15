@@ -41,10 +41,7 @@ export class EditProfileComponent {
       apellido: ['', Validators.required, Validators.minLength(2)],
       fechaNacimiento: ['', Validators.required],
       telefono: ['', Validators.required],
-      imagenPerfil: [
-        '',
-        [Validators.required, Validators.pattern('https?://.+')],
-      ],
+      imagenPerfil: ['', [Validators.pattern('https?://.+')]],
       posicion: ['', Validators.required],
       categoria: ['', Validators.required],
     });
@@ -81,6 +78,7 @@ export class EditProfileComponent {
   }
 
   onSubmit(): void {
+    console.log(this.form.errors);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.confirmationModalService.openModal({

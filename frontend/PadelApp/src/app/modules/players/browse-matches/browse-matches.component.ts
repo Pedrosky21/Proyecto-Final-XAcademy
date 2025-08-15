@@ -9,6 +9,7 @@ import { FloorMaterial } from '../../../model/FloorMaterial';
 import { WallMaterial } from '../../../model/WallMaterial';
 import { FloorMaterialService } from '../../../core/services/FloorMaterialService';
 import { WallMaterialService } from '../../../core/services/WallMaterialService';
+import { AuthService } from '../../../core/services/AuthService';
 
 @Component({
   selector: 'app-browse-matches',
@@ -71,13 +72,44 @@ export class BrowseMatchesComponent implements OnInit {
       .getMatches(this.limit, this.page, roofed, wallMaterial, floorMaterial)
       .subscribe({
         next: (matches) => {
-          this.filteredPartidos = matches;
+          // For each match, sort timeSlots ascending by date and startTime
+          this.filteredPartidos = (matches || []).map((m: Match) => {
+            if (m.timeSlots && Array.isArray(m.timeSlots)) {
+              m.timeSlots = m.timeSlots.slice().sort((a: any, b: any) => {
+                // Normalize dates to timestamps (handles ISO yyyy-mm-dd)
+                const dateA = a?.date ? new Date(a.date).getTime() : 0;
+                const dateB = b?.date ? new Date(b.date).getTime() : 0;
+                if (dateA !== dateB) return dateA - dateB;
+
+                // If same date, try to sort by startTime (HH:mm or similar)
+                const timeA = a?.startTime
+                  ? this.parseTimeToMinutes(a.startTime)
+                  : 0;
+                const timeB = b?.startTime
+                  ? this.parseTimeToMinutes(b.startTime)
+                  : 0;
+                return timeA - timeB;
+              });
+            }
+            return m;
+          });
+
           console.log('Filtered matches:', this.filteredPartidos);
         },
         error: (err) => {
           console.error('Error fetching matches', err);
         },
       });
+  }
+
+  private parseTimeToMinutes(time: string | undefined): number {
+    if (!time) return 0;
+    // Accept formats like "HH:mm", "H:mm", "HH:mm:ss"
+    const parts = time.split(':').map((p) => parseInt(p, 10));
+    if (!parts.length || isNaN(parts[0])) return 0;
+    const hours = parts[0] || 0;
+    const minutes = parts[1] || 0;
+    return hours * 60 + minutes;
   }
 
   reiniciarFiltros() {
@@ -87,12 +119,21 @@ export class BrowseMatchesComponent implements OnInit {
   }
   openAcceptMatchModal(match: Match) {
     this.selectedMatch = match;
+
     this.showAcceptMatchModal = true;
   }
 
+  onMatchAccepted(matchId: number) {
+    this.onCloseAcceptMatchModal();
+
+    this.filteredPartidos = this.filteredPartidos.filter(
+      (m) => m.id !== matchId
+    );
+
+    this.buscar();
+  }
   onCloseAcceptMatchModal() {
     this.showAcceptMatchModal = false;
     this.selectedMatch = null;
   }
-  onConfirmAcceptMatchModal() {}
 }

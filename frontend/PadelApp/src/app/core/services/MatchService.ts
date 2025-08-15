@@ -11,12 +11,20 @@ export class MatchService {
 
   constructor(private readonly http: HttpClient) {}
 
+  acceptMatch(matchId: number, teamId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/accept-match`, {
+      matchId,
+      teamId,
+    });
+  }
+
   getMatches(
     limit: number,
     page: number,
     roofed?: number | null,
     wallMaterial?: number | null,
-    floorMaterial?: number | null
+    floorMaterial?: number | null,
+    excludePlayerId?: number | null
   ): Observable<Match[]> {
     let params = new HttpParams()
       .set('limit', limit.toString())

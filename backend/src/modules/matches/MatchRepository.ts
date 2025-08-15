@@ -234,7 +234,9 @@ export class MatchRepository {
     return matchTeam;
   };
 
-  teamsByMatchId = async (matchId: number): Promise<{ count: number; rows: MatchesTeams[] }> => {
+  teamsByMatchId = async (
+    matchId: number
+  ): Promise<{ count: number; rows: MatchesTeams[] }> => {
     const matchesTeams = await MatchesTeams.findAndCountAll({
       where: {
         matchId: matchId,
@@ -242,22 +244,22 @@ export class MatchRepository {
       distinct: true,
       include: [
         {
-              model: Team,
-              as: "team",
+          model: Team,
+          as: "team",
+          include: [
+            {
+              model: PlayersTeams,
+              as: "PlayersTeams",
               include: [
                 {
-                  model: PlayersTeams,
-                  as: "PlayersTeams",
-                  include: [
-                    {
-                      model: Player,
-                      as: "player",
-                    },
-                  ],
+                  model: Player,
+                  as: "player",
                 },
               ],
             },
-      ]
+          ],
+        },
+      ],
     });
     return matchesTeams;
   };

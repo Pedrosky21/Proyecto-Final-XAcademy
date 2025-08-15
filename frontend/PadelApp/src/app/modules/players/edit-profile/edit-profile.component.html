@@ -10,7 +10,9 @@
     </h3>
   </div>
 
-  <section class="px-4 py-6 sm:px-8 sm:py-12 font-roboto">
+  <section
+    class="flex flex-col justify-center items-center px-4 py-6 sm:px-8 sm:py-12 font-roboto"
+  >
     <form
       [formGroup]="form"
       (ngSubmit)="onSubmit()"
@@ -25,7 +27,7 @@
           id="nombre"
           type="text"
           formControlName="nombre"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched"
@@ -43,7 +45,7 @@
           id="apellido"
           type="text"
           formControlName="apellido"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched"
@@ -63,7 +65,7 @@
           id="fechaNacimiento"
           type="date"
           formControlName="fechaNacimiento"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="
@@ -84,7 +86,7 @@
           id="telefono"
           type="tel"
           formControlName="telefono"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
         <small
           *ngIf="form.get('telefono')?.invalid && form.get('telefono')?.touched"
@@ -104,16 +106,8 @@
           id="imagenPerfil"
           type="text"
           formControlName="imagenPerfil"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 file:text-appBlackText file:bg-white"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2 file:text-appBlackText file:bg-white"
         />
-        <small
-          *ngIf="
-            form.get('imagenPerfil')?.invalid &&
-            form.get('imagenPerfil')?.touched
-          "
-          class="text-appError text-xs mt-1"
-          >Este campo es obligatorio.</small
-        >
       </div>
 
       <!-- Posición -->
@@ -124,7 +118,7 @@
         <select
           id="posicion"
           formControlName="posicion"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2"
         >
           <option
             class="bg-[#011738] text-appWhiteText"
@@ -159,7 +153,7 @@
         <select
           id="categoria"
           formControlName="categoria"
-          class="border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2"
+          class="border border-appPrimary bg-transparent text-appWhiteText rounded-md px-3 py-2"
         >
           <option
             class="bg-[#011738] text-appWhiteText"
@@ -191,7 +185,7 @@
       >
         <button
           type="submit"
-          class="bg-[#EBFF00] text-appBlackText font-bold w-64 h-10 rounded-md ring-2"
+          class="bg-appPrimary text-appBlackText font-bold w-64 h-10 rounded-md ring-2"
         >
           Confirmar
         </button>
@@ -229,7 +223,7 @@
         <div class="mt-6">
           <button
             (click)="closeSuccessModal()"
-            class="bg-[#EBFF00] px-6 py-2 rounded-md font-semibold"
+            class="bg-appPrimary px-6 py-2 rounded-md font-semibold"
           >
             Aceptar
           </button>
