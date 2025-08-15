@@ -1,7 +1,6 @@
 import { Court } from "./Court"
 
 export class Club{
-  
     address:string
     admisionRules:string
     cancelationRules:string
@@ -14,6 +13,9 @@ export class Club{
     responsableFirstName:string
     responsableLastName:string
     turnPrice:number
+    coindicentCourts?:number
+    coincidentTurn?:number
+
     
     constructor(data:any){
       this.address=data.address
@@ -28,8 +30,11 @@ export class Club{
       this.responsableFirstName=data.responsableFirstName
       this.responsableLastName= data.responsableLastName
       this.turnPrice =data.turnPrice
-      
-
+      this.coincidentTurn=data.totalTurns
+      this.coindicentCourts=data.totalCourts
+    }
+    setCourts(courts:Court[]){
+      this.courts=courts
     }
  
 }

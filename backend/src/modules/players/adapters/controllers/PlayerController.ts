@@ -11,7 +11,6 @@ import { NewMatchRequest } from "../../../matches/NewMatchRequest";
 import { NewMatchesTeams } from "../../../matches/MXTRequest";
 import { MatchService } from "../../../matches/MatchService";
 import AppError from "../../../../errors/AppError";
-import { Sequelize, Transaction } from "sequelize";
 
 export class PlayerController {
   playerService = new PlayerService();
@@ -282,22 +281,143 @@ export class PlayerController {
         accepted.matchId
       );
 
-      res.json(acceptedMatch);
+      res.status(200).json(acceptedMatch);
     } catch (error) {
       next(error);
     }
   };
 
-  getMatchById = async (req: Request, res: Response) => {
+  getMatchById = async (req: Request, res: Response, next:NextFunction) => {
     try {
       const { id } = req.params;
       const match = await this.matchService.getMatchById(Number(id));
       if (!match) {
         return res.status(404).json({ message: "Match not found" });
       }
-      res.json(match);
+      res.status(200).json(match);
     } catch (error) {
-      res.status(500).json({ message: "Error fetching match", error });
+      next(error);
     }
   };
+
+  // Get matches of the player
+  getMatchesForPlayer = async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const userId = req.user?.id; // es la id del usuario, deberia extraerse del token
+
+      if (!userId) {
+        throw new UnauhtorizedError("No existe el usuario");
+      }
+
+      const player = await this.playerService.getPlayerByUserId(Number(userId));
+      if (!player) {
+        throw new AppError("El usuario no es un jugador");
+      }
+
+      const matches = await this.playerService.getMatchesForPlayer(Number(player.id));
+
+      res.status(200).json(matches);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getClubsForMath= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const {id} = req.params;
+
+      if(!id || Number(id)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+
+      const clubs=await this.matchService.getClubsForMatch(Number(id))
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  getCourtsForMatch= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const {matchId,clubId} = req.query;
+
+      if(!matchId || Number(matchId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if(!clubId || Number(clubId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+
+      const clubs=await this.matchService.getCourtsForMatch(Number(matchId),Number(clubId))
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  getTurnsForMatch= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const {matchId,courtId,startDate} = req.query;
+
+      if(!matchId || Number(matchId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if(!courtId || Number(courtId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if (!startDate) {
+        throw new BadRequestError(
+          "El query startDate debe ser una fecha valida"
+        );
+      }
+
+      let date: Date;
+        if ((startDate as string).includes('/')) {
+          // Asume formato DD/MM/YYYY
+          const [day, month, year] = (startDate as string).split('/').map(Number);
+          date = new Date(year, month - 1, day);
+        } else {
+          // Asume formato ISO
+          date = new Date(startDate as string);
+        }
+      if (isNaN(date.getTime())) {
+        throw new BadRequestError(
+          "El query startDate debe ser una fecha válida"
+        );
+      }
+      if (date.getDay() !== 0) {
+        throw new BadRequestError("El startDate debe ser un domingo");
+      }
+
+      const clubs=await this.matchService.getTurnsForMatch(Number(matchId),Number(courtId),date)
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  reserveTurn= async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      
+      const userId = req.user?.id; 
+      const {matchId,turnId} = req.body;
+
+      if(!matchId || Number(matchId)<0){
+        throw new BadRequestError("El matchId debe ser un número entero mayor a 0")
+      }
+      if(!turnId || Number(turnId)<0){
+        throw new BadRequestError("El turnId debe ser un número entero mayor a 0")
+      }
+      const clubs=await this.matchService.reserveTurnForMatch(Number(matchId),Number(turnId),userId!)
+
+      res.json(clubs);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
 }

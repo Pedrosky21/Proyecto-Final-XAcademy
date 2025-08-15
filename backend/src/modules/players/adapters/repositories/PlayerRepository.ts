@@ -5,6 +5,8 @@ import { Op, Transaction } from "sequelize";
 import Position from "../../core/models/PositionModel";
 import Team from "../../core/models/TeamModel";
 import PlayersTeams from "../../core/models/PXTModel";
+import Match from "../../../matches/MatchModel";
+import MatchesTeams from "../../../matches/MXTModel";
 
 export class PlayerRepository {
   createPlayer = async (
@@ -109,4 +111,40 @@ export class PlayerRepository {
       .map((pt) => pt.team)
       .filter((team): team is Team => team !== undefined);
   };
+
+  getMatchesForPlayer = async (playerId:number): Promise<Match[]> => {
+    const matches = await Match.findAll({
+      include: [
+        {
+          model: MatchesTeams,
+          as: "MatchesTeams",
+          required: true,
+          include: [
+            {
+              model: Team,
+              as: "team",
+              required: true,
+              include: [
+                {
+                  model: PlayersTeams,
+                  as: "PlayersTeams",
+                  required: true,
+                  where: {
+                    playerId: playerId
+                  },
+                  include: [
+                    {
+                      model: Player,
+                      as: "player"
+                    },
+                  ],
+                },
+              ],
+            }
+          ]
+        }
+      ]
+    })
+    return matches
+  }
 }

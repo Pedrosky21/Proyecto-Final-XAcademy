@@ -9,6 +9,9 @@ import TimeSlot from "../timeSlot/TimeSlotModel";
 import Category from "../players/core/models/CategoryModel";
 import { MatchCreateInput } from "./MatchCreateInput";
 import { Op } from "sequelize";
+import WallMaterial from "../wallMaterials/core/models/WallMaterial";
+import FloorMaterial from "../floorMaterials/core/FloorMaterial";
+import { MatchPreferences } from "./core/models/MatchPreferences";
 
 export class MatchRepository {
   createMatch = async (
@@ -111,12 +114,20 @@ export class MatchRepository {
         ...whereClause,
         id: {
           [Op.notIn]: Sequelize.literal(`
-          (SELECT m.idpartido
+          (
+          SELECT m.idpartido
           FROM partido m
           JOIN equipoxpartido mt ON mt.partido_idpartido = m.idpartido
           JOIN equipo t ON t.idequipo = mt.equipo_idequipo
           JOIN jugadorxequipo pt ON pt.equipo_idequipo = t.idequipo
-          WHERE pt.jugador_idjugador = ${playerId})
+          WHERE pt.jugador_idjugador = ${playerId}
+          UNION
+          SELECT m.idpartido
+          FROM partido m
+          JOIN equipoxpartido mt ON mt.partido_idpartido = m.idpartido
+          GROUP BY m.idpartido
+          HAVING COUNT(DISTINCT mt.equipo_idequipo) > 1
+          )
       `),
         },
       },
@@ -134,13 +145,6 @@ export class MatchRepository {
                 {
                   model: PlayersTeams,
                   as: "PlayersTeams",
-                  required: false,
-                  where: {
-                    [Op.or]: [
-                      { playerId: { [Op.ne]: playerId } }, // jugador distinto
-                      { playerId: null }, // o sin jugador
-                    ],
-                  },
                   include: [
                     {
                       model: Player,
@@ -166,6 +170,53 @@ export class MatchRepository {
         },
       ],
     });
+    
+    // const matches = await Match.findAll({
+    //   where:{
+    //     ...whereClause
+    //   },
+    //   include: [
+    //     {
+    //       model: MatchesTeams,
+    //       as: "MatchesTeams",
+    //       include: [
+    //         {
+    //           model: Team,
+    //           as: "team",
+    //           include: [
+    //             {
+    //               model: PlayersTeams,
+    //               as: "PlayersTeams",
+    //               where: {
+    //                 playerId: { [Op.ne]: playerId }
+    //               },
+    //               include: [
+    //                 {
+    //                   model: Player,
+    //                   as: "player",
+    //                   include: [
+    //                     {
+    //                       model: Category,
+    //                       as: "category",
+    //                       attributes: ["id", "name"],
+    //                     }
+    //                   ]
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       model: TimeSlot,
+    //       as: "timeSlots",
+    //       attributes: ["date", "startTime", "endTime"],
+    //     }
+    //   ],
+    //   limit,
+    //   offset: (page - 1) * limit,
+    // })
 
     return matches;
   };
@@ -227,4 +278,38 @@ export class MatchRepository {
       }
     );
   };
+
+  getMatchPreferences = async(
+    matchId:number,
+  ):Promise<MatchPreferences>=>{
+     const match = await Match.findByPk(matchId, {
+      attributes:["roofed"],
+      include: [
+            {
+              model:WallMaterial,
+              attributes:["id"]
+            },{
+              model:FloorMaterial,
+              attributes:["id"]
+            },
+            { model: TimeSlot, 
+              as: "timeSlots",
+              attributes:["date","startTime","endTime"]},
+      ],
+    });
+    const matchPreferences= new MatchPreferences(match)
+    return matchPreferences
+  }
+
+  reserveTurn=async(matchId:number,turnId:number,transaction:Transaction):Promise<any>=>{
+     return await Match.update(
+      { turnId: turnId },
+      {
+        where: {
+          id: matchId,
+        },
+        transaction,
+      }
+    );
+  }
 }

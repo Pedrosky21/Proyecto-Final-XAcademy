@@ -78,6 +78,7 @@ export class EditProfileComponent {
   }
 
   onSubmit(): void {
+    console.log(this.form.errors);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.confirmationModalService.openModal({

@@ -105,7 +105,7 @@ export class ModalCreateMatchComponent {
 
       const diffMinutes = finishTotalMinutes - startTotalMinutes;
 
-      return diffMinutes > 90;
+      return diffMinutes < 90;
     });
 
     if (hasInvalidDuration) {
