@@ -1,10 +1,21 @@
 <div
   *ngIf="match"
-  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 p-4"
 >
+  
   <div
-    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[500px] p-6 relative"
+    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[45vw] p-6 relative"
   >
+  <button
+    *ngIf="step!==stepEnum.First"
+   (click)="stepBack()"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+      class="absolute top-3 left-3 h-6 w-6 text-appWhiteText hover:text-appError">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+    </svg>
+
+  </button>
     <button
       (click)="onClose()"
       class="absolute top-3 right-3 text-appWhiteText hover:text-appError"
@@ -13,39 +24,113 @@
     </button>
 
     <h2 class="text-2xl font-bold text-center mb-6">Partido pendiente</h2>
-    <div>
+    <ng-container [ngSwitch]="step">
+      <div *ngSwitchCase="stepEnum.First">
+      <div class="flex flex-col flex-wrap">
       <h3 class="text-xl font-bold text-center mb-2">Equipo seleccionado</h3>
-      <div class="flex flex-row gap-4">
+      <div class="flex flex-row gap-4  justify-center mb-2">
         <label class="flex text-lg font-roboto font-semibold">Nombre: <span class="font-normal">{{match?.ownTeam?.name}}</span></label>
         <label class="flex text-lg font-roboto font-semibold">Compañero: <span class="font-normal">{{match?.ownTeam?.partner}}</span></label>
       </div>
     </div>
     <div>
       <h3 class="text-xl font-bold text-center mb-2">Equipo rival</h3>
-      <div>
+      <div class="flex flex-row gap-4  justify-center mb-2">
         <label class="flex text-lg font-roboto font-semibold">Nombre: <span class="font-normal">{{match?.rivalTeam?.name}}</span></label>
-        <label class="flex text-lg font-roboto font-semibold">Jugadores: <span class="font-normal">Cambiar despues</span></label>
+        <label class="flex text-lg font-roboto font-semibold">Jugadores: <span class="font-normal">{{ match?.rivalTeam?.players?.[0] ?? '' }} - {{ match?.rivalTeam?.players?.[1] ?? '' }}  </span></label>
       </div>
     </div>
     <div>
       <h3 class="text-xl font-bold text-center mb-2">Preferencias de cancha</h3>
-      <div>
+      <div class="flex flex-row gap-4 justify-center mb-2">
         <label class="flex text-lg font-roboto font-semibold">Material piso: <span class="font-normal">{{match?.preferences?.floorMaterial?.name}}</span></label>
         <label class="flex text-lg font-roboto font-semibold">Material pared:<span class="font-normal"> {{match?.preferences?.wallMaterial?.name}}</span></label>
         <label class="flex text-lg font-roboto font-semibold">Techada: <span class="font-normal">{{match?.preferences?.roofed}}</span></label>
       </div>
     </div>
-    <div>
-      <h3 class="text-xl font-bold text-center mb-2">Franjas Horarias</h3>
       <div>
-        <app-table
-        [columns]="columns"
-        [rows]="this.match.timeSlot"
-        ></app-table>
+        <h3 class="text-xl font-bold text-center mb-2">Franjas Horarias</h3>
+        <div>
+          <app-table
+          [columns]="columns"
+          [rows]="this.match.timeSlot"
+          ></app-table>
+        </div>
       </div>
-    </div>
-    <button>
-      Reservar turno
-    </button>
+      <div class="flex justify-center align-middle mt-2">
+        <button 
+              (click)="initiateSelection()"
+              class="bg-[#EBFF00] text-appBlackText px-6 py-2 rounded-md font-semibold">
+          Reservar turno
+        </button>
+
+      </div>
+      </div>
+      <div  *ngSwitchCase="stepEnum.Second"
+    >
+      <h3  class="text-xl font-bold text-center mb-2" >Seleccione un club</h3>
+      <div  class="flex flex-wrap gap-4 max-h-[50vh] overflow-y-auto w-full justify-center gap-3">
+      <div
+        *ngFor="let club of selectableClubs;let i= index"
+        (click)="selectClub(i)"
+        class="p-4 rounded-lg cursor-pointer justify-start text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-fit h-32 text-center"
+        
+      >
+        <div class="font-bold text-center">
+          <span>
+            <i class="fa-solid fa-people-group"></i> {{ club.name }}
+          </span>
+        </div>
+
+        <div class="text-sm pt-2 w-fit">
+          <span>
+            <i class="fa-solid fa-table-tennis-paddle-ball w-4"></i>
+            <span>
+              Canchas coincidentes: {{ club.coindicentCourts}}
+            </span>
+          </span>
+        </div>
+        <div class="text-sm pt-2 w-48">
+          <span>
+            <i class="fa-solid fa-calendar"></i>  Turnos coincidentes: {{ club.coincidentTurn }}
+          </span>
+        </div>
+      </div>
+
+      </div>
+      </div>
+      <div  *ngSwitchCase="stepEnum.Third"
+    >
+      <h3  class="text-xl font-bold text-center mb-2" >Seleccione una cancha</h3>
+      <div class="flex flex-row gap-5 overflow-x-auto">
+      <article *ngFor="let court of selectedClub?.courts"
+      (click)="selectCourt(court.index-1)"
+      class="relative w-60 h-[24rem] bg-cover bg-center  overflow-hidden flex flex-col justify-between rounded-3xl hover:scale-105 transition-transform duration-200 cursor-pointer"
+          style="background-image: url('imgs/canchaPadel.jpeg')">
+            <h3 class=" text-2xl font-bold text-appBlackText w-full text-center py-2">Cancha {{court.index}}</h3>
+            <article class="p-4 text-xl font-bold text-appBlackText flex flex-col gap-2">
+              <p class="text-lg font-semibold text-appBlackText">Material Pared: <span class="font-medium">{{court.wallMaterialName}}</span></p>
+              <p class="text-lg font-semibold text-appBlackText">Material Piso: <span class="font-medium">{{court.floorMaterialName}}</span></p>
+              <p class="text-lg font-semibold text-appBlackText">Techada: <span class="font-medium">{{court.roofted}}</span></p>
+              <p class="text-lg font-semibold text-appBlackText" >Turnos coincidentes: <span class="font-medium">{{court.totalTurns}}</span></p>
+            </article>
+      </article>
+
+      </div>
+      </div>
+      <div  *ngSwitchCase="stepEnum.Fourth"
+    >
+      <h3  class="text-xl font-bold text-center mb-2" >Seleccione un turno </h3>
+        <app-turn-table
+          [columns]="turnColumns"
+          [rows]="tableTurns"
+          [type]="'viewClub'"
+          (rowClick)="clickRow($event)"
+        >
+
+        </app-turn-table>
+
+      </div>
+    </ng-container>
   </div>
 </div>

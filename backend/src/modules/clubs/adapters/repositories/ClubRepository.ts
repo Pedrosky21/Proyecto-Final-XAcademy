@@ -90,6 +90,7 @@ export class ClubRepository {
     return await Club.findAll({
       attributes: [
         "id",
+        "name",
         [
           sequelize.literal(`(
             SELECT COUNT(*) FROM cancha AS c

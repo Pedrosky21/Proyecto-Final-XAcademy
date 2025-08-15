@@ -12,18 +12,20 @@ export class Court {
   availableTurns: number;
   reservedTurns: number;
   paidTurns: number;
+  totalTurns:number
 
   constructor(data: any, index: number) {
     this.id = data.id;
     this.index = index;
     this.wallMaterialId = data.wallMaterialId;
-    this.wallMaterialName = data.wallMaterialName;
+    this.wallMaterialName = data.wallMaterial.name;
     this.floorMaterialId = data.floorMaterialId;
-    this.floorMaterialName = data.floorMaterialName;
+    this.floorMaterialName = data.floorMaterial.name;
     this.roofted = data.roofted ? 'SI' : 'NO';
     this.availableTurns = data.availableTurns;
     this.reservedTurns = data.reservedTurns;
     this.paidTurns = data.paidTurns;
+    this.totalTurns=data.totalTurns
   }
 
   

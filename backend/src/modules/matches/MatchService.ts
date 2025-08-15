@@ -229,6 +229,7 @@ export class MatchService {
       }
       const preferences= await this.matchRepository.getMatchPreferences(matchId)
 
+      transaction.commit()
       const clubs= await this.clubService.getClubsForMatch(preferences)
       return clubs
     }catch(error){
@@ -248,8 +249,10 @@ export class MatchService {
       }
       const preferences= await this.matchRepository.getMatchPreferences(matchId)
 
+      console.log()
       const club= await this.clubService.getCourtsForMatch(preferences,clubId)
 
+      transaction.commit()
       return club
     }catch(error){
       await transaction.rollback();
@@ -270,6 +273,7 @@ export class MatchService {
 
       const turns= await this.turnService.getCourtTurnsByWeek(courtId,startDay,preferences)
 
+      transaction.commit()
       return turns
     }catch(error){
       await transaction.rollback();
@@ -280,6 +284,7 @@ export class MatchService {
   }
 
   reserveTurnForMatch=async(matchId:number,turnId:number,userId:number,):Promise<any>=>{
+    console.log(userId)
     const player= await this.playerService.getPlayerByUserId(userId)
 
     const fullName= player.getDataValue("lastName")+ " " + player.getDataValue("firstName")

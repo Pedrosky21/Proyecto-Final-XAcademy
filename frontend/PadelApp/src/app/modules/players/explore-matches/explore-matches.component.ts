@@ -347,10 +347,24 @@ export class ExploreMatchesComponent {
     new TimeSlots({
       id: 101,
       index: 0,
-      date: "2025-08-13",
-      startTime: "18:00",
-      endTime: "19:30"
-    })
+      date: "01/09/2025",
+      startTime: "8:00",
+      endTime: "11:00"
+    }),
+    new TimeSlots({
+      id: 102,
+      index: 0,
+      date: "02/09/2025",
+      startTime: "9:00",
+      endTime: "12:00"
+    }),
+    new TimeSlots({
+      id: 103,
+      index: 0,
+      date: "02/09/2025",
+      startTime: "14:00",
+      endTime: "18:00"
+    }),
   ]
 }
 

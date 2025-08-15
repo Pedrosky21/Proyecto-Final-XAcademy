@@ -127,8 +127,6 @@
   ></app-modal-create-match>
   <app-modal-pending-match
     [match]="selectedMatch"
-    (onClose)="closePendingModal()"
-  >
-
-  </app-modal-pending-match>
+    (closeModal)="closePendingModal()"
+  ></app-modal-pending-match>
 </div>
