@@ -5,6 +5,7 @@ import { PlayerRepository } from "../adapters/repositories/PlayerRepository";
 import { NewPlayerRequest } from "../core/dtos/request/NewPlayerRequest";
 import { UserService } from "../../auth/services/UserService";
 import sequelize from "../../../config/db.config";
+import Match from "../../matches/MatchModel";
 
 export class PlayerService {
   playerRepository = new PlayerRepository();
@@ -63,4 +64,20 @@ export class PlayerService {
     const playerId = await this.getPlayerByUserId(id);
     return await this.playerRepository.getTeamsByPlayerId(playerId.id);
   };
+
+  getMatchesForPlayer = async (playerId: number): Promise<any> => {
+    const matches = await this.playerRepository.getMatchesForPlayer(playerId);
+
+    if (!matches) {
+      return null;
+    }
+
+    const matchesByState = {
+      created: matches.filter((m:Match) => m.matchStateId === 1),
+      pending: matches.filter((m:Match) => m.matchStateId === 2),
+      confirmed: matches.filter((m:Match) => m.matchStateId === 3)
+    }
+
+    return matchesByState;
+  }
 }

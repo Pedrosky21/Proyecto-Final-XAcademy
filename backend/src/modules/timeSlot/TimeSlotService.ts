@@ -13,7 +13,6 @@ export class TimeSlotService {
       newTS,
       transaction
     );
-    console.log(newTS);
     return createdTimeSlot;
   };
 

@@ -11,7 +11,6 @@ import { NewMatchRequest } from "../../../matches/NewMatchRequest";
 import { NewMatchesTeams } from "../../../matches/MXTRequest";
 import { MatchService } from "../../../matches/MatchService";
 import AppError from "../../../../errors/AppError";
-import { Sequelize, Transaction } from "sequelize";
 
 export class PlayerController {
   playerService = new PlayerService();
@@ -282,22 +281,44 @@ export class PlayerController {
         accepted.matchId
       );
 
-      res.json(acceptedMatch);
+      res.status(200).json(acceptedMatch);
     } catch (error) {
       next(error);
     }
   };
 
-  getMatchById = async (req: Request, res: Response) => {
+  getMatchById = async (req: Request, res: Response, next:NextFunction) => {
     try {
       const { id } = req.params;
       const match = await this.matchService.getMatchById(Number(id));
       if (!match) {
         return res.status(404).json({ message: "Match not found" });
       }
-      res.json(match);
+      res.status(200).json(match);
     } catch (error) {
-      res.status(500).json({ message: "Error fetching match", error });
+      next(error);
     }
   };
+
+  // Get matches of the player
+  getMatchesForPlayer = async (req:Request, res:Response, next:NextFunction): Promise<void> => {
+    try {
+      const userId = req.user?.id; // es la id del usuario, deberia extraerse del token
+
+      if (!userId) {
+        throw new UnauhtorizedError("No existe el usuario");
+      }
+
+      const player = await this.playerService.getPlayerByUserId(Number(userId));
+      if (!player) {
+        throw new AppError("El usuario no es un jugador");
+      }
+
+      const matches = await this.playerService.getMatchesForPlayer(Number(player.id));
+
+      res.status(200).json(matches);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
