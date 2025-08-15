@@ -72,6 +72,8 @@ export class PlayerService {
       return null;
     }
 
+    // Ver que datos mandar segun match, capaz modificar repository tmb
+
     const matchesByState = {
       created: matches.filter((m:Match) => m.matchStateId === 1),
       pending: matches.filter((m:Match) => m.matchStateId === 2),
