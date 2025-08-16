@@ -68,8 +68,8 @@ Match.init({
 })
 
 Match.belongsTo(MatchState, {foreignKey: "matchStateId"});
-Match.belongsTo(WallMaterial, {foreignKey: "wallMaterialId"});
-Match.belongsTo(FloorMaterial, {foreignKey: "floorMaterialId"});
+Match.belongsTo(WallMaterial, {foreignKey: "wallMaterialId", as: "wallMaterial"});
+Match.belongsTo(FloorMaterial, {foreignKey: "floorMaterialId", as: "floorMaterial"});
 TimeSlot.belongsTo(Match, {foreignKey: "matchId"});
 
 MatchState.hasMany(Match, {foreignKey: "matchStateId"});
