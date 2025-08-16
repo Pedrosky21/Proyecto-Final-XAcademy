@@ -244,6 +244,7 @@ export class CourtModalComponent implements OnChanges {
                         title: 'Aceptar',
                         action: () => {
                           this.confirmationModalService.closeModal();
+                          this.selectedTurn=undefined
                           this.loadTurns()
                         },
                       },
@@ -316,6 +317,7 @@ export class CourtModalComponent implements OnChanges {
                         title: 'Aceptar',
                         action: () => {
                           this.confirmationModalService.closeModal();
+                          this.selectedTurn=undefined
                           this.loadTurns()
                         },
                       },
@@ -370,6 +372,7 @@ export class CourtModalComponent implements OnChanges {
                     title: 'Aceptar',
                     action: () => {
                       this.confirmationModalService.closeModal();
+                          this.selectedTurn=undefined
                       this.loadTurns()
                     },
                   },
@@ -423,6 +426,7 @@ export class CourtModalComponent implements OnChanges {
                     title: 'Aceptar',
                     action: () => {
                       this.confirmationModalService.closeModal();
+                          this.selectedTurn=undefined
                       this.loadTurns()
                     },
                   },

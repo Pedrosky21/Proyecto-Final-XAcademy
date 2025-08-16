@@ -48,6 +48,7 @@ export class ClubByUserIdResponse {
         availableTurns,
         reservedTurns,
         paidTurns,
+        totalTurns:court.totalTurns
       });
     });
   }

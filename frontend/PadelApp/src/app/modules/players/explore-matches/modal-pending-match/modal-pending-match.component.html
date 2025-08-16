@@ -5,30 +5,41 @@
   <div
     class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[45vw] p-6 relative"
   >
-    <button *ngIf="step !== stepEnum.First" (click)="stepBack()">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="absolute top-3 left-3 h-6 w-6 text-appWhiteText hover:text-appError"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M15.75 19.5 8.25 12l7.5-7.5"
-        />
-      </svg>
-    </button>
-    <button
-      (click)="onClose()"
-      class="absolute top-3 right-3 text-appWhiteText hover:text-appError"
-    >
-      ✕
-    </button>
+    <div class="grid grid-cols-3 items-center w-full mb-4">
+      <!-- Botón izquierdo -->
+      <div class="flex justify-start">
+        <button *ngIf="step !== stepEnum.First" (click)="stepBack()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-6 w-6 text-appWhiteText hover:text-appError"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+          </svg>
+        </button>
+      </div>
 
-    <h2 class="text-2xl font-bold text-center mb-6">Partido pendiente</h2>
+      <!-- Título centrado -->
+      <h2 class="text-2xl font-bold text-center">Partido pendiente</h2>
+
+      <!-- Botón derecho -->
+      <div class="flex justify-end">
+        <button
+          (click)="onClose()"
+          class="text-appWhiteText hover:text-appError"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+
     <ng-container [ngSwitch]="step">
       <div *ngSwitchCase="stepEnum.First">
         <div class="flex flex-col flex-wrap">
@@ -36,23 +47,34 @@
             Equipo seleccionado
           </h3>
           <div class="flex flex-row gap-4 justify-center mb-2">
-            <label class="flex text-lg font-roboto font-semibold"
-              >Nombre: <span class="font-normal"></span
-            ></label>
-            <label class="flex text-lg font-roboto font-semibold"
-              >Compañero: <span class="font-normal"></span
-            ></label>
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Nombre:
+              <span class="font-normal">{{ match?.ownTeam?.name }}</span></label
+            >
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Compañero:
+              <span class="font-normal">{{
+                match?.ownTeam?.partner
+              }}</span></label
+            >
           </div>
         </div>
         <div>
-          <h3 class="text-xl font-bold text-center mb-2">Rival:</h3>
+          <h3 class="text-xl font-bold text-center mb-2">Equipo rival</h3>
           <div class="flex flex-row gap-4 justify-center mb-2">
-            <label class="flex text-lg font-roboto font-semibold"
-              >Nombre: <span class="font-normal"> Jorges</span></label
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Nombre:
+              <span class="font-normal">{{
+                match?.rivalTeam?.name
+              }}</span></label
             >
-            <label class="flex text-lg font-roboto font-semibold"
-              >Jugadores: <span class="font-normal"> </span
-            ></label>
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Jugadores:
+              <span class="font-normal"
+                >{{ match?.rivalTeam?.players?.[0] ?? '' }} -
+                {{ match?.rivalTeam?.players?.[1] ?? '' }}
+              </span></label
+            >
           </div>
         </div>
         <div>
@@ -60,15 +82,23 @@
             Preferencias de cancha
           </h3>
           <div class="flex flex-row gap-4 justify-center mb-2">
-            <label class="flex text-lg font-roboto font-semibold"
-              >Material piso: <span class="font-normal"></span
-            ></label>
-            <label class="flex text-lg font-roboto font-semibold"
-              >Material pared:<span class="font-normal"> </span
-            ></label>
-            <label class="flex text-lg font-roboto font-semibold"
-              >Techada: <span class="font-normal"></span
-            ></label>
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Material piso:
+              <span class="font-normal">{{
+                match?.preferences?.floorMaterial?.name
+              }}</span></label
+            >
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Material pared:<span class="font-normal">
+                {{ match?.preferences?.wallMaterial?.name }}</span
+              ></label
+            >
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Techada:
+              <span class="font-normal">{{
+                match?.preferences?.roofed
+              }}</span></label
+            >
           </div>
         </div>
         <div>
@@ -76,7 +106,7 @@
           <div>
             <app-table
               [columns]="columns"
-              [rows]="this.match.timeSlots"
+              [rows]="this.match.timeSlot"
             ></app-table>
           </div>
         </div>
@@ -92,6 +122,7 @@
       <div *ngSwitchCase="stepEnum.Second">
         <h3 class="text-xl font-bold text-center mb-2">Seleccione un club</h3>
         <div
+          *ngIf="!preSelectedClub"
           class="flex flex-wrap gap-4 max-h-[50vh] overflow-y-auto w-full justify-center gap-3"
         >
           <div
@@ -118,6 +149,7 @@
               </span>
             </div>
           </div>
+          <div *ngIf="preSelectedClub"></div>
         </div>
       </div>
       <div *ngSwitchCase="stepEnum.Third">
@@ -128,7 +160,7 @@
           <article
             *ngFor="let court of selectedClub?.courts"
             (click)="selectCourt(court.index - 1)"
-            class="relative w-60 h-[24rem] bg-cover bg-center overflow-hidden flex flex-col justify-between rounded-3xl hover:scale-105 transition-transform duration-200 cursor-pointer"
+            class="relative min-w-60 h-[24rem] bg-cover bg-center overflow-hidden flex flex-col justify-between rounded-3xl hover:scale-105 transition-transform duration-200 cursor-pointer"
             style="background-image: url('imgs/canchaPadel.jpeg')"
           >
             <h3
@@ -151,8 +183,7 @@
                 Techada: <span class="font-medium">{{ court.roofted }}</span>
               </p>
               <p class="text-lg font-semibold text-appBlackText">
-                Turnos coincidentes:
-                <span class="font-medium">{{ court.totalTurns }}</span>
+                Turnos: <span class="font-medium">{{ court.totalTurns }}</span>
               </p>
             </article>
           </article>

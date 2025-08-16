@@ -41,7 +41,7 @@ export class TurnService{
 
   getCourtTurnsByWeek=async(courtId:number, startDate:Date,preferences?:MatchPreferences):Promise<any>=>{
     const endDate= new Date(startDate)
-    endDate.setDate(startDate.getDate()+6)
+    endDate.setDate(startDate.getDate()+7)
     return await this.turnRepository.getCourtTurnsByWeek(courtId,startDate,endDate,preferences)
   }
 

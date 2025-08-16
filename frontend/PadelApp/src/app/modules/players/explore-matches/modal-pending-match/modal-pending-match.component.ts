@@ -29,13 +29,13 @@ enum StepEnum {
   styleUrl: './modal-pending-match.component.scss',
 })
 export class ModalPendingMatchComponent implements OnChanges {
-  @Input() match?: Match | null = null;
-
+  @Input() match?: CreatedMatch | null = null;
   @Output() closeModal = new EventEmitter();
 
   stepEnum = StepEnum;
   step: StepEnum = StepEnum.First;
   selectableClubs: Club[] = [];
+  preSelectedClub: Club | null = null;
   selectedClub: Club | null = null;
   sundaysOfWeeks: string[] = [];
   turns: Turn[] = [];
@@ -81,36 +81,19 @@ export class ModalPendingMatchComponent implements OnChanges {
     console.log('Domingos de semanas:', this.sundaysOfWeeks);
   }
 
-  getCreatorTeamName() {
-    if (!this.match?.MatchesTeams?.length) return 'Mi equipo';
-    const t = this.match.MatchesTeams.find((x) => !!x.isCreator);
-    return t?.team?.name ?? 'Mi equipo';
-  }
-
-  getRivalTeamName() {
-    if (!this.match?.MatchesTeams?.length) return 'Rival';
-    const t = this.match.MatchesTeams.find((x) => !x.isCreator);
-    return t?.team?.name ?? 'Rival';
-  }
-
-  getFirstTimeSlotText() {
-    const ts = this.match?.timeSlots?.[0];
-    if (!ts) return '—';
-    const formatTime = (t: string) => t?.split(':').slice(0, 2).join(':') ?? '';
-    return `${ts.date} ${formatTime(ts.startTime)} - ${formatTime(ts.endTime)}`;
-  }
-
   onClose() {
     this.selectedClub = null;
     this.selectableClubs = [];
     this.turns = [];
     this.tableTurns = [];
     this.sundaysOfWeeks = [];
+    this.turnColumns = [];
     this.step = StepEnum.First;
     this.closeModal.emit();
   }
   turnColumns: string[] = [];
   setColumns() {
+    this.turnColumns = [];
     const initialTime =
       Number(this.selectedClub?.openningTime.split(':')[0]) * 60;
     let currentTime = initialTime;
@@ -198,11 +181,9 @@ export class ModalPendingMatchComponent implements OnChanges {
       .getTurnsForMatch(2, courtId, this.sundaysOfWeeks[0])
       .subscribe({
         next: (data) => {
-          console.log(data);
           const turns = (data as Array<any>).map((turn) => new Turn(turn));
           this.turns = turns;
           this.setTurns(turns);
-          console.log(this.turns);
         },
         error: () => {
           console.log();

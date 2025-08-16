@@ -35,6 +35,7 @@ export class DiagramTurnModalComponent implements OnChanges {
   ) {}
   courtsDiagram: DiagramatingTurnsCourt[] = [];
   selectedMonth: string = '';
+  currentDate= new Date().getFullYear().toString()+"-"+ (new Date().getMonth()+1).toString().padStart(2,"0")
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['club'] && this.club?.openningTime) {
@@ -81,14 +82,10 @@ export class DiagramTurnModalComponent implements OnChanges {
       this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==prevHour2)
     }
     if(existingHours.has(nextHour1)){
-      deleted=true
-      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
-      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==nextHour1)
+      return
     }
     if(existingHours.has(nextHour2)){
-      deleted=true
-      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours=
-      this.courtsDiagram[this.selectedCourt].days[event.weekDay].startHours.filter((element)=>element.hour!==nextHour2)
+      return
     }
     
     // Si no se eliminó nada, es porque no pertenece a un turno → crear uno
@@ -162,6 +159,7 @@ export class DiagramTurnModalComponent implements OnChanges {
                         title: 'Aceptar',
                         action: () => {
                           this.confirmationModalService.closeModal();
+                          this.onClose()
                         },
                       },
                     });

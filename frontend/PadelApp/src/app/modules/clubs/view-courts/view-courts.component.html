@@ -19,6 +19,18 @@
   </section>
 
   <section *ngIf="club" class="flex flex-row justify-center align-middle w-full gap-5">
+      <article *ngFor="let court of club?.courts"
+      (click)="setSelectedCourt(court.index-1)"
+      class="relative w-60 h-[24rem] bg-cover bg-center  overflow-hidden flex flex-col justify-between rounded-3xl hover:scale-105 transition-transform duration-200 cursor-pointer"
+          style="background-image: url('imgs/canchaPadel.jpeg')">
+            <h3 class=" text-2xl font-bold text-appBlackText w-full text-center py-2">Cancha {{court.index}}</h3>
+            <article class="p-4 text-xl font-bold text-appBlackText flex flex-col gap-2">
+              <p class="text-lg font-semibold text-appBlackText">Turnos: </p>
+              <p class="text-lg font-semibold text-appBlackText">Disponibles: <span class="font-medium">{{court.availableTurns}}</span></p>
+              <p class="text-lg font-semibold text-appBlackText">Reservados: <span class="font-medium">{{court.reservedTurns}}</span></p>
+              <p class="text-lg font-semibold text-appBlackText" >Pagados : <span class="font-medium">{{court.paidTurns}}</span></p>
+            </article>
+      </article>
     
   </section>
 <app-diagram-turn-modal
