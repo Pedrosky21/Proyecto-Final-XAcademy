@@ -17,5 +17,5 @@ export class CreatedMatch {
     floorMaterial: FloorMaterial;
     roofed: number;
   };
-  timeSlot?: TimeSlots[];
+  timeSlots?: TimeSlots[];
 }
