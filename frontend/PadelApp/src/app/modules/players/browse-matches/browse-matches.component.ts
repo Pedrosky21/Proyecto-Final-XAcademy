@@ -10,6 +10,7 @@ import { WallMaterial } from '../../../model/WallMaterial';
 import { FloorMaterialService } from '../../../core/services/FloorMaterialService';
 import { WallMaterialService } from '../../../core/services/WallMaterialService';
 import { AuthService } from '../../../core/services/AuthService';
+import { TimeSlots } from '../../../model/TimeSlots';
 
 @Component({
   selector: 'app-browse-matches',
@@ -102,6 +103,10 @@ export class BrowseMatchesComponent implements OnInit {
       });
   }
 
+  getUniqueDates(timeSlots: TimeSlots[]): string[] {
+    const dates = timeSlots.map((ts) => ts.date);
+    return Array.from(new Set(dates));
+  }
   private parseTimeToMinutes(time: string | undefined): number {
     if (!time) return 0;
     // Accept formats like "HH:mm", "H:mm", "HH:mm:ss"

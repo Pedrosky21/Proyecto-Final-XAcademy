@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Match, MatchesByState } from '../../model/Match';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +35,9 @@ export class PlayerService {
   }
   getTeamsByPlayerId(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/teams`);
+  }
+
+  getMyMatchesGrouped(): Observable<MatchesByState> {
+    return this.http.get<MatchesByState>(`${this.apiUrl}/my-matches`);
   }
 }

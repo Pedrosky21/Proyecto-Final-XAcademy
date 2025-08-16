@@ -20,14 +20,12 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // Only try to read token in browser
-    let token: string | null = null;
-
-    if (isPlatformBrowser(this.platformId)) {
-      token = this.authService.getToken();
+    if (typeof window === 'undefined') {
+      // Running on server: just pass through
+      return next.handle(req);
     }
 
-    // If token exists, attach it to Authorization header
+    const token = this.authService.getToken();
     if (token) {
       const authReq = req.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
@@ -35,7 +33,6 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(authReq);
     }
 
-    // If no token, send request without modification
     return next.handle(req);
   }
 }

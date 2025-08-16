@@ -9,6 +9,7 @@ import { AuthService } from '../../../core/services/AuthService';
 import { UserService } from '../../../core/services/UserService';
 import { CategoryService } from '../../../core/services/CategoryService';
 import { PositionService } from '../../../core/services/PositionService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -34,7 +35,8 @@ export class EditProfileComponent {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     private readonly categoryService: CategoryService,
-    private readonly positionService: PositionService
+    private readonly positionService: PositionService,
+    private readonly router: Router
   ) {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -78,7 +80,6 @@ export class EditProfileComponent {
   }
 
   onSubmit(): void {
-    console.log(this.form.errors);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.confirmationModalService.openModal({
@@ -130,7 +131,10 @@ export class EditProfileComponent {
                   message: 'Se ha guardado la configuración correctamente',
                   accept: {
                     title: 'Aceptar',
-                    action: () => this.confirmationModalService.closeModal(),
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                      this.router.navigate(['/players/browse-matches']);
+                    },
                   },
                 });
               }, 1500);

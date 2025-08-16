@@ -57,3 +57,9 @@ export interface Match {
   MatchesTeams: MatchesTeams[];
   timeSlots: TimeSlots[];
 }
+
+export interface MatchesByState {
+  created: Match[];
+  pending: Match[];
+  confirmed: Match[];
+}

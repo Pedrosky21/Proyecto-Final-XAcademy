@@ -9,11 +9,13 @@ import { loadingScreenService } from '../../../core/layouts/loading-screen/servi
 import { TeamService } from '../../../core/services/TeamService';
 import { NewTeamRequest } from '../../../model/NewTeamRequest';
 import { AuthService } from '../../../core/services/AuthService';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { CreatedMatch } from '../../../model/CreatedMatch';
+import { Subject, takeUntil } from 'rxjs';
+
 import { WallMaterial } from '../../../model/WallMaterial';
 import { FloorMaterial } from '../../../model/FloorMaterial';
 import { TimeSlots } from '../../../model/TimeSlots';
+import { Match } from '../../../model/Match';
+import { MatchService } from '../../../core/services/MatchService';
 
 @Component({
   selector: 'app-explore-matches',
@@ -25,10 +27,11 @@ export class ExploreMatchesComponent {
   constructor(
     private playerService: PlayerService,
     private readonly fb: FormBuilder,
-    private confirmationModalService: ConfirmationModalService,
-    private loadingScreenService: loadingScreenService,
-    private teamService: TeamService,
-    private authService: AuthService
+    private readonly confirmationModalService: ConfirmationModalService,
+    private readonly loadingScreenService: loadingScreenService,
+    private readonly teamService: TeamService,
+    private readonly authService: AuthService,
+    private readonly matchService: MatchService
   ) {
     this.matchGroup = this.fb.group({
       selectedTeam: ['', Validators.required],
@@ -43,154 +46,25 @@ export class ExploreMatchesComponent {
       teamDescription: ['', [Validators.minLength(5)]],
     });
   }
-  hardcodedPartidos = [
-    {
-      idpartido: 1,
-      nombre: 'Partido A',
-      equipo: 'Mclaren',
-      categoria: 'Avanzado',
-      fecha: '2025-08-05',
-      techada: true,
-      turno_idturno: 1,
-      materialPared_idmaterialpared: 2,
-      materialSuelo_idmaterialSuelo: 3,
-      estadopartido_idestadoturno: 1,
-    },
-    {
-      idpartido: 2,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 2,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 3,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 4,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 5,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 6,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 6,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 6,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 6,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-    {
-      idpartido: 6,
-      nombre: 'Partido B',
-      equipo: 'Mercedes',
-      categoria: 'Intermedio',
-      fecha: '2025-08-10',
-      techada: false,
-      turno_idturno: 2,
-      materialPared_idmaterialpared: 1,
-      materialSuelo_idmaterialSuelo: 2,
-      estadopartido_idestadoturno: 2,
-    },
-  ];
-  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
   matchGroup: FormGroup;
   createTeamForm!: FormGroup;
-
+  selectedMatch: Match | null = null;
   showCreateTeamModal = false;
   showCreateMatchModal = false;
   searchTerm = '';
-
+  createdMatches: Match[] = [];
+  pendingMatches: Match[] = [];
+  confirmedMatches: Match[] = [];
   players: any[] = [];
   teams: any[] = [];
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('Token before API call:', this.authService.getToken());
+    this.loadMyMatches();
+  }
   loadUserTeams() {
-    console.log('Calling getTeamsByPlayerId()');
     this.playerService.getTeamsByPlayerId().subscribe({
       next: (teams) => {
         this.teams = teams;
@@ -202,6 +76,59 @@ export class ExploreMatchesComponent {
     });
   }
 
+  loadMyMatches(): void {
+    console.log('jejo');
+    this.playerService
+      .getMyMatchesGrouped()
+
+      .subscribe({
+        next: (groups) => {
+          console.log('jaja');
+          console.log(groups);
+          this.createdMatches = groups.created || [];
+          this.pendingMatches = groups.pending || [];
+          this.confirmedMatches = groups.confirmed || [];
+        },
+
+        error: (e) => {
+          console.error('Error Loading matches', e);
+        },
+      });
+  }
+  getCreatorTeamName(match: Match | any): string {
+    if (!match?.MatchesTeams?.length) return 'Mi equipo';
+    const t = match.MatchesTeams.find((x: any) => !!x.isCreator);
+    return t?.team?.name ?? 'Mi equipo';
+  }
+
+  getRivalTeamName(match: Match | any): string {
+    if (!match?.MatchesTeams?.length) return 'Rival';
+    const t = match.MatchesTeams.find((x: any) => !x.isCreator);
+    return t?.team?.name ?? 'Rival';
+  }
+
+  getFirstTimeSlotText(match: Match | any): string {
+    const ts = match?.timeSlots?.[0];
+    if (!ts) return '—';
+    // if times are stored like "22:00:00", show only hour:minutes
+    const formatTime = (t: string) => {
+      if (!t) return '';
+      // keep HH:mm if "HH:mm:ss" or "HH:mm"
+      const parts = t.split(':');
+      if (parts.length >= 2) return `${parts[0]}:${parts[1]}`;
+      return t;
+    };
+
+    const date = ts.date ?? '—';
+    const start = formatTime(ts.startTime);
+    const end = formatTime(ts.endTime);
+    return `${date} ${start ? start + ' - ' + end : ''}`.trim();
+  }
+
+  trackById(index: number, item: any) {
+    return item?.id ?? index;
+  }
+
   openCreateMatchModal() {
     this.loadUserTeams();
     this.showCreateMatchModal = true;
@@ -209,6 +136,7 @@ export class ExploreMatchesComponent {
 
   closeCreateMatchModal() {
     this.showCreateMatchModal = false;
+    this.loadMyMatches();
   }
 
   openCreateTeamModal() {
@@ -218,51 +146,6 @@ export class ExploreMatchesComponent {
 
   closeCreateTeamModal() {
     this.showCreateTeamModal = false;
-  }
-
-  onConfirmMatchModal() {
-    if (this.matchGroup.invalid) {
-      this.matchGroup.markAllAsTouched();
-      return;
-    }
-    this.closeCreateMatchModal();
-    const formValues = this.matchGroup.value;
-
-    this.confirmationModalService.openModal({
-      title: '¿Confirmar partido?',
-      message: `¿Desea crear el partido con el equipo ${formValues.selectedTeam}?`,
-      icon: ModalIconEnum.ok,
-      accept: {
-        title: 'Confirmar',
-        action: () => {
-          this.confirmationModalService.closeModal();
-
-          this.loadingScreenService.showLoadingScreen('Creando Partido...');
-
-          setTimeout(() => {
-            this.loadingScreenService.showLoadingScreen(null);
-          }, 2000);
-
-          this.confirmationModalService.openModal({
-            icon: ModalIconEnum.ok,
-            title: 'Partido creado con exito',
-            message: 'Se ha creado el partido correctamente.',
-            accept: {
-              title: 'Aceptar',
-              action: () => {
-                this.confirmationModalService.closeModal();
-              },
-            },
-          });
-        },
-      },
-      reject: {
-        title: 'Cancelar',
-        action: () => {
-          this.confirmationModalService.closeModal();
-        },
-      },
-    });
   }
 
   onConfirmTeamModal() {
@@ -327,51 +210,11 @@ export class ExploreMatchesComponent {
       },
     });
   }
-  selectedMatch:CreatedMatch|null=null
-  mockSelectedMatch:CreatedMatch= {
-  id: 1,
-  ownTeam: {
-    name: "Los Invencibles",
-    partner: "Juan Pérez"
-  },
-  rivalTeam: {
-    name: "Los Retadores",
-    players: ["Carlos Gómez", "Luis Fernández"]
-  },
-  preferences: {
-    wallMaterial: new WallMaterial({ id: 1, name: "Vidrio" }),
-    floorMaterial: new FloorMaterial({ id: 2, name: "Césped sintético" }),
-    roofed: 1
-  },
-  timeSlot: [
-    new TimeSlots({
-      id: 101,
-      index: 0,
-      date: "01/09/2025",
-      startTime: "8:00",
-      endTime: "11:00"
-    }),
-    new TimeSlots({
-      id: 102,
-      index: 0,
-      date: "02/09/2025",
-      startTime: "9:00",
-      endTime: "12:00"
-    }),
-    new TimeSlots({
-      id: 103,
-      index: 0,
-      date: "02/09/2025",
-      startTime: "14:00",
-      endTime: "18:00"
-    }),
-  ]
-}
 
-  selectMatch(){
-    this.selectedMatch=this.mockSelectedMatch
+  selectPendingMatch(match?: Match) {
+    this.selectedMatch = match as any;
   }
-  closePendingModal(){
-    this.selectedMatch=null
+  closePendingModal() {
+    this.selectedMatch = null;
   }
 }

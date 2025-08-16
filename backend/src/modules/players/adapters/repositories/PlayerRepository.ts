@@ -7,6 +7,7 @@ import Team from "../../core/models/TeamModel";
 import PlayersTeams from "../../core/models/PXTModel";
 import Match from "../../../matches/MatchModel";
 import MatchesTeams from "../../../matches/MXTModel";
+import TimeSlot from "../../../timeSlot/TimeSlotModel";
 
 export class PlayerRepository {
   createPlayer = async (
@@ -112,7 +113,7 @@ export class PlayerRepository {
       .filter((team): team is Team => team !== undefined);
   };
 
-  getMatchesForPlayer = async (playerId:number): Promise<Match[]> => {
+  getMatchesForPlayer = async (playerId: number): Promise<Match[]> => {
     const matches = await Match.findAll({
       include: [
         {
@@ -129,22 +130,21 @@ export class PlayerRepository {
                   model: PlayersTeams,
                   as: "PlayersTeams",
                   required: true,
-                  where: {
-                    playerId: playerId
-                  },
+
                   include: [
                     {
                       model: Player,
-                      as: "player"
+                      as: "player",
                     },
                   ],
                 },
               ],
-            }
-          ]
-        }
-      ]
-    })
-    return matches
-  }
+            },
+          ],
+        },
+        { model: TimeSlot, as: "timeSlots" },
+      ],
+    });
+    return matches;
+  };
 }
