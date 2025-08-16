@@ -27,6 +27,7 @@ export class ModalPendingMatchComponent implements OnChanges{
   stepEnum=StepEnum
   step:StepEnum=StepEnum.First
   selectableClubs:Club[]=[]
+  preSelectedClub:Club|null=null
   selectedClub:Club|null=null
   sundaysOfWeeks:string[]=[]
   turns:Turn[]=[]
@@ -143,7 +144,6 @@ export class ModalPendingMatchComponent implements OnChanges{
   }
   selectClub(index:number){
     this.step=StepEnum.Third
-        this.columns=[]
     this.matchService.getCourtsForMatch(2,this.selectableClubs[index].id).subscribe({
       next:(data)=>{
         const club=new Club(data)
@@ -162,11 +162,9 @@ export class ModalPendingMatchComponent implements OnChanges{
     const courtId:number= this.selectedClub?.courts![courtIndex].id!
     this.matchService.getTurnsForMatch(2,courtId, this.sundaysOfWeeks[0]).subscribe({
       next:(data)=>{
-        console.log(data)
         const turns=(data as Array<any>).map((turn)=>new Turn(turn))
         this.turns= turns
         this.setTurns(turns)
-        console.log(this.turns)
       },
       error:()=>{
         console.log()
