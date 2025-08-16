@@ -8,6 +8,9 @@ import PlayersTeams from "../../core/models/PXTModel";
 import Match from "../../../matches/MatchModel";
 import MatchesTeams from "../../../matches/MXTModel";
 import { MatchResponse } from "../../../matches/MatchResponse";
+import TimeSlot from "../../../timeSlot/TimeSlotModel";
+import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
+import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
 
 export class PlayerRepository {
   createPlayer = async (
@@ -140,6 +143,21 @@ export class PlayerRepository {
                     },
                   ],
                 },
+                {
+                  model: PlayersTeams,
+                  as: "PartnerTeams",
+                  where: {
+                    playerId: {
+                      [Op.notIn]: [playerId]
+                    },
+                  },
+                  include: [
+                    {
+                      model: Player,
+                      as: "player",
+                    },
+                  ],
+                },
               ],
             },
           ],
@@ -147,7 +165,7 @@ export class PlayerRepository {
         {
           model: MatchesTeams,
           as: "RivalTeams",
-          required: true,
+          required: false,
           include: [
             {
               model: Team,
@@ -173,17 +191,29 @@ export class PlayerRepository {
             },
           ],
         },
+        {
+          model: TimeSlot,
+          as: "timeSlots",
+        },
+        {
+          model: WallMaterial,
+          as: "wallMaterial"
+        },
+        {
+          model: FloorMaterial,
+          as: "floorMaterial"
+        },
       ],
     });
 
     const matchesByState = {
-      created: matches.filter((m:Match) => m.matchStateId === 1),
-      pending: matches.filter((m:Match) => m.matchStateId === 2),
-      confirmed: matches.filter((m:Match) => m.matchStateId === 3),
-      userId: playerId
-    }
+      created: matches.filter((m: Match) => m.matchStateId === 1),
+      pending: matches.filter((m: Match) => m.matchStateId === 2),
+      confirmed: matches.filter((m: Match) => m.matchStateId === 3),
+      userId: playerId,
+    };
 
-    const response = new MatchResponse(matchesByState)
+    const response = new MatchResponse(matchesByState);
 
     return response;
   };
