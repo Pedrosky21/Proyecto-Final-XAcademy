@@ -86,7 +86,6 @@ export class ClubRepository {
   };
 
   getClubsForMatches = async (preferences: MatchPreferences): Promise<any> => {
-    console.log(preferences);
     return await Club.findAll({
       attributes: [
         "id",
@@ -218,7 +217,8 @@ export class ClubRepository {
       }),
     };
 
-    return sortedClub;
+    const response= new ClubByUserIdResponse(sortedClub)
+    return response;
   };
   private countMatches(court: any, preferences: MatchPreferences) {
     let matches = 0;

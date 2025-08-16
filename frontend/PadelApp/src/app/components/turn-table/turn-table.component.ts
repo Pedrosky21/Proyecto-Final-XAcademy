@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WeekDayEnum } from './enums/WeekDayEnum';
 import { TableTurn } from './types/TableTurn';
 import { elementAt } from 'rxjs';
+import e from 'express';
 
 @Component({
   selector: 'app-turn-table',
@@ -36,15 +37,31 @@ export class TurnTableComponent {
       : '';
   }
   getHoverStatusClass(weekDay: number, colIndex: number) {
-    if (colIndex === -1) return null;
+    
+    let hasFreeSpace:boolean=true
+    const indexes=[-2,-1,1,2]
+    if(this.hoveredHour){
+    indexes.forEach(index => {
+      if(this.columns[this.hoveredHour!+index] && this.rows![weekDay].startHours.find((e)=>e.hour===this.columns[this.hoveredHour!+index])){
+        hasFreeSpace=false
+      }
+    });
+
+    }
+    if (!hasFreeSpace) return null;
+    
 
     const isStart =
-      this.hoveredRow === weekDay && this.hoveredHour === colIndex;
+      (this.hoveredRow === weekDay && this.hoveredHour === colIndex && colIndex< this.columns.length-4)||
+      (this.hoveredRow === weekDay && this.hoveredHour! >= colIndex && colIndex=== this.columns.length-4)
+
     const isMiddle =
-      this.hoveredRow === weekDay &&
-      (this.hoveredHour === colIndex - 1 || this.hoveredHour === colIndex - 2);
+      (this.hoveredRow === weekDay &&(this.hoveredHour === colIndex - 1 || this.hoveredHour === colIndex - 2)&&colIndex< this.columns.length-1)||
+      (this.hoveredRow === weekDay && (this.hoveredHour! >= colIndex && colIndex<=this.columns.length-1) && colIndex>this.columns.length-4)
+      ;
     const isEnd =
-      this.hoveredRow === weekDay && this.hoveredHour === colIndex - 3;
+      (this.hoveredRow === weekDay && this.hoveredHour === colIndex - 3)||
+      (this.hoveredRow === weekDay && this.hoveredHour! >= colIndex - 3 && colIndex===this.columns.length-1);
 
     if (isStart && isEnd) return 'start-end';
     if (isStart) return 'start';

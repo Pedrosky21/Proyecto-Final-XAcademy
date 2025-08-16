@@ -20,7 +20,9 @@ export class ViewCourtsComponent implements OnInit{
     this.clubService.getClubByUserId().subscribe({
       next: (data: any) => {
         this.club=new Club(data)
-        this.setColumns()
+        if(this.columns.length===0){
+          this.setColumns()
+        }
       },
       error: (err) => {
         console.error('Error al cargar categorías', err);
@@ -35,7 +37,7 @@ export class ViewCourtsComponent implements OnInit{
     let currentTime = initialTime;
     const finalTime = Number(this.club?.closingTime.split(':')[0]) * 60;
 
-    while (currentTime < finalTime) {
+    while (currentTime <= finalTime) {
       const hours = Math.floor(currentTime / 60)
         .toFixed()
         .padStart(2, '0');
@@ -52,6 +54,7 @@ export class ViewCourtsComponent implements OnInit{
 
   closeDiagramTurnModal(){
     this.diagramTurnModalOpen=false
+    this.loadClub()
   }
 
   selectedCourt:Court|null=null
@@ -60,6 +63,7 @@ export class ViewCourtsComponent implements OnInit{
   }
   closeCourtModal(){
     this.selectedCourt=null
+    this.loadClub()
   }
   ngOnInit(): void {
     this.loadClub()
