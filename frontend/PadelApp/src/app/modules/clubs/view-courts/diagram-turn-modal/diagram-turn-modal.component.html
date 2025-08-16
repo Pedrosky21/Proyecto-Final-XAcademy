@@ -16,6 +16,7 @@
     <div class="w-full flex flex-row  items-center text-center justify-center gap-3">
       <label class="flex text-xl font-roboto font-bold">Mes: </label>
       <input type="month"
+      [min]="currentDate"
       [(ngModel)]="selectedMonth"
       class="w-38 border border-appSecondary text-lg resize-none bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
     </div>

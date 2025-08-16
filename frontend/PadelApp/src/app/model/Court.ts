@@ -18,9 +18,9 @@ export class Court {
     this.id = data.id;
     this.index = index;
     this.wallMaterialId = data.wallMaterialId;
-    this.wallMaterialName = data.wallMaterial.name;
+    this.wallMaterialName = data.wallMaterialName;
     this.floorMaterialId = data.floorMaterialId;
-    this.floorMaterialName = data.floorMaterial.name;
+    this.floorMaterialName = data.floorMaterialName;
     this.roofted = data.roofted ? 'SI' : 'NO';
     this.availableTurns = data.availableTurns;
     this.reservedTurns = data.reservedTurns;

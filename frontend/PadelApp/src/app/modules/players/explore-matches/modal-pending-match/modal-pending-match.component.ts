@@ -69,17 +69,18 @@ export class ModalPendingMatchComponent implements OnChanges{
   }
 
   onClose(){
-    console.log("ajajaj")
     this.selectedClub=null
     this.selectableClubs=[]
     this.turns=[]
     this.tableTurns=[]
     this.sundaysOfWeeks=[]
+    this.turnColumns=[]
     this.step= StepEnum.First
     this.closeModal.emit()
   }
   turnColumns:string[]=[]
   setColumns() {
+    this.turnColumns=[]
     const initialTime = Number(this.selectedClub?.openningTime.split(':')[0]) * 60;
     let currentTime = initialTime;
     const finalTime = Number(this.selectedClub?.closingTime.split(':')[0]) * 60;
@@ -142,6 +143,7 @@ export class ModalPendingMatchComponent implements OnChanges{
   }
   selectClub(index:number){
     this.step=StepEnum.Third
+        this.columns=[]
     this.matchService.getCourtsForMatch(2,this.selectableClubs[index].id).subscribe({
       next:(data)=>{
         const club=new Club(data)

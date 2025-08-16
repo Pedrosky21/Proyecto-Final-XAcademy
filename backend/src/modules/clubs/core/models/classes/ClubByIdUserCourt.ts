@@ -8,7 +8,7 @@ export class CourtByIdUser{
     availableTurns:number
     reservedTurns:number
     paidTurns:number
-
+    totalTurns:number
     constructor(data:any){
       this.id=data.id
       this.number=data.number
@@ -18,5 +18,6 @@ export class CourtByIdUser{
       this.availableTurns=data.availableTurns
       this.reservedTurns=data.reservedTurns
       this.paidTurns=data.paidTurns
+      this.totalTurns= data.totalTurns
     }
   }

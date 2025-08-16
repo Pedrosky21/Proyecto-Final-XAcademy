@@ -27,7 +27,7 @@
     <tbody *ngIf="rows">
       <tr
         *ngFor="let day of rows; let index = index"
-        class="border border-appSecondary"
+        class="border border-appSecondary py-2"
       >
         <!-- Día -->
         <td
@@ -43,7 +43,7 @@
           (click)="onCellClick(index, colIndex)"
           (mouseenter)="setHoverIndex(index, colIndex)"
           (mouserleave)="setHoverIndex()"
-          class="relative text-center min-h-16 py-2"
+          class="relative text-center min-h-16"
         >
           <!-- Si la tabla se esta usando para diagramar turnos -->
           <ng-container *ngIf="type === 'diagramTurns'">
@@ -52,28 +52,28 @@
               <!-- Contorno completo -->
               <div
                 *ngSwitchCase="'middle'"
-                class="absolute inset-0 z-20 rounded-none border-y-2 border-appPrimary pointer-events-none"
+                class="absolute inset-0 z-20 h-5/6 self-center rounded-none border-y-2 border-appPrimary cursor-pointer"
               ></div>
               <!-- Solo start -->
               <div
                 *ngSwitchCase="'start'"
-                class="absolute right-0 top-0 bottom-0 w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
+                class="absolute right-0 top-0 bottom-0 h-5/6 self-center   w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full  cursor-pointer"
               ></div>
               <!-- Solo end -->
               <div
                 *ngSwitchCase="'end'"
-                class="absolute left-0 top-0 bottom-0 w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
+                class="absolute left-0 top-0 bottom-0 h-5/6 self-center   w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full  cursor-pointer"
               ></div>
               <!-- Start-End -->
               <div
                 *ngSwitchCase="'start-end'"
-                class="absolute inset-0 flex justify-between items-center z-20 px-[2px] pointer-events-none"
+                class="absolute inset-0 flex  h-5/6 self-center  justify-between items-center z-20  cursor-pointer"
               >
                 <div
-                  class="w-1/2 h-full border-r-4 border-appPrimary rounded-r-full"
+                  class="w-4/5 h-full  self-center  border-appPrimary rounded-r-full"
                 ></div>
                 <div
-                  class="w-1/2 h-full border-l-4 border-appPrimary rounded-l-full"
+                  class="w-4/5 h-full self-center border-appPrimary rounded-l-full"
                 ></div>
               </div>
             </ng-container>
@@ -81,22 +81,22 @@
             <ng-container [ngSwitch]="getCellStatus(index, colIndex)">
               <div
                 *ngSwitchCase="'middle'"
-                class="absolute inset-0 bg-appPrimary z-0 rounded-none cursor-pointer"
+                class="absolute inset-0  h-5/6 self-center  bg-appPrimary z-0 rounded-none cursor-pointer"
               ></div>
               <div
                 *ngSwitchCase="'start'"
-                class="absolute right-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
+                class="absolute right-0  h-5/6 self-center  top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
               ></div>
               <div
                 *ngSwitchCase="'end'"
-                class="absolute left-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
+                class="absolute left-0  h-5/6 self-center  top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
               ></div>
               <div
                 *ngSwitchCase="'start-end'"
-                class="absolute inset-0 flex justify-between items-center z-10 px-[2px] cursor-pointer"
+                class="absolute inset-0  h-5/6 self-center  flex justify-between items-center z-10 cursor-pointer"
               >
-                <div class="w-1/2 h-full bg-appPrimary rounded-r-full"></div>
-                <div class="w-1/2 h-full bg-appPrimary rounded-l-full"></div>
+                <div class="w-1/2 h-full self-center  bg-appPrimary rounded-r-full"></div>
+                <div class="w-1/2 h-full self-center  bg-appPrimary rounded-l-full"></div>
               </div>
             </ng-container>
           </ng-container>
@@ -109,28 +109,28 @@
                 <!-- Contorno completo -->
                 <div
                   *ngSwitchCase="'middle'"
-                  class="absolute inset-0 z-20 rounded-none border-y-2 border-appPrimary pointer-events-none"
+                  class="absolute inset-0 z-20  h-5/6 self-center  rounded-none border-y-2 border-appPrimary pointer-events-none"
                 ></div>
                 <!-- Solo start -->
                 <div
                   *ngSwitchCase="'start'"
-                  class="absolute right-0 top-0 bottom-0 w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
+                  class="absolute right-0 top-0 bottom-0  h-5/6 self-center  w-1/2 z-20 border-l-4 border-appPrimary rounded-l-full pointer-events-none"
                 ></div>
                 <!-- Solo end -->
                 <div
                   *ngSwitchCase="'end'"
-                  class="absolute left-0 top-0 bottom-0 w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
+                  class="absolute left-0 top-0 bottom-0  h-5/6 self-center  w-1/2 z-20 border-r-4 border-appPrimary rounded-r-full pointer-events-none"
                 ></div>
                 <!-- Start-End -->
                 <div
                   *ngSwitchCase="'start-end'"
-                  class="absolute inset-0 flex justify-between items-center z-20 px-[2px] pointer-events-none"
+                  class="absolute inset-0 flex justify-between items-center z-20  pointer-events-none"
                 >
                   <div
-                    class="w-1/2 h-full border-r-4 border-appPrimary rounded-r-full"
+                    class="w-1/2 border-r-4  h-5/6 self-center  border-appPrimary rounded-r-lg"
                   ></div>
                   <div
-                    class="w-1/2 h-full border-l-4 border-appPrimary rounded-l-full"
+                    class="w-1/2 border-l-4  h-5/6 self-center  border-appPrimary rounded-l-lg"
                   ></div>
                 </div>
               </ng-container>
@@ -145,10 +145,10 @@
               <ng-container [ngSwitch]="getCellStatus(index, colIndex)">
                 <div
                   *ngSwitchCase="'middle'"
-                  class="absolute inset-0 bg-appPrimary z-0 rounded-none cursor-pointer"
+                  class="absolute inset-0 h-5/6 self-center  bg-appPrimary z-0 rounded-none cursor-pointer"
                 >
                   <svg
-                    *ngIf="getMiddleIndex(index, colIndex) === 2"
+                    *ngIf="getMiddleIndex(index, colIndex) === 2&& getCellTurnStatus(index, colIndex)?.includes('reserved')"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -162,21 +162,28 @@
                       d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                     />
                   </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black"
+                    *ngIf="getMiddleIndex(index, colIndex) === 2&& getCellTurnStatus(index, colIndex)?.includes('paid')"
+                  
+                    class="size-6 absolute top-1/2 left-3/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+
                 </div>
                 <div
                   *ngSwitchCase="'start'"
-                  class="absolute right-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
+                  class="absolute right-0 top-0 bottom-0  h-5/6 self-center   w-1/2 bg-appPrimary rounded-l-full z-10 cursor-pointer"
                 ></div>
                 <div
                   *ngSwitchCase="'end'"
-                  class="absolute left-0 top-0 bottom-0 w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
+                  class="absolute left-0 top-0 bottom-0  h-5/6 self-center  w-1/2 bg-appPrimary rounded-r-full z-10 cursor-pointer"
                 ></div>
                 <div
                   *ngSwitchCase="'start-end'"
-                  class="absolute inset-0 flex justify-between items-center z-10 px-[2px] cursor-pointer"
+                  class="absolute inset-0 flex justify-between items-center z-10 cursor-pointer"
                 >
-                  <div class="w-1/2 h-full bg-appPrimary rounded-r-full"></div>
-                  <div class="w-1/2 h-full bg-appPrimary rounded-l-full"></div>
+                  <div class="w-1/2 bg-appPrimary h-5/6 self-center  rounded-r-full"></div>
+                  <div class="w-1/2 bg-appPrimary h-5/6 self-center  rounded-l-full"></div>
                 </div>
               </ng-container>
             </ng-container>
