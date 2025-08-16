@@ -22,10 +22,9 @@ export class MatchService {
   wallMaterialService = new WallMaterialService();
   floorMaterialService = new FloorMaterialService();
   timeSlotService = new TimeSlotService();
-  clubService= new ClubService()
-  turnService= new TurnService()
-  playerService= new PlayerService()
-
+  clubService = new ClubService();
+  turnService = new TurnService();
+  playerService = new PlayerService();
 
   createMatch = async (
     creatorTeamId: number,
@@ -219,87 +218,120 @@ export class MatchService {
       throw error;
     }
   };
-  getClubsForMatch=async(matchId:number):Promise<any>=>{
+
+  getClubsForMatch = async (matchId: number): Promise<any> => {
     const transaction = await sequelize.transaction();
-    try{
-      const match= await this.matchRepository.getMatchById(matchId,transaction)
 
-      if(!match){
-        throw new NotFoundError("Partido no encontrado")
+    try {
+      const match = await this.matchRepository.getMatchById(
+        matchId,
+        transaction
+      );
+
+      if (!match) {
+        throw new NotFoundError("Partido no encontrado");
       }
-      const preferences= await this.matchRepository.getMatchPreferences(matchId)
+      const preferences = await this.matchRepository.getMatchPreferences(
+        matchId
+      );
+      console.log(preferences);
 
-      transaction.commit()
-      const clubs= await this.clubService.getClubsForMatch(preferences)
-      return clubs
-    }catch(error){
+      transaction.commit();
+      const clubs = await this.clubService.getClubsForMatch(preferences);
+      return clubs;
+    } catch (error) {
       await transaction.rollback();
       throw error;
-      
     }
-  }
+  };
 
-  getCourtsForMatch=async(matchId:number,clubId:number):Promise<any>=>{
+  getCourtsForMatch = async (matchId: number, clubId: number): Promise<any> => {
     const transaction = await sequelize.transaction();
-    try{
-      const match= await this.matchRepository.getMatchById(matchId,transaction)
+    try {
+      const match = await this.matchRepository.getMatchById(
+        matchId,
+        transaction
+      );
 
-      if(!match){
-        throw new NotFoundError("Partido no encontrado")
+      if (!match) {
+        throw new NotFoundError("Partido no encontrado");
       }
-      const preferences= await this.matchRepository.getMatchPreferences(matchId)
+      const preferences = await this.matchRepository.getMatchPreferences(
+        matchId
+      );
 
-      console.log()
-      const club= await this.clubService.getCourtsForMatch(preferences,clubId)
+      console.log();
+      const club = await this.clubService.getCourtsForMatch(
+        preferences,
+        clubId
+      );
 
-      transaction.commit()
-      return club
-    }catch(error){
+      transaction.commit();
+      return club;
+    } catch (error) {
       await transaction.rollback();
       throw error;
-      
     }
-
-  }
-  getTurnsForMatch=async(matchId:number,courtId:number,startDay:Date):Promise<any>=>{
+  };
+  getTurnsForMatch = async (
+    matchId: number,
+    courtId: number,
+    startDay: Date
+  ): Promise<any> => {
     const transaction = await sequelize.transaction();
-    try{
-      const match= await this.matchRepository.getMatchById(matchId,transaction)
+    try {
+      const match = await this.matchRepository.getMatchById(
+        matchId,
+        transaction
+      );
 
-      if(!match){
-        throw new NotFoundError("Partido no encontrado")
+      if (!match) {
+        throw new NotFoundError("Partido no encontrado");
       }
-      const preferences= await this.matchRepository.getMatchPreferences(matchId)
+      const preferences = await this.matchRepository.getMatchPreferences(
+        matchId
+      );
 
-      const turns= await this.turnService.getCourtTurnsByWeek(courtId,startDay,preferences)
+      const turns = await this.turnService.getCourtTurnsByWeek(
+        courtId,
+        startDay,
+        preferences
+      );
 
-      transaction.commit()
-      return turns
-    }catch(error){
+      transaction.commit();
+      return turns;
+    } catch (error) {
       await transaction.rollback();
       throw error;
-      
     }
+  };
 
-  }
+  reserveTurnForMatch = async (
+    matchId: number,
+    turnId: number,
+    userId: number
+  ): Promise<any> => {
+    console.log(userId);
+    const player = await this.playerService.getPlayerByUserId(userId);
 
-  reserveTurnForMatch=async(matchId:number,turnId:number,userId:number,):Promise<any>=>{
-    console.log(userId)
-    const player= await this.playerService.getPlayerByUserId(userId)
+    const fullName =
+      player.getDataValue("lastName") + " " + player.getDataValue("firstName");
 
-    const fullName= player.getDataValue("lastName")+ " " + player.getDataValue("firstName")
+    const transaction = await sequelize.transaction();
+    try {
+      await this.turnService.reserveTurn(
+        turnId,
+        UserTypeEnum.Player,
+        fullName,
+        transaction
+      );
 
-    const transaction= await sequelize.transaction()
-    try{
-      await this.turnService.reserveTurn(turnId,UserTypeEnum.Player,fullName,transaction)
+      await this.matchRepository.reserveTurn(matchId, turnId, transaction);
 
-      await this.matchRepository.reserveTurn(matchId,turnId,transaction)
-
-      transaction.commit()
-
-    }catch(error){
-      transaction.rollback()
-      throw error
+      transaction.commit();
+    } catch (error) {
+      transaction.rollback();
+      throw error;
     }
-  }
+  };
 }

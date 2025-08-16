@@ -16,6 +16,7 @@ import { FloorMaterial } from '../../../model/FloorMaterial';
 import { TimeSlots } from '../../../model/TimeSlots';
 import { Match } from '../../../model/Match';
 import { MatchService } from '../../../core/services/MatchService';
+import { CreatedMatch } from '../../../model/CreatedMatch';
 
 @Component({
   selector: 'app-explore-matches',
@@ -50,13 +51,13 @@ export class ExploreMatchesComponent {
 
   matchGroup: FormGroup;
   createTeamForm!: FormGroup;
-  selectedMatch: Match | null = null;
+  selectedMatch: CreatedMatch | null = null;
   showCreateTeamModal = false;
   showCreateMatchModal = false;
   searchTerm = '';
-  createdMatches: Match[] = [];
-  pendingMatches: Match[] = [];
-  confirmedMatches: Match[] = [];
+  createdMatches: CreatedMatch[] = [];
+  pendingMatches: CreatedMatch[] = [];
+  confirmedMatches: CreatedMatch[] = [];
   players: any[] = [];
   teams: any[] = [];
 
@@ -85,9 +86,15 @@ export class ExploreMatchesComponent {
         next: (groups) => {
           console.log('jaja');
           console.log(groups);
-          this.createdMatches = groups.created || [];
-          this.pendingMatches = groups.pending || [];
-          this.confirmedMatches = groups.confirmed || [];
+          this.createdMatches = groups.created
+            ? groups.created.map((Match: any) => new CreatedMatch(Match))
+            : [];
+          this.pendingMatches = groups.pending
+            ? groups.pending.map((Match: any) => new CreatedMatch(Match))
+            : [];
+          this.confirmedMatches = groups.confirmed
+            ? groups.confirmed.map((Match: any) => new CreatedMatch(Match))
+            : [];
         },
 
         error: (e) => {
@@ -211,8 +218,8 @@ export class ExploreMatchesComponent {
     });
   }
 
-  selectPendingMatch(match?: Match) {
-    this.selectedMatch = match as any;
+  selectPendingMatch(match: CreatedMatch) {
+    this.selectedMatch = match;
   }
   closePendingModal() {
     this.selectedMatch = null;

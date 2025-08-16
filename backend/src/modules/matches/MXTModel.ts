@@ -35,6 +35,7 @@ MatchesTeams.belongsTo(Match, {foreignKey: "matchId", as: "match"});
 MatchesTeams.belongsTo(Team, {foreignKey: "teamId", as: "team"});
 
 Match.hasMany(MatchesTeams, {foreignKey: "matchId"});
+Match.hasMany(MatchesTeams, {foreignKey: "matchId", as: "RivalTeams" })
 Team.hasMany(MatchesTeams, {foreignKey: "teamId"});
 
 export default MatchesTeams;

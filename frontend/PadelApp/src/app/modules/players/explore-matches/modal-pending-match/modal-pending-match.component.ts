@@ -130,7 +130,7 @@ export class ModalPendingMatchComponent implements OnChanges {
   ];
   initiateSelection() {
     this.step = StepEnum.Second;
-    this.matchService.getClubsForMatch(2).subscribe({
+    this.matchService.getClubsForMatch(this.match?.id!).subscribe({
       next: (data) => {
         const clubs = data.map((club: any) => new Club(club));
         this.selectableClubs = clubs;
@@ -178,7 +178,7 @@ export class ModalPendingMatchComponent implements OnChanges {
     this.step = StepEnum.Fourth;
     const courtId: number = this.selectedClub?.courts![courtIndex].id!;
     this.matchService
-      .getTurnsForMatch(2, courtId, this.sundaysOfWeeks[0])
+      .getTurnsForMatch(this.match?.id!, courtId, this.sundaysOfWeeks[0])
       .subscribe({
         next: (data) => {
           const turns = (data as Array<any>).map((turn) => new Turn(turn));

@@ -13,9 +13,29 @@ export class CreatedMatch {
     players: string[];
   };
   preferences?: {
-    wallMaterial: WallMaterial;
-    floorMaterial: FloorMaterial;
-    roofed: number;
+    wallMaterialName: string;
+    floorMaterialName: string;
+    roofed: string;
   };
   timeSlots?: TimeSlots[];
+
+  constructor(data: any) {
+    this.id = data.id;
+    this.ownTeam = {
+      name: data.ownTeam.teamName,
+      partner: data.ownTeam.partner,
+    };
+    this.rivalTeam = {
+      name: data.rivalTeam.teamName,
+      players: data.rivalTeam.players,
+    };
+    this.preferences = {
+      wallMaterialName: data.preferecences.wallMaterialName,
+      floorMaterialName: data.preferecences.floorMaterialName,
+      roofed: data.preferecences.roofted == 1 ? 'Si' : 'No',
+    };
+    this.timeSlots = data.timeSlots
+      ? data.timeSlots.map((element: any) => new TimeSlots(element))
+      : [];
+  }
 }

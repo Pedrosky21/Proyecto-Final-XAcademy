@@ -1,13 +1,13 @@
 import { NewPlayerRequest } from "../../core/dtos/request/NewPlayerRequest";
 import Category from "../../core/models/CategoryModel";
 import Player from "../../core/models/PlayerModel";
-import { Op, Transaction } from "sequelize";
+import { Op, Sequelize, Transaction } from "sequelize";
 import Position from "../../core/models/PositionModel";
 import Team from "../../core/models/TeamModel";
 import PlayersTeams from "../../core/models/PXTModel";
 import Match from "../../../matches/MatchModel";
 import MatchesTeams from "../../../matches/MXTModel";
-import TimeSlot from "../../../timeSlot/TimeSlotModel";
+import { MatchResponse } from "../../../matches/MatchResponse";
 
 export class PlayerRepository {
   createPlayer = async (
@@ -113,7 +113,7 @@ export class PlayerRepository {
       .filter((team): team is Team => team !== undefined);
   };
 
-  getMatchesForPlayer = async (playerId: number): Promise<Match[]> => {
+  getMatchesForPlayer = async (playerId: number): Promise<MatchResponse> => {
     const matches = await Match.findAll({
       include: [
         {
@@ -130,7 +130,9 @@ export class PlayerRepository {
                   model: PlayersTeams,
                   as: "PlayersTeams",
                   required: true,
-
+                  where: {
+                    playerId: playerId, // equipo donde si esta el jugador
+                  },
                   include: [
                     {
                       model: Player,
@@ -142,9 +144,47 @@ export class PlayerRepository {
             },
           ],
         },
-        { model: TimeSlot, as: "timeSlots" },
+        {
+          model: MatchesTeams,
+          as: "RivalTeams",
+
+          include: [
+            {
+              model: Team,
+              as: "team", // equipos donde no esta el jugador
+              where: {
+                id: {
+                  [Op.notIn]: Sequelize.literal(`(
+                    SELECT pt.equipo_idequipo
+                    FROM jugadorxequipo pt 
+                    WHERE pt.jugador_idjugador = ${playerId}
+                    )`),
+                },
+              },
+              required: true,
+              include: [
+                {
+                  model: PlayersTeams,
+                  as: "PlayersTeams",
+                  required: true,
+                  include: [{ model: Player, as: "player" }],
+                },
+              ],
+            },
+          ],
+        },
       ],
     });
-    return matches;
+    console.log(matches);
+    const matchesByState = {
+      created: matches.filter((m: Match) => m.matchStateId === 1),
+      pending: matches.filter((m: Match) => m.matchStateId === 2),
+      confirmed: matches.filter((m: Match) => m.matchStateId === 3),
+      userId: playerId,
+    };
+
+    const response = new MatchResponse(matchesByState);
+
+    return response;
   };
 }
