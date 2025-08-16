@@ -20,13 +20,13 @@ export class Match {
     this.id = data.id;
     this.stateId = data.matchStateId;
     this.preferecences = {
-      wallMaterialName: data.wallMaterialId,
-      floorMaterialName: data.floorMaterialId,
+      wallMaterialName: data.wallMaterial.name,
+      floorMaterialName: data.floorMaterial.name,
       roofted: data.roofed === 1 ? true : false,
     };
-    this.timeSlots = data.timeSlot;
+    this.timeSlots = data.timeSlots;
     const creatorTeam = data.MatchesTeams[0].team;
-    const playersTeams = data.MatchesTeams[0].team.PlayersTeams;
+    const playersTeams = data.MatchesTeams[0].team.PartnerTeams;
     const playerName = playersTeams[0].player;
 
     this.ownTeam = {
