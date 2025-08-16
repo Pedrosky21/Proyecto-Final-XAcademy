@@ -3,16 +3,19 @@
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 p-4"
 >
   <div
-    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[60vw] p-6 relative"
+    class="bg-appBackground text-appWhiteText rounded-xl w-full w-[60] max-w-[800px] p-6 relative"
   >
+  <div class="flex align-middle justify-center w-full text-center">
+    <h2 class="text-2xl font-bold text-center self-center mb-6">Cancha {{court.index}}</h2>
     <button
       (click)="onClose()"
-      class="absolute top-3 right-3 text-appWhiteText hover:text-appError"
+      class=" absolute right-4 text-appWhiteText hover:text-appError"
     >
       ✕
     </button>
 
-    <h2 class="text-2xl font-bold text-center mb-6">Cancha {{court.index}}</h2>
+  </div>
+
     <div class="w-full flex flex-row  items-center text-center justify-center gap-3">
       <label class="flex text-xl font-roboto font-bold">Material piso: <span class="font-normal">{{court.floorMaterialName}}</span></label>
       <label class="flex text-xl font-roboto font-bold">Material pared:<span class="font-normal"> {{court.wallMaterialName}}</span></label>
