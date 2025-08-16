@@ -148,7 +148,7 @@ export class PlayerRepository {
                   as: "PartnerTeams",
                   where: {
                     playerId: {
-                      [Op.notIn]: [playerId]
+                      [Op.notIn]: [playerId],
                     },
                   },
                   include: [
@@ -197,15 +197,15 @@ export class PlayerRepository {
         },
         {
           model: WallMaterial,
-          as: "wallMaterial"
+          as: "wallMaterial",
         },
         {
           model: FloorMaterial,
-          as: "floorMaterial"
+          as: "floorMaterial",
         },
       ],
     });
-
+    console.log(matches);
     const matchesByState = {
       created: matches.filter((m: Match) => m.matchStateId === 1),
       pending: matches.filter((m: Match) => m.matchStateId === 2),

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CreatedMatch } from '../../../../model/CreatedMatch';
 import { ViewColumnSettings } from '../../../../components/table/models/ViewColumnSettings';
 import { TimeSlots } from '../../../../model/TimeSlots';
@@ -9,50 +16,52 @@ import { TableTurn } from '../../../../components/turn-table/types/TableTurn';
 import { ConfirmationModalService } from '../../../../core/layouts/confirmation-modal/service/confirmationModalService';
 import { loadingScreenService } from '../../../../core/layouts/loading-screen/service/loadingService';
 import { ModalIconEnum } from '../../../../core/layouts/confirmation-modal/models/ModalProps';
-enum StepEnum{
-    First="ViewData",
-    Second="SelectClub",
-    Third="SelectCourt",
-    Fourth="SelectTurn"
-  }
+import { Match } from '../../../../model/Match';
+enum StepEnum {
+  First = 'ViewData',
+  Second = 'SelectClub',
+  Third = 'SelectCourt',
+  Fourth = 'SelectTurn',
+}
 @Component({
   selector: 'app-modal-pending-match',
   templateUrl: './modal-pending-match.component.html',
-  styleUrl: './modal-pending-match.component.scss'
+  styleUrl: './modal-pending-match.component.scss',
 })
-export class ModalPendingMatchComponent implements OnChanges{
-  @Input() match?:CreatedMatch|null=null
-  @Output() closeModal= new EventEmitter()
-  
-  stepEnum=StepEnum
-  step:StepEnum=StepEnum.First
-  selectableClubs:Club[]=[]
-  preSelectedClub:Club|null=null
-  selectedClub:Club|null=null
-  sundaysOfWeeks:string[]=[]
-  turns:Turn[]=[]
+export class ModalPendingMatchComponent implements OnChanges {
+  @Input() match?: CreatedMatch | null = null;
+  @Output() closeModal = new EventEmitter();
+
+  stepEnum = StepEnum;
+  step: StepEnum = StepEnum.First;
+  selectableClubs: Club[] = [];
+  preSelectedClub: Club | null = null;
+  selectedClub: Club | null = null;
+  sundaysOfWeeks: string[] = [];
+  turns: Turn[] = [];
   tableTurns: TableTurn[] | undefined = undefined;
-  
+
   constructor(
-    private readonly matchService:MatchService,
+    private readonly matchService: MatchService,
     private readonly confirmationModalService: ConfirmationModalService,
     private readonly loadingScreenService: loadingScreenService
-  ){
+  ) {}
 
-  }
-  
+  ngOnInit() {}
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['match'] && this.match?.timeSlot) {
+    if (changes['match'] && this.match?.timeSlots) {
       this.generateSundays();
+      console.log(this.match);
+      console.log(this.sundaysOfWeeks);
     }
   }
 
   private generateSundays(): void {
     const sundaysSet = new Set<string>();
 
-    for (const ts of this.match!.timeSlot!) {
-    const [dayStr, monthStr, yearStr] = ts.date!.split("/");
-    const date = new Date(+yearStr, +monthStr - 1, +dayStr)
+    for (const ts of this.match!.timeSlots!) {
+      const [yearStr, monthStr, dayStr] = ts.date!.split('-');
+      const date = new Date(+yearStr, +monthStr - 1, +dayStr);
       const day = date.getDay(); // 0 = domingo, 1 = lunes, etc.
 
       // domingo de esa semana (resta la cantidad de días desde el domingo)
@@ -60,29 +69,35 @@ export class ModalPendingMatchComponent implements OnChanges{
       sunday.setDate(date.getDate() - day);
 
       // Formato dd/mm/aaaa
-      const formatted = sunday.getDate()+"/"+Number(sunday.getMonth()+1)+"/"+sunday.getFullYear()
+      const formatted =
+        sunday.getDate() +
+        '/' +
+        Number(sunday.getMonth() + 1) +
+        '/' +
+        sunday.getFullYear();
       sundaysSet.add(formatted);
     }
 
     // Convertimos el set a array
     this.sundaysOfWeeks = Array.from(sundaysSet);
-    console.log("Domingos de semanas:", this.sundaysOfWeeks);
+    console.log('Domingos de semanas:', this.sundaysOfWeeks);
   }
 
-  onClose(){
-    this.selectedClub=null
-    this.selectableClubs=[]
-    this.turns=[]
-    this.tableTurns=[]
-    this.sundaysOfWeeks=[]
-    this.turnColumns=[]
-    this.step= StepEnum.First
-    this.closeModal.emit()
+  onClose() {
+    this.selectedClub = null;
+    this.selectableClubs = [];
+    this.turns = [];
+    this.tableTurns = [];
+    this.sundaysOfWeeks = [];
+    this.turnColumns = [];
+    this.step = StepEnum.First;
+    this.closeModal.emit();
   }
-  turnColumns:string[]=[]
+  turnColumns: string[] = [];
   setColumns() {
-    this.turnColumns=[]
-    const initialTime = Number(this.selectedClub?.openningTime.split(':')[0]) * 60;
+    this.turnColumns = [];
+    const initialTime =
+      Number(this.selectedClub?.openningTime.split(':')[0]) * 60;
     let currentTime = initialTime;
     const finalTime = Number(this.selectedClub?.closingTime.split(':')[0]) * 60;
 
@@ -97,79 +112,85 @@ export class ModalPendingMatchComponent implements OnChanges{
     }
   }
 
-  columns:ViewColumnSettings<TimeSlots>[]=[{
-      title:"N°",
-      key:"index"
-  },{
-      title:"Fecha",
-      key:"date"
-  },{
-      title:"Hora inicio",
-      key:"startTime"
-  },{
-      title:"Hora Fin",
-      key:"endTime"
-  },
-]
-  initiateSelection(){
-    this.step=StepEnum.Second
-    this.matchService.getClubsForMatch(2).subscribe({
-      next:(data)=>{
-        const clubs=data.map((club:any)=>new Club(club))
-        this.selectableClubs=clubs
+  columns: ViewColumnSettings<TimeSlots>[] = [
+    {
+      title: 'N°',
+      key: 'index',
+    },
+    {
+      title: 'Fecha',
+      key: 'date',
+    },
+    {
+      title: 'Hora inicio',
+      key: 'startTime',
+    },
+    {
+      title: 'Hora Fin',
+      key: 'endTime',
+    },
+  ];
+  initiateSelection() {
+    this.step = StepEnum.Second;
+    this.matchService.getClubsForMatch(this.match?.id!).subscribe({
+      next: (data) => {
+        const clubs = data.map((club: any) => new Club(club));
+        this.selectableClubs = clubs;
       },
-      error:()=>{
-        console.log()
-      }
-    })
+      error: () => {
+        console.log();
+      },
+    });
   }
 
-  stepBack(){
+  stepBack() {
     switch (this.step) {
       case StepEnum.Second:
-        this.selectableClubs=[]
-        this.step=StepEnum.First
+        this.selectableClubs = [];
+        this.step = StepEnum.First;
         break;
       case StepEnum.Third:
-        this.selectedClub=null
-        this.step=StepEnum.Second
+        this.selectedClub = null;
+        this.step = StepEnum.Second;
         break;
       case StepEnum.Fourth:
-        this.turns=[]
-        this.tableTurns=[]
-        this.step= StepEnum.Third
+        this.turns = [];
+        this.tableTurns = [];
+        this.step = StepEnum.Third;
         break;
     }
-    
   }
-  selectClub(index:number){
-    this.step=StepEnum.Third
-    this.matchService.getCourtsForMatch(2,this.selectableClubs[index].id).subscribe({
-      next:(data)=>{
-        const club=new Club(data)
-        this.selectedClub=club
-        this.setColumns()
-      },
-      error:()=>{
-        console.log()
-      }
-    })
-
+  selectClub(index: number) {
+    this.step = StepEnum.Third;
+    this.matchService
+      .getCourtsForMatch(2, this.selectableClubs[index].id)
+      .subscribe({
+        next: (data) => {
+          const club = new Club(data);
+          this.selectedClub = club;
+          this.setColumns();
+        },
+        error: () => {
+          console.log();
+        },
+      });
   }
 
-  selectCourt(courtIndex:number){
-    this.step= StepEnum.Fourth
-    const courtId:number= this.selectedClub?.courts![courtIndex].id!
-    this.matchService.getTurnsForMatch(2,courtId, this.sundaysOfWeeks[0]).subscribe({
-      next:(data)=>{
-        const turns=(data as Array<any>).map((turn)=>new Turn(turn))
-        this.turns= turns
-        this.setTurns(turns)
-      },
-      error:()=>{
-        console.log()
-      }
-    })
+  selectCourt(courtIndex: number) {
+    this.step = StepEnum.Fourth;
+    const courtId: number = this.selectedClub?.courts![courtIndex].id!;
+    this.matchService
+      .getTurnsForMatch(this.match?.id!, courtId, this.sundaysOfWeeks[0])
+      .subscribe({
+        next: (data) => {
+          const turns = (data as Array<any>).map((turn) => new Turn(turn));
+          this.turns = turns;
+          this.setTurns(turns);
+        },
+        error: () => {
+          console.log();
+        },
+      });
   }
   setTurns(turns: Turn[]) {
     const [day, month, year] = this.sundaysOfWeeks[0].split('/').map(Number);
@@ -202,7 +223,9 @@ export class ModalPendingMatchComponent implements OnChanges{
     });
   }
   clickRow(event: { weekDay: number; column: string }) {
-    const columnIndex = this.turnColumns.findIndex((col) => col === event.column);
+    const columnIndex = this.turnColumns.findIndex(
+      (col) => col === event.column
+    );
     const existingHours = new Set(
       this.tableTurns![event.weekDay].startHours.map((e) => e.hour)
     );
@@ -211,7 +234,7 @@ export class ModalPendingMatchComponent implements OnChanges{
     const prevHour1 = this.turnColumns[columnIndex - 1];
     const prevHour2 = this.turnColumns[columnIndex - 2];
 
-    let clickTurn:any
+    let clickTurn: any;
     if (existingHours.has(colHour)) {
       clickTurn = this.turns!.find(
         (col) =>
@@ -233,11 +256,10 @@ export class ModalPendingMatchComponent implements OnChanges{
           col.startHour === prevHour2
       );
     }
-    
+
     this.confirmationModalService.openModal({
       title: 'Confirmar reserva',
-      message:
-        '¿Desea reservar el turno?',
+      message: '¿Desea reservar el turno?',
       reject: {
         title: 'Cancelar',
         action: () => {
@@ -250,37 +272,39 @@ export class ModalPendingMatchComponent implements OnChanges{
           this.confirmationModalService.closeModal();
           this.loadingScreenService.showLoadingScreen('Reservando...');
           // Create player
-          this.matchService.reserveTurn(this.match?.id!,clickTurn.id).subscribe({
-            next: () => {
-              this.loadingScreenService.showLoadingScreen(null);
-              this.confirmationModalService.openModal({
-                icon: ModalIconEnum.ok,
-                title: 'Reserva exitosa',
-                message: 'Se ha marcado el turno como reservado',
-                accept: {
-                  title: 'Aceptar',
-                  action: () => {
-                    this.confirmationModalService.closeModal();
+          this.matchService
+            .reserveTurn(this.match?.id!, clickTurn.id)
+            .subscribe({
+              next: () => {
+                this.loadingScreenService.showLoadingScreen(null);
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.ok,
+                  title: 'Reserva exitosa',
+                  message: 'Se ha marcado el turno como reservado',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                    },
                   },
-                },
-              });
-            },
-            error: () => {
-              this.loadingScreenService.showLoadingScreen(null);
-              this.confirmationModalService.openModal({
-                icon: ModalIconEnum.error,
-                title: 'Error al reservar',
-                message:
-                  'Ha ocurrido un error al reservar el turno, intente de nuevo más tarde.',
-                accept: {
-                  title: 'Aceptar',
-                  action: () => {
-                    this.confirmationModalService.closeModal();
+                });
+              },
+              error: () => {
+                this.loadingScreenService.showLoadingScreen(null);
+                this.confirmationModalService.openModal({
+                  icon: ModalIconEnum.error,
+                  title: 'Error al reservar',
+                  message:
+                    'Ha ocurrido un error al reservar el turno, intente de nuevo más tarde.',
+                  accept: {
+                    title: 'Aceptar',
+                    action: () => {
+                      this.confirmationModalService.closeModal();
+                    },
                   },
-                },
-              });
-            },
-          });
+                });
+              },
+            });
         },
       },
     });

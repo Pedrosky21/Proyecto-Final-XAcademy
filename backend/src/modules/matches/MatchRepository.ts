@@ -170,7 +170,7 @@ export class MatchRepository {
         },
       ],
     });
-    
+
     // const matches = await Match.findAll({
     //   where:{
     //     ...whereClause
@@ -279,31 +279,38 @@ export class MatchRepository {
     );
   };
 
-  getMatchPreferences = async(
-    matchId:number,
-  ):Promise<MatchPreferences>=>{
-     const match = await Match.findByPk(matchId, {
-      attributes:["roofed"],
+  getMatchPreferences = async (matchId: number): Promise<MatchPreferences> => {
+    const match = await Match.findByPk(matchId, {
+      attributes: ["roofed"],
       include: [
-            {
-              model:WallMaterial,
-              attributes:["id"]
-            },{
-              model:FloorMaterial,
-              attributes:["id"]
-            },
-            { model: TimeSlot, 
-              as: "timeSlots",
-              attributes:["date","startTime","endTime"]},
+        {
+          model: WallMaterial,
+          as: "wallMaterial",
+          attributes: ["id"],
+        },
+        {
+          model: FloorMaterial,
+          as: "floorMaterial",
+          attributes: ["id"],
+        },
+        {
+          model: TimeSlot,
+          as: "timeSlots",
+          attributes: ["date", "startTime", "endTime"],
+        },
       ],
     });
-    const matchPreferences= new MatchPreferences(match)
-    return matchPreferences
-  }
+    const matchPreferences = new MatchPreferences(match);
+    return matchPreferences;
+  };
 
-  reserveTurn=async(matchId:number,turnId:number,transaction:Transaction):Promise<any>=>{
-     return await Match.update(
-      { turnId: turnId },
+  reserveTurn = async (
+    matchId: number,
+    turnId: number,
+    transaction: Transaction
+  ): Promise<any> => {
+    return await Match.update(
+      { turnId: turnId, matchStateId: 3 },
       {
         where: {
           id: matchId,
@@ -311,5 +318,5 @@ export class MatchRepository {
         transaction,
       }
     );
-  }
+  };
 }

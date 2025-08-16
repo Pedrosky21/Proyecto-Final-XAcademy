@@ -9,6 +9,8 @@ import { ComponentsModule } from '../../components/components.module';
 import { BrowseMatchesComponent } from './browse-matches/browse-matches.component';
 import { ModalAcceptMatchComponent } from './browse-matches/modal-accept-match/modal-accept-match/modal-accept-match.component';
 import { ModalPendingMatchComponent } from './explore-matches/modal-pending-match/modal-pending-match.component';
+import { RouterModule } from '@angular/router';
+import { Router } from 'express';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,14 @@ import { ModalPendingMatchComponent } from './explore-matches/modal-pending-matc
     ModalCreateMatchComponent,
     BrowseMatchesComponent,
     ModalAcceptMatchComponent,
-    ModalPendingMatchComponent
+    ModalPendingMatchComponent,
   ],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ComponentsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ComponentsModule,
+    RouterModule,
+  ],
 })
 export class PlayersModule {}

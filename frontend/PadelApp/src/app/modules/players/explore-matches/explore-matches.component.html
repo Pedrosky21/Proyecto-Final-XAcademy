@@ -31,79 +31,112 @@
     </button>
   </section>
 
+  <!-- 3-column container -->
   <section class="flex justify-center p-4 h-full w-[1200px] mx-auto">
+    <!-- Created -->
     <article
       class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
     >
       <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
         Creados
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4 mt-6">
+
+      <div class="mt-6">
         <div
-          *ngFor="let partido of hardcodedPartidos"
-          class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 text-center"
+          *ngIf="createdMatches.length === 0"
+          class="text-sm text-gray-400 text-center"
         >
-          <div class="gap-2 font-bold">
-            <span class="text-bold text-center"
-              ><i class="fa-solid fa-people-group pr-1"></i
-              >{{ partido.equipo }}</span
-            >
-          </div>
-          <span class="font-bold">{{ partido.nombre }}</span>
-          <div class="text-sm">{{ partido.categoria }}</div>
-          <div class="text-sm font-bold">
-            <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+          No hay partidos creados
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 mt-4">
+          <div
+            *ngFor="let partido of createdMatches; trackBy: trackById"
+            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto text-center"
+          >
+            <div class="gap-2 font-bold mb-1">
+              <span class="text-bold">
+                <i class="fa-solid fa-people-group pr-1"></i>
+              </span>
+            </div>
+
+            <div class="text-sm font-bold mt-2">
+              <i class="fa-solid fa-calendar pr-1"></i>
+            </div>
           </div>
         </div>
       </div>
     </article>
+
+    <!-- Pending -->
     <article
       class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
     >
-      <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
-        Pendientes
-      </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4 mt-6">
+      <h2 class="text-xl font-bold mb-2 text-appWhiteText">Pendientes</h2>
+
+      <div class="mt-6">
         <div
-          *ngFor="let partido of hardcodedPartidos"
-          (click)="selectMatch()"
-          class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 text-center"
+          *ngIf="pendingMatches.length === 0"
+          class="text-sm text-gray-400 text-center"
         >
-          <div class="gap-2 font-bold">
-            <span class="text-bold text-center"
-              ><i class="fa-solid fa-people-group pr-1"></i
-              >{{ partido.equipo }}</span
-            >
-          </div>
-          <span class="font-bold">{{ partido.nombre }}</span>
-          <div class="text-sm">{{ partido.categoria }}</div>
-          <div class="text-sm font-bold">
-            <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+          No hay partidos pendientes
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 mt-4">
+          <div
+            *ngFor="let partido of pendingMatches; trackBy: trackById"
+            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto"
+            (click)="selectPendingMatch(partido)"
+          >
+            <div class="gap-2 font-bold mb-1">
+              <i class="fa-solid fa-people-group pr-1"></i>
+
+              <span class="font-bold">
+                {{ getCreatorTeamName(partido) }}
+              </span>
+            </div>
+
+            <div class="text-sm font-bold mt-2">
+              <i class="fa-solid fa-calendar pr-1"></i>
+              {{ getFirstTimeSlotText(partido) }}
+            </div>
           </div>
         </div>
       </div>
     </article>
+
+    <!-- Confirmed -->
     <article
       class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
     >
       <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
         Confirmados
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4 mt-6">
+
+      <div class="mt-6">
         <div
-          *ngFor="let partido of hardcodedPartidos"
-          class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 text-center"
+          *ngIf="confirmedMatches.length === 0"
+          class="text-sm text-gray-400 text-center"
         >
-          <div class="gap-2 font-bold">
-            <span class="text-bold text-center"
-              ><i class="fa-solid fa-people-group pr-1"></i
-              >{{ partido.equipo }}</span
-            >
-          </div>
-          <span class="font-bold">{{ partido.nombre }}</span>
-          <div class="text-sm">{{ partido.categoria }}</div>
-          <div class="text-sm font-bold">
-            <i class="fa-solid fa-calendar pr-1"></i>{{ partido.fecha }}
+          No hay partidos confirmados
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 mt-4">
+          <div
+            *ngFor="let partido of confirmedMatches; trackBy: trackById"
+            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto text-center"
+          >
+            <div class="gap-2 font-bold mb-1">
+              <span class="text-bold">
+                <i class="fa-solid fa-people-group pr-1"></i>
+              </span>
+            </div>
+
+            <div class="font-bold"></div>
+
+            <div class="text-sm font-bold mt-2">
+              <i class="fa-solid fa-calendar pr-1"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -123,10 +156,10 @@
     [matchGroup]="matchGroup"
     [teams]="teams"
     (close)="closeCreateMatchModal()"
-    (confirm)="onConfirmMatchModal()"
   ></app-modal-create-match>
+
   <app-modal-pending-match
-    [match]="selectedMatch"
     (closeModal)="closePendingModal()"
+    [match]="selectedMatch"
   ></app-modal-pending-match>
 </div>

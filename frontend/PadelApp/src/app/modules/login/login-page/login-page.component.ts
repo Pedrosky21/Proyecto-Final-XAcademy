@@ -52,7 +52,7 @@ export class LoginPageComponent {
                   this.router.navigate(['/select-role']);
                   break;
                 case 'Jugador':
-                  this.router.navigate(['home']);
+                  this.router.navigate(['/players/explore-matches']);
                   break;
                 case 'Club':
                   this.router.navigate(['/clubs/view-courts']);

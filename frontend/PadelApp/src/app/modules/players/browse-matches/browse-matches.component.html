@@ -101,9 +101,14 @@
           </span>
         </div>
         <div class="text-sm pt-2 w-48">
-          <span *ngFor="let ts of partido.timeSlots; let last = last">
-            <i class="fa-solid fa-calendar"></i> {{ ts.date
-            }}<span *ngIf="!last"> / </span>
+          <i class="fa-solid fa-calendar"></i>
+          <span
+            *ngFor="
+              let date of getUniqueDates(partido.timeSlots);
+              let last = last
+            "
+          >
+            {{ date }}<span *ngIf="!last"> / </span>
           </span>
         </div>
       </div>

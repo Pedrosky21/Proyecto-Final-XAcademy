@@ -136,8 +136,6 @@ export class ModalCreateMatchComponent {
     const tableMessage = this.validateTable();
 
     if (this.matchGroup.invalid || tableMessage) {
-      this.close.emit();
-
       const message: string = this.matchGroup.invalid
         ? 'Revise los valores ingresados antes de continuar'
         : tableMessage;
@@ -157,7 +155,6 @@ export class ModalCreateMatchComponent {
       return;
     }
 
-    this.close.emit();
     this.confirmationModalService.openModal({
       title: '¿Confirmar partido?',
       message: `¿Desea crear el partido con los horarios seleccionados?`,
@@ -194,7 +191,10 @@ export class ModalCreateMatchComponent {
                   message: 'Se ha creado el partido correctamente.',
                   accept: {
                     title: 'Aceptar',
-                    action: () => this.confirmationModalService.closeModal(),
+                    action: () => {
+                      this.confirmationModalService.closeModal(),
+                        this.close.emit();
+                    },
                   },
                 });
               }, 1500);
