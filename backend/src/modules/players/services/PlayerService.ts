@@ -68,18 +68,6 @@ export class PlayerService {
   getMatchesForPlayer = async (playerId: number): Promise<any> => {
     const matches = await this.playerRepository.getMatchesForPlayer(playerId);
 
-    if (!matches) {
-      return null;
-    }
-
-    // Ver que datos mandar segun match, capaz modificar repository tmb
-
-    const matchesByState = {
-      created: matches.filter((m:Match) => m.matchStateId === 1),
-      pending: matches.filter((m:Match) => m.matchStateId === 2),
-      confirmed: matches.filter((m:Match) => m.matchStateId === 3)
-    }
-
-    return matchesByState;
+    return matches;
   }
 }

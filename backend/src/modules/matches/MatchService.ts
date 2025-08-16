@@ -219,6 +219,7 @@ export class MatchService {
       throw error;
     }
   };
+  
   getClubsForMatch=async(matchId:number):Promise<any>=>{
     const transaction = await sequelize.transaction();
     try{
