@@ -16,6 +16,8 @@ export class Match {
     players?: string[];
   };
 
+
+
   constructor(data: any, userId: number) {
     this.id = data.id;
     this.stateId = data.matchStateId;

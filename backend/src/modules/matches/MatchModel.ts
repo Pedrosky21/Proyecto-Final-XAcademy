@@ -70,11 +70,13 @@ Match.init({
 Match.belongsTo(MatchState, {foreignKey: "matchStateId"});
 Match.belongsTo(WallMaterial, {foreignKey: "wallMaterialId", as: "wallMaterial"});
 Match.belongsTo(FloorMaterial, {foreignKey: "floorMaterialId", as: "floorMaterial"});
+Turn.belongsTo(Match, {foreignKey: "turnId"});
 TimeSlot.belongsTo(Match, {foreignKey: "matchId"});
 
 MatchState.hasMany(Match, {foreignKey: "matchStateId"});
 WallMaterial.hasMany(Match, {foreignKey: "wallMaterialId"});
 FloorMaterial.hasMany(Match, {foreignKey: "floorMaterialId"});
+Match.hasMany(Turn, {foreignKey: "turnId", as: "turn"});
 Match.hasMany(TimeSlot, {foreignKey: "matchId", as: "timeSlots"});
 
 export default Match;
