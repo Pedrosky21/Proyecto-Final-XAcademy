@@ -51,17 +51,20 @@
 
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
-            *ngFor="let partido of createdMatches; trackBy: trackById"
+            *ngFor="let partido of createdMatches"
             class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto text-center"
+            (click)="selectCreatedMatch(partido)"
           >
             <div class="gap-2 font-bold mb-1">
               <span class="text-bold">
                 <i class="fa-solid fa-people-group pr-1"></i>
+                {{ partido.ownTeam?.name }}
               </span>
             </div>
 
             <div class="text-sm font-bold mt-2">
               <i class="fa-solid fa-calendar pr-1"></i>
+              {{ getAllTimeSlotsText(partido) }}
             </div>
           </div>
         </div>
@@ -72,7 +75,9 @@
     <article
       class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
     >
-      <h2 class="text-xl font-bold mb-2 text-appWhiteText">Pendientes</h2>
+      <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
+        Pendientes
+      </h2>
 
       <div class="mt-6">
         <div
@@ -84,7 +89,7 @@
 
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
-            *ngFor="let partido of pendingMatches; trackBy: trackById"
+            *ngFor="let partido of pendingMatches"
             class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto"
             (click)="selectPendingMatch(partido)"
           >
@@ -92,13 +97,13 @@
               <i class="fa-solid fa-people-group pr-1"></i>
 
               <span class="font-bold">
-                {{ getCreatorTeamName(partido) }}
+                {{ partido.ownTeam?.name }}
               </span>
             </div>
 
             <div class="text-sm font-bold mt-2">
               <i class="fa-solid fa-calendar pr-1"></i>
-              {{ getFirstTimeSlotText(partido) }}
+              {{ getAllTimeSlotsText(partido) }}
             </div>
           </div>
         </div>
@@ -123,12 +128,14 @@
 
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
-            *ngFor="let partido of confirmedMatches; trackBy: trackById"
+            *ngFor="let partido of confirmedMatches"
             class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto text-center"
+            (click)="selectConfirmedMatch(partido)"
           >
             <div class="gap-2 font-bold mb-1">
               <span class="text-bold">
                 <i class="fa-solid fa-people-group pr-1"></i>
+                {{ partido.ownTeam?.name }}
               </span>
             </div>
 
@@ -136,6 +143,7 @@
 
             <div class="text-sm font-bold mt-2">
               <i class="fa-solid fa-calendar pr-1"></i>
+              {{ getAllTimeSlotsText(partido) }}
             </div>
           </div>
         </div>
@@ -162,4 +170,16 @@
     (closeModal)="closePendingModal()"
     [match]="selectedMatch"
   ></app-modal-pending-match>
+
+  <app-modal-created-match
+    *ngIf="selectedCreatedMatch"
+    (closeModal)="closeCreatedModal()"
+    [match]="selectedCreatedMatch"
+  ></app-modal-created-match>
+
+  <app-modal-confirmed-match
+    *ngIf="selectedConfirmedMatch"
+    (closeModal)="closeConfirmedModal()"
+    [match]="selectedConfirmedMatch"
+  ></app-modal-confirmed-match>
 </div>

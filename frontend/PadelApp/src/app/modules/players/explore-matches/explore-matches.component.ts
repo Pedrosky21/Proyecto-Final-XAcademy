@@ -52,6 +52,8 @@ export class ExploreMatchesComponent {
   matchGroup: FormGroup;
   createTeamForm!: FormGroup;
   selectedMatch: CreatedMatch | null = null;
+  selectedCreatedMatch: CreatedMatch | null = null;
+  selectedConfirmedMatch: CreatedMatch | null = null;
   showCreateTeamModal = false;
   showCreateMatchModal = false;
   searchTerm = '';
@@ -99,38 +101,27 @@ export class ExploreMatchesComponent {
         },
       });
   }
-  getCreatorTeamName(match: Match | any): string {
-    if (!match?.MatchesTeams?.length) return 'Mi equipo';
-    const t = match.MatchesTeams.find((x: any) => !!x.isCreator);
-    return t?.team?.name ?? 'Mi equipo';
-  }
 
-  getRivalTeamName(match: Match | any): string {
-    if (!match?.MatchesTeams?.length) return 'Rival';
-    const t = match.MatchesTeams.find((x: any) => !x.isCreator);
-    return t?.team?.name ?? 'Rival';
-  }
+  getAllTimeSlotsText(match: Match | any): string {
+    const timeSlots = match?.timeSlots;
+    if (!timeSlots || timeSlots.length === 0) return '—';
 
-  getFirstTimeSlotText(match: Match | any): string {
-    const ts = match?.timeSlots?.[0];
-    if (!ts) return '—';
-    // if times are stored like "22:00:00", show only hour:minutes
     const formatTime = (t: string) => {
       if (!t) return '';
-      // keep HH:mm if "HH:mm:ss" or "HH:mm"
       const parts = t.split(':');
-      if (parts.length >= 2) return `${parts[0]}:${parts[1]}`;
-      return t;
+      return parts.length >= 2 ? `${parts[0]}:${parts[1]}` : t;
     };
 
-    const date = ts.date ?? '—';
-    const start = formatTime(ts.startTime);
-    const end = formatTime(ts.endTime);
-    return `${date} ${start ? start + ' - ' + end : ''}`.trim();
-  }
+    // map all time slots to formatted strings
+    const slotsText = timeSlots.map((ts: any) => {
+      const date = ts.date ?? '—';
+      const start = formatTime(ts.startTime);
+      const end = formatTime(ts.endTime);
+      return start ? `${date} ${start} - ${end}` : date;
+    });
 
-  trackById(index: number, item: any) {
-    return item?.id ?? index;
+    // join them with comma or line break
+    return slotsText.join(' / '); // or use '\n' if you want each on a new line
   }
 
   openCreateMatchModal() {
@@ -218,8 +209,24 @@ export class ExploreMatchesComponent {
   selectPendingMatch(match: CreatedMatch) {
     this.selectedMatch = match;
   }
+
+  selectCreatedMatch(match: CreatedMatch) {
+    this.selectedCreatedMatch = match;
+  }
+
+  selectConfirmedMatch(match: CreatedMatch) {
+    this.selectedConfirmedMatch = match;
+  }
   closePendingModal() {
     this.selectedMatch = null;
     this.loadMyMatches()
+  }
+
+  closeCreatedModal() {
+    this.selectedCreatedMatch = null;
+  }
+
+  closeConfirmedModal() {
+    this.selectedConfirmedMatch = null;
   }
 }

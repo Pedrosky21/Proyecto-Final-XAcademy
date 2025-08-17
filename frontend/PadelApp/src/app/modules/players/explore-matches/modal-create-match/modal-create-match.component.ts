@@ -244,7 +244,6 @@ export class ModalCreateMatchComponent {
     ];
   }
   ngOnInit(): void {
-    
     this.setColumns();
     this.loadMaterials();
   }
