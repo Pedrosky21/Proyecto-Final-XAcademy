@@ -47,11 +47,12 @@ export class ExploreMatchesComponent {
       teamDescription: ['', [Validators.minLength(5)]],
     });
   }
-  private destroy$ = new Subject<void>();
 
   matchGroup: FormGroup;
   createTeamForm!: FormGroup;
   selectedMatch: CreatedMatch | null = null;
+  selectedCreatedMatch: CreatedMatch | null = null;
+  selectedConfirmedMatch: CreatedMatch | null = null;
   showCreateTeamModal = false;
   showCreateMatchModal = false;
   searchTerm = '';
@@ -78,14 +79,11 @@ export class ExploreMatchesComponent {
   }
 
   loadMyMatches(): void {
-    console.log('jejo');
     this.playerService
       .getMyMatchesGrouped()
 
       .subscribe({
         next: (groups) => {
-          console.log('jaja');
-          console.log(groups);
           this.createdMatches = groups.created
             ? groups.created.map((Match: any) => new CreatedMatch(Match))
             : [];
@@ -101,17 +99,6 @@ export class ExploreMatchesComponent {
           console.error('Error Loading matches', e);
         },
       });
-  }
-  getCreatorTeamName(match: Match | any): string {
-    if (!match?.MatchesTeams?.length) return 'Mi equipo';
-    const t = match.MatchesTeams.find((x: any) => !!x.isCreator);
-    return t?.team?.name ?? 'Mi equipo';
-  }
-
-  getRivalTeamName(match: Match | any): string {
-    if (!match?.MatchesTeams?.length) return 'Rival';
-    const t = match.MatchesTeams.find((x: any) => !x.isCreator);
-    return t?.team?.name ?? 'Rival';
   }
 
   getFirstTimeSlotText(match: Match | any): string {
@@ -221,7 +208,23 @@ export class ExploreMatchesComponent {
   selectPendingMatch(match: CreatedMatch) {
     this.selectedMatch = match;
   }
+
+  selectCreatedMatch(match: CreatedMatch) {
+    this.selectedCreatedMatch = match;
+  }
+
+  selectConfirmedMatch(match: CreatedMatch) {
+    this.selectedConfirmedMatch = match;
+  }
   closePendingModal() {
     this.selectedMatch = null;
+  }
+
+  closeCreatedModal() {
+    this.selectedCreatedMatch = null;
+  }
+
+  closeConfirmedModal() {
+    this.selectedConfirmedMatch = null;
   }
 }

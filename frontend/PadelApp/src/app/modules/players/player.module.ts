@@ -11,6 +11,8 @@ import { ModalAcceptMatchComponent } from './browse-matches/modal-accept-match/m
 import { ModalPendingMatchComponent } from './explore-matches/modal-pending-match/modal-pending-match.component';
 import { RouterModule } from '@angular/router';
 import { Router } from 'express';
+import { ModalCreatedMatchComponent } from './explore-matches/modal-created-match/modal-created-match/modal-created-match.component';
+import { ModalConfirmedMatchComponent } from './explore-matches/modal-confirmed-match/modal-confirmed-match.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { Router } from 'express';
     BrowseMatchesComponent,
     ModalAcceptMatchComponent,
     ModalPendingMatchComponent,
+    ModalCreatedMatchComponent,
+    ModalConfirmedMatchComponent,
   ],
   imports: [
     CommonModule,
