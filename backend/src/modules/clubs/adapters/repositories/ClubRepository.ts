@@ -90,6 +90,15 @@ export class ClubRepository {
       attributes: [
         "id",
         "name",
+        "address",
+        "responsableFirstName",
+        "responsableLastName",
+        "openningTime",
+        "closingTime",
+        "cellNumber",
+        "admisionRules",
+        "cancelationRules",
+        "turnPrice",
         [
           sequelize.literal(`(
             SELECT COUNT(*) FROM cancha AS c
