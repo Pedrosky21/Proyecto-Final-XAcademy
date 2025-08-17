@@ -28,21 +28,26 @@ export class TurnRepository {
     preferences?: MatchPreferences
   ): Promise<Turn[]> => {
 
-    const preferencesConditions=preferences? {
-      [Op.or]:preferences?.timeSlots?.map((slot)=>({
-        [Op.and]:[
-          {startDateTime:{[Op.lt]:slot.endHour}},
-          {endDateTime:{[Op.gt]: slot.startHour}}
-        ]
-      }))
-    }:[]
+    const preferencesConditions = preferences
+  ? {
+      [Op.or]: preferences.timeSlots?.map((slot) => ({
+        [Op.and]: [
+          { startDateTime: { [Op.gte]: slot.startHour } },
+          { endDateTime: { [Op.lte]: slot.endHour } },
+        ],
+      })),
+    }
+  : {};
+    
     const turnsByWeek = await Turn.findAll({
       where: {
         courtId: courtId,
+        turnStateId:1,
         startDateTime: {
           [Op.gte]: startDate,
           [Op.lte]: endDate,
         },
+      ...(preferences ? { turnStateId: 1 } : {}),
         ...preferencesConditions
       },
       include: [

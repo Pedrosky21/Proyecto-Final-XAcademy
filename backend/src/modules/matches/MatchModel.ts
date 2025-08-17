@@ -31,6 +31,7 @@ Match.init({
     turnId: {
         type: DataTypes.INTEGER,
         field: "turno_idturno",
+        allowNull: true, 
         references: {
             model: Turn,
             key: "id"
@@ -70,11 +71,13 @@ Match.init({
 Match.belongsTo(MatchState, {foreignKey: "matchStateId"});
 Match.belongsTo(WallMaterial, {foreignKey: "wallMaterialId", as: "wallMaterial"});
 Match.belongsTo(FloorMaterial, {foreignKey: "floorMaterialId", as: "floorMaterial"});
+Turn.hasMany(Match, {foreignKey: "turnId"});
 TimeSlot.belongsTo(Match, {foreignKey: "matchId"});
 
 MatchState.hasMany(Match, {foreignKey: "matchStateId"});
 WallMaterial.hasMany(Match, {foreignKey: "wallMaterialId"});
 FloorMaterial.hasMany(Match, {foreignKey: "floorMaterialId"});
+Match.belongsTo(Turn, {foreignKey: "turnId", as: "turn"});
 Match.hasMany(TimeSlot, {foreignKey: "matchId", as: "timeSlots"});
 
 export default Match;

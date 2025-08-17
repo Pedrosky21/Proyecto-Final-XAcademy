@@ -9,11 +9,11 @@ export class MatchPreferences{
 
   constructor(data:any){
     // Puede venir como data.roofed o data.dataValues.roofed
-    this.roofted = data.roofed ?? data.dataValues?.roofed;
+    this.roofted = data.dataValues?.roofed ?? data.dataValues?.roofed;
 
     // MaterialPared y MaterialSuelo pueden venir como propiedades directas o dentro de dataValues
-    const wallMaterial = data.MaterialPared ?? data.dataValues?.MaterialPared;
-    const floorMaterial = data.MaterialSuelo ?? data.dataValues?.MaterialSuelo;
+    const wallMaterial = data.wallMaterial ?? data.dataValues?.wallMaterial;
+    const floorMaterial = data.floorMaterial ?? data.dataValues?.floorMaterial;
 
     this.wallMaterialId = wallMaterial?.id ?? wallMaterial?.dataValues?.id;
     this.floorMaterialId = floorMaterial?.id ?? floorMaterial?.dataValues?.id;

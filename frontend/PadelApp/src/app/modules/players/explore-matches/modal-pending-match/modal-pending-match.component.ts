@@ -51,8 +51,6 @@ export class ModalPendingMatchComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['match'] && this.match?.timeSlots) {
       this.generateSundays();
-      console.log(this.match);
-      console.log(this.sundaysOfWeeks);
     }
   }
 
@@ -80,7 +78,6 @@ export class ModalPendingMatchComponent implements OnChanges {
 
     // Convertimos el set a array
     this.sundaysOfWeeks = Array.from(sundaysSet);
-    console.log('Domingos de semanas:', this.sundaysOfWeeks);
   }
 
   onClose() {
@@ -148,9 +145,11 @@ export class ModalPendingMatchComponent implements OnChanges {
       case StepEnum.Second:
         this.selectableClubs = [];
         this.step = StepEnum.First;
+        this.preSelectedClub=null
         break;
       case StepEnum.Third:
         this.selectedClub = null;
+        this.preSelectedClub=null
         this.step = StepEnum.Second;
         break;
       case StepEnum.Fourth:
@@ -160,10 +159,17 @@ export class ModalPendingMatchComponent implements OnChanges {
         break;
     }
   }
-  selectClub(index: number) {
+
+  preSelectClub(index:number){
+    this.preSelectedClub= this.selectableClubs[index]
+  }
+  cancelPreselection(){
+    this.preSelectedClub=null
+  }
+  selectClub() {
     this.step = StepEnum.Third;
     this.matchService
-      .getCourtsForMatch(2, this.selectableClubs[index].id)
+      .getCourtsForMatch(2, this.preSelectedClub!.id)
       .subscribe({
         next: (data) => {
           const club = new Club(data);

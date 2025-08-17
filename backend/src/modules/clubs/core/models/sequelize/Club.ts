@@ -16,6 +16,8 @@ interface ClubAttributes {
   cancelationRules: string;
   userId:number
   courts?: Court[];
+  totalCourts?:number,
+  totalTurns?:number
 }
 
 
@@ -34,6 +36,8 @@ class Club  extends Model<ClubAttributes,ClubCreationAttributes> implements Club
   public cancelationRules!: string;
   public userId!:number
   public courts?: Court[];
+  public totalCourts?:number
+  public totalTurns?:number
 };
 
 Club.init({
@@ -89,6 +93,18 @@ Club.init({
         references: {
             model: User,
             key: 'id'
+        }
+    },
+    totalCourts: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.getDataValue('totalCourts');
+        }
+        },
+    totalTurns: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.getDataValue('totalTurns');
         }
     }
 },{
