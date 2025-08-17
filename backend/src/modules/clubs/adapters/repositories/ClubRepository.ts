@@ -12,6 +12,7 @@ import { Op } from "sequelize";
 import sequelize from "../../../../config/db.config";
 import { NotFoundError } from "../../../../errors/NotFoundError";
 import { ClubForMatch } from "../../core/dtos/responses/ClubForMatchesResponse";
+import TimeSlot from "../../../timeSlot/TimeSlotModel";
 
 export class ClubRepository {
   getClubById = async (id: number): Promise<Club | null> => {
@@ -87,9 +88,19 @@ export class ClubRepository {
   };
 
   getClubsForMatches = async (preferences: MatchPreferences): Promise<any> => {
-    console.log("getClubsForMatches")
-    console.log(preferences)
-    const clubs=await Club.findAll({
+    const timeSlotConditions = preferences.timeSlots?.length
+      ? `(${preferences.timeSlots
+          .map((slot) => {
+            const start = new Date(slot.startHour);
+            const end = new Date(slot.endHour);
+
+            return `(t.fechaHoraInicio >= CAST('${start.toISOString().slice(0, 19)}' AS DATETIME)
+                    AND t.fechaHoraFin <= CAST('${end.toISOString().slice(0, 19)}' AS DATETIME))`;
+          })
+          .join(" OR ")})`
+      : "1=1";
+      
+    const clubs = await Club.findAll({
       attributes: [
         "id",
         "name",
@@ -137,17 +148,7 @@ export class ClubRepository {
                   : "IS NOT NULL"
               }
               AND t.estadoturno_idestadoturno = 1
-              AND (
-                    ${
-                      preferences.timeSlots
-                        ?.map(
-                          (slot) =>
-                            `(t.fechaHoraInicio < CAST('${slot.endHour}' AS DATETIME) AND t.fechaHoraFin > CAST('${slot.startHour}' AS DATETIME))`
-                        )
-                        .join(" OR ") || "1=1"
-                    }
-                )
-          )`),
+              AND ${timeSlotConditions})`),
           "totalTurns",
         ],
       ],
@@ -156,87 +157,84 @@ export class ClubRepository {
         ["totalTurns", "DESC"],
       ],
     });
-    const response:ClubForMatch[]= clubs.map((element)=> new ClubForMatch(element))
-    return response
+    const response: ClubForMatch[] = clubs.map(
+      (element) => new ClubForMatch(element)
+    );
+    return response;
   };
 
   getCourtsForMatch = async (
     preferences: MatchPreferences,
     clubId: number
   ): Promise<any> => {
-    const timeSlotConditions =
-  preferences.timeSlots?.length
-    ? preferences.timeSlots
-        .map(
-          (slot) =>
-            `(t.fechaHoraInicio < CAST('${slot.endHour}' AS DATETIME) 
-              AND t.fechaHoraFin > CAST('${slot.startHour}' AS DATETIME))`
-        )
-        .join(" OR ")
-    : "1=1";
+    const timeSlotConditions = preferences.timeSlots?.length
+  ? preferences.timeSlots
+      .map((slot) => {
+        const start = new Date(slot.startHour);
+        const end = new Date(slot.endHour);
 
-const club: Club | null = await Club.findOne({
-  where: { id: clubId },
-  include: [
-    {
-      model: Court,
-      as: "courts",
-      attributes: [
-        "id", // en tu modelo se mapea a idcancha
-        "roofed",
-        "wallMaterialId",
-        "floorMaterialId",
-        [
-          sequelize.literal(`(
+        return `(t.fechaHoraInicio >= CAST('${start.toISOString().slice(0, 19)}' AS DATETIME)
+                 AND t.fechaHoraFin <= CAST('${end.toISOString().slice(0, 19)}' AS DATETIME))`;
+      })
+      .join(" OR ")
+  : "1=1";
+    const club: Club | null = await Club.findOne({
+      where: { id: clubId },
+      include: [
+        {
+          model: Court,
+          as: "courts",
+          attributes: [
+            "id", // en tu modelo se mapea a idcancha
+            "roofed",
+            "wallMaterialId",
+            "floorMaterialId",
+            [
+              sequelize.literal(`(
             SELECT COUNT(*)
             FROM turno AS t
             WHERE t.cancha_idcancha = courts.idcancha
               AND t.estadoturno_idestadoturno = 1
               AND (${timeSlotConditions})
           )`),
-          "totalTurns",
-        ],
-      ],
-      include: [
-        {
-          model: FloorMaterial,
-          as: "floorMaterial",
-          attributes: ["name"],
+              "totalTurns",
+            ],
+          ],
+          include: [
+            {
+              model: FloorMaterial,
+              as: "floorMaterial",
+              attributes: ["name"],
+            },
+            {
+              model: WallMaterial,
+              as: "wallMaterial",
+              attributes: ["name"],
+            },
+          ],
         },
-        {
-          model: WallMaterial,
-          as: "wallMaterial",
-          attributes: ["name"],
-        },
       ],
-    },
-  ],
-});
+    });
 
     if (!club) {
       throw new NotFoundError("Club no encontrado");
     }
 
-
     //problema de referencias circulares
-    const plainClub = club.toJSON()
+    const plainClub = club.toJSON();
     const sortedClub = {
       ...plainClub,
       courts: plainClub.courts?.sort((a: any, b: any) => {
         const coincidencesA = this.countMatches(a, preferences);
         const coincidencesB = this.countMatches(b, preferences);
         if (coincidencesA !== coincidencesB) {
-          return coincidencesB- coincidencesA;
+          return coincidencesB - coincidencesA;
         }
-        return (
-          Number(b.totalTurns) -
-          Number(a.totalTurns)
-        );
+        return Number(b.totalTurns) - Number(a.totalTurns);
       }),
     };
 
-    console.log(sortedClub)
-    const response= new ClubByUserIdResponse(sortedClub)
+    const response = new ClubByUserIdResponse(sortedClub);
     return response;
   };
   private countMatches(court: any, preferences: MatchPreferences) {

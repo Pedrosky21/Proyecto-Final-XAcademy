@@ -235,8 +235,9 @@ export class MatchService {
         matchId
       );
 
-      transaction.commit();
       const clubs = await this.clubService.getClubsForMatch(preferences);
+      transaction.commit();
+
       return clubs;
     } catch (error) {
       await transaction.rollback();

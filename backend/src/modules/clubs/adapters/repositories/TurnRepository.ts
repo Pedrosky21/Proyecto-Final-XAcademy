@@ -28,6 +28,7 @@ export class TurnRepository {
     preferences?: MatchPreferences
   ): Promise<Turn[]> => {
 
+    console.log()
     const preferencesConditions = preferences
   ? {
       [Op.or]: preferences.timeSlots?.map((slot) => ({
@@ -57,7 +58,6 @@ export class TurnRepository {
         },
       ],
     });
-
     return turnsByWeek;
   };
 

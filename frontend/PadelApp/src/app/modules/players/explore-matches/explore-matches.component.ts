@@ -219,6 +219,7 @@ export class ExploreMatchesComponent {
   }
   closePendingModal() {
     this.selectedMatch = null;
+    this.loadMyMatches()
   }
 
   closeCreatedModal() {
