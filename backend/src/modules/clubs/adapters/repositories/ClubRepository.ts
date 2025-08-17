@@ -92,16 +92,10 @@ export class ClubRepository {
       ? `(${preferences.timeSlots
           .map((slot) => {
             const start = new Date(slot.startHour);
-            start.setHours(start.getHours());
             const end = new Date(slot.endHour);
-            end.setHours(end.getHours());
 
-            return `(t.fechaHoraInicio <= CAST('${end
-              .toISOString()
-              .slice(0, 19)}' AS DATETIME) 
-                 AND t.fechaHoraFin >= CAST('${start
-                   .toISOString()
-                   .slice(0, 19)}' AS DATETIME))`;
+            return `(t.fechaHoraInicio >= CAST('${start.toISOString().slice(0, 19)}' AS DATETIME)
+                    AND t.fechaHoraFin <= CAST('${end.toISOString().slice(0, 19)}' AS DATETIME))`;
           })
           .join(" OR ")})`
       : "1=1";
@@ -174,23 +168,16 @@ export class ClubRepository {
     clubId: number
   ): Promise<any> => {
     const timeSlotConditions = preferences.timeSlots?.length
-      ? preferences.timeSlots
-          .map((slot) => {
-            const start = new Date(slot.startHour);
-            start.setHours(start.getHours());
-            const end = new Date(slot.endHour);
-            end.setHours(end.getHours() );
+  ? preferences.timeSlots
+      .map((slot) => {
+        const start = new Date(slot.startHour);
+        const end = new Date(slot.endHour);
 
-            return `(t.fechaHoraInicio <= CAST('${end
-              .toISOString()
-              .slice(0, 19)}' AS DATETIME) 
-                AND t.fechaHoraFin >= CAST('${start
-                  .toISOString()
-                  .slice(0, 19)}' AS DATETIME))`;
-          })
-          .join(" OR ")
-      : "1=1";
-
+        return `(t.fechaHoraInicio >= CAST('${start.toISOString().slice(0, 19)}' AS DATETIME)
+                 AND t.fechaHoraFin <= CAST('${end.toISOString().slice(0, 19)}' AS DATETIME))`;
+      })
+      .join(" OR ")
+  : "1=1";
     const club: Club | null = await Club.findOne({
       where: { id: clubId },
       include: [

@@ -125,26 +125,26 @@
         class="text-xl font-bold text-center mb-2">Seleccione un club</h3>
         <div
           *ngIf="!preSelectedClub"
-          class="flex flex-wrap gap-4 max-h-[50vh] overflow-y-auto w-full justify-center gap-3 border border-appPrimary p-2 rounded-lg"
+          class="flex flex-wrap gap-6 max-h-[50vh] overflow-y-auto w-full justify-center gap-3 border border-appPrimary p-2 rounded-lg"
         >
           <div
             *ngFor="let club of selectableClubs; let i = index"
             (click)="preSelectClub(i)"
-            class="p-4 rounded-lg cursor-pointer justify-start text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-fit h-32 text-center"
+            class="flex flex-col p-4 rounded-lg cursor-pointer justify-start text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-fit h-32 text-center"
           >
-            <div class="font-bold text-center">
-              <span>
+            <div class="font-bold text-left text-ellipsis w-48 truncate">
+              <span class="w-1/2">
                 <i class="fa-solid fa-people-group"></i> {{ club.name }}
               </span>
             </div>
 
-            <div class="text-sm pt-2 w-fit">
+            <div class="text-sm pt-2 w-fit text-left text-ellipsis">
               <span>
                 <i class="fa-solid fa-table-tennis-paddle-ball w-4"></i>
                 <span> Canchas coincidentes: {{ club.coindicentCourts }} </span>
               </span>
             </div>
-            <div class="text-sm pt-2 w-48">
+            <div class="text-sm pt-2 w-fit text-left text-ellipsis">
               <span>
                 <i class="fa-solid fa-calendar"></i> Turnos coincidentes:
                 {{ club.coincidentTurn }}
@@ -154,7 +154,7 @@
           <div *ngIf="preSelectedClub"></div>
         </div>
         <div *ngIf="preSelectedClub">
-          <div class="gap-2 border border-appPrimary p-2 rounded-lg">
+          <div class="flex flex-col border border-appPrimary p-2 rounded-lg gap-4">
             <h3 class="text-xl font-bold text-center mb-2">{{preSelectedClub.name}}</h3>
             <div class="flex flex-row gap-3">
               
