@@ -224,7 +224,6 @@ export class PlayerRepository {
         }
       ],
     });
-    console.log(matches);
     const matchesByState = {
       created: matches.filter((m: Match) => m.matchStateId === 1),
       pending: matches.filter((m: Match) => m.matchStateId === 2),

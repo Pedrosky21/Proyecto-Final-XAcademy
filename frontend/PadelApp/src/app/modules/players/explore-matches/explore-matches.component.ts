@@ -78,14 +78,11 @@ export class ExploreMatchesComponent {
   }
 
   loadMyMatches(): void {
-    console.log('jejo');
     this.playerService
       .getMyMatchesGrouped()
 
       .subscribe({
         next: (groups) => {
-          console.log('jaja');
-          console.log(groups);
           this.createdMatches = groups.created
             ? groups.created.map((Match: any) => new CreatedMatch(Match))
             : [];

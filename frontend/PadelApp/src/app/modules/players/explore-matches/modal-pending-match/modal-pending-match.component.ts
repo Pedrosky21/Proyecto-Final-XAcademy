@@ -51,8 +51,6 @@ export class ModalPendingMatchComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['match'] && this.match?.timeSlots) {
       this.generateSundays();
-      console.log(this.match);
-      console.log(this.sundaysOfWeeks);
     }
   }
 
@@ -80,7 +78,6 @@ export class ModalPendingMatchComponent implements OnChanges {
 
     // Convertimos el set a array
     this.sundaysOfWeeks = Array.from(sundaysSet);
-    console.log('Domingos de semanas:', this.sundaysOfWeeks);
   }
 
   onClose() {

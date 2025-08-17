@@ -95,7 +95,6 @@ export class BrowseMatchesComponent implements OnInit {
             return m;
           });
 
-          console.log('Filtered matches:', this.filteredPartidos);
         },
         error: (err) => {
           console.error('Error fetching matches', err);

@@ -1,12 +1,9 @@
-import { Court } from "./Court"
-
-export class Club{
+export class ClubForMatch{
     address:string
     admisionRules:string
     cancelationRules:string
     cellNumber:number
     closingTime:string
-    courts?:Court[]
     id:number
     name:string
     openningTime:string
@@ -23,7 +20,6 @@ export class Club{
       this.cancelationRules=data.cancelationRules
       this.cellNumber=data.cellNumber
       this.closingTime=data.closingTime
-      this.courts=data.courts? data.courts.map((court:any,index:number)=>new Court(court,index+1)):[]
       this.id=data.id
       this.name=data.name
       this.openningTime= data.openningTime
@@ -32,9 +28,6 @@ export class Club{
       this.turnPrice =data.turnPrice
       this.coincidentTurn=data.coincidentTurn
       this.coindicentCourts=data.coindicentCourts
+
     }
-    setCourts(courts:Court[]){
-      this.courts=courts
-    }
- 
 }
