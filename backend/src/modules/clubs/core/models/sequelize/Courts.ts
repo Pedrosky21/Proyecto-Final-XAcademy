@@ -89,8 +89,8 @@ Court.belongsTo(WallMaterial, {
   foreignKey: "wallMaterialId",
   as: "wallMaterial",
 });
-Court.belongsTo(Club, { foreignKey: 'clubId' });
 
+Court.belongsTo(Club, { foreignKey: 'clubId', as:"club"});
 Club.hasMany(Court, { foreignKey: 'clubId',as: 'courts'})
 
 export default Court;

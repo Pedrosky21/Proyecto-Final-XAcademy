@@ -11,6 +11,9 @@ import { MatchResponse } from "../../../matches/MatchResponse";
 import TimeSlot from "../../../timeSlot/TimeSlotModel";
 import WallMaterial from "../../../wallMaterials/core/models/WallMaterial";
 import FloorMaterial from "../../../floorMaterials/core/FloorMaterial";
+import TurnModel from "../../../clubs/core/models/sequelize/Turn";
+import Court from "../../../clubs/core/models/sequelize/Courts";
+import Club from "../../../clubs/core/models/sequelize/Club";
 
 export class PlayerRepository {
   createPlayer = async (
@@ -203,6 +206,22 @@ export class PlayerRepository {
           model: FloorMaterial,
           as: "floorMaterial",
         },
+        {
+          model: TurnModel,
+          as: "turn",
+          include: [
+            {
+              model: Court,
+              as: "court",
+              include: [
+                {
+                  model: Club,
+                  as: "club"
+                }
+              ]
+            },
+          ]
+        }
       ],
     });
     console.log(matches);

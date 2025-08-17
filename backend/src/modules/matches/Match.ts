@@ -15,6 +15,19 @@ export class Match {
     teamName?: string;
     players?: string[];
   };
+  turn?:{
+    date:string
+    startHour:string,
+    endHour:string,
+  }
+  club?:{
+    name:string
+    address:string
+    turnPrice:string,
+    cellNumber:string
+  }
+
+
 
   constructor(data: any, userId: number) {
     this.id = data.id;
@@ -44,5 +57,16 @@ export class Match {
       teamName: rivalTeam ? rivalTeam.name : null,
       players: [rival1Name, rival2Name],
     };
+    this.turn=data.turn?{
+      date:new Date(data.turn.startDateTime).toISOString().split("T")[0],
+      startHour:new Date(data.turn.startDateTime).toISOString().substring(11, 16),
+      endHour: new Date(data.turn.endDateTime).toISOString().substring(11, 16)
+    }:undefined
+    this.club=data.turn?.court?.club?{
+      address:data.turn.court.club.address,
+      name:data.turn.court.club.name,
+      turnPrice: data.turn.court.club.turnPrice,
+      cellNumber: data.turn.court.club.cellNumber
+    }:undefined
   }
 }
