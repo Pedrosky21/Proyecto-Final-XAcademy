@@ -27,7 +27,7 @@
       </div>
 
       <!-- Título centrado -->
-      <h2 class="text-2xl font-bold text-center">Partido pendiente</h2>
+      <h2 class="text-2xl w-full font-bold text-center">Partido pendiente</h2>
 
       <!-- Botón derecho -->
       <div class="flex justify-end">
@@ -120,14 +120,16 @@
         </div>
       </div>
       <div *ngSwitchCase="stepEnum.Second">
-        <h3 class="text-xl font-bold text-center mb-2">Seleccione un club</h3>
+        <h3 
+        *ngIf="!preSelectedClub"
+        class="text-xl font-bold text-center mb-2">Seleccione un club</h3>
         <div
           *ngIf="!preSelectedClub"
-          class="flex flex-wrap gap-4 max-h-[50vh] overflow-y-auto w-full justify-center gap-3"
+          class="flex flex-wrap gap-4 max-h-[50vh] overflow-y-auto w-full justify-center gap-3 border border-appPrimary p-2 rounded-lg"
         >
           <div
             *ngFor="let club of selectableClubs; let i = index"
-            (click)="selectClub(i)"
+            (click)="preSelectClub(i)"
             class="p-4 rounded-lg cursor-pointer justify-start text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-fit h-32 text-center"
           >
             <div class="font-bold text-center">
@@ -150,6 +152,82 @@
             </div>
           </div>
           <div *ngIf="preSelectedClub"></div>
+        </div>
+        <div *ngIf="preSelectedClub">
+          <div class="gap-2 border border-appPrimary p-2 rounded-lg">
+            <h3 class="text-xl font-bold text-center mb-2">{{preSelectedClub.name}}</h3>
+            <div class="flex flex-row gap-3">
+              
+            <label class="flex text-lg w-1/2 font-roboto font-semibold gap-1"
+              >Dirección:
+              <span class="font-normal">
+                {{preSelectedClub?.address}}
+              </span></label
+            >
+              
+            <label class="flex text-lg w-1/2 font-roboto font-semibold gap-1"
+              >Horario:
+              <span class="font-normal">
+                {{preSelectedClub?.openningTime}} - {{preSelectedClub.closingTime}}
+              </span></label
+            >
+            </div>
+            <div class="flex flex-row gap-3">
+              
+            <label class="flex text-lg w-1/2  font-roboto font-semibold gap-1"
+              >Responsable:
+              <span class="font-normal">
+                {{preSelectedClub?.responsableLastName}} {{preSelectedClub.responsableFirstName}}
+              </span></label
+            >
+            <label class="flex text-lg w-1/2  font-roboto font-semibold gap-1"
+              >Número:
+              <span class="font-normal">
+                {{preSelectedClub?.cellNumber}}
+              </span></label
+            >
+            </div>
+            <div class="flex flex-row gap-3">
+            <label class="flex text-lg w-1/2  font-roboto font-semibold gap-1"
+              >Precio turno:
+              <span class="font-normal">
+                {{preSelectedClub?.turnPrice}}
+              </span></label
+            >
+            </div>
+            <div class="flex flex-row gap-3">
+              
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Reglas de admisión:
+              <span class="font-normal">
+                {{preSelectedClub?.admisionRules}}
+              </span></label
+            >
+            </div>
+            <div class="flex flex-row gap-3">
+              
+            <label class="flex text-lg font-roboto font-semibold gap-1"
+              >Reglas de cancelación:
+              <span class="font-normal">
+                {{preSelectedClub?.cancelationRules?? '-'}} 
+              </span></label
+            >
+            </div>
+
+
+          </div>
+          <div class="flex flex-row justify-between mt-4">
+            <button
+            class="bg-transparent text-appWhiteText px-6 py-2 rounded-md font-bold border border-appPrimary"
+            (click)="cancelPreselection()">
+            Cancelar selección
+            </button>
+            <button 
+            class="bg-appPrimary text-appBlackText px-6 py-2 rounded-md font-bold"
+            (click)="selectClub()">
+            Confirmar selección
+            </button>
+          </div>
         </div>
       </div>
       <div *ngSwitchCase="stepEnum.Third">
