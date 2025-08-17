@@ -47,6 +47,7 @@ export class ExploreMatchesComponent {
       teamDescription: ['', [Validators.minLength(5)]],
     });
   }
+  private destroy$ = new Subject<void>();
 
   matchGroup: FormGroup;
   createTeamForm!: FormGroup;
@@ -101,26 +102,26 @@ export class ExploreMatchesComponent {
       });
   }
 
-  getFirstTimeSlotText(match: Match | any): string {
-    const ts = match?.timeSlots?.[0];
-    if (!ts) return '—';
-    // if times are stored like "22:00:00", show only hour:minutes
+  getAllTimeSlotsText(match: Match | any): string {
+    const timeSlots = match?.timeSlots;
+    if (!timeSlots || timeSlots.length === 0) return '—';
+
     const formatTime = (t: string) => {
       if (!t) return '';
-      // keep HH:mm if "HH:mm:ss" or "HH:mm"
       const parts = t.split(':');
-      if (parts.length >= 2) return `${parts[0]}:${parts[1]}`;
-      return t;
+      return parts.length >= 2 ? `${parts[0]}:${parts[1]}` : t;
     };
 
-    const date = ts.date ?? '—';
-    const start = formatTime(ts.startTime);
-    const end = formatTime(ts.endTime);
-    return `${date} ${start ? start + ' - ' + end : ''}`.trim();
-  }
+    // map all time slots to formatted strings
+    const slotsText = timeSlots.map((ts: any) => {
+      const date = ts.date ?? '—';
+      const start = formatTime(ts.startTime);
+      const end = formatTime(ts.endTime);
+      return start ? `${date} ${start} - ${end}` : date;
+    });
 
-  trackById(index: number, item: any) {
-    return item?.id ?? index;
+    // join them with comma or line break
+    return slotsText.join(' / '); // or use '\n' if you want each on a new line
   }
 
   openCreateMatchModal() {

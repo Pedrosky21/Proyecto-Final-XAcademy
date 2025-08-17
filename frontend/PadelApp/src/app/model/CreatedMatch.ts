@@ -17,6 +17,18 @@ export class CreatedMatch {
     floorMaterialName: string;
     roofed: string;
   };
+
+  turn?: {
+    date: string;
+    startHour: string;
+    endHour: string;
+  };
+  club?: {
+    address: string;
+    name: string;
+    turnPrice: string;
+    cellNumber: string;
+  };
   timeSlots?: TimeSlots[];
 
   constructor(data: any) {
@@ -33,6 +45,18 @@ export class CreatedMatch {
       wallMaterialName: data.preferecences.wallMaterialName,
       floorMaterialName: data.preferecences.floorMaterialName,
       roofed: data.preferecences.roofted == 1 ? 'Si' : 'No',
+    };
+    this.turn = {
+      date: data.turn?.date,
+      startHour: data.turn?.startHour,
+      endHour: data.turn?.endHour,
+    };
+
+    this.club = {
+      address: data.club?.address,
+      name: data.club?.name,
+      turnPrice: data.club?.turnPrice,
+      cellNumber: data.club?.cellNumber,
     };
     this.timeSlots = data.timeSlots
       ? data.timeSlots.map((element: any) => new TimeSlots(element))

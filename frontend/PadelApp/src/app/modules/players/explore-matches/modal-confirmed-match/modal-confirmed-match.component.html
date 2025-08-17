@@ -27,29 +27,43 @@
           <span class="font-normal">{{ match?.ownTeam?.partner }}</span></label
         >
       </div>
-    </div>
 
-    <div class="flex flex-col flex-wrap">
       <h3 class="text-xl font-bold text-center mb-2">Equipo Rival:</h3>
       <div class="flex flex-row gap-4 justify-center mb-4">
-        <label class="flex text-lg font-roboto font-semibold gap-1"
+        <label class="flex text-lg font-roboto font-semibold gap-2"
           >Nombre:
           <span class="font-normal">{{ match?.rivalTeam?.name }}</span></label
         >
-        <label class="flex text-lg font-roboto font-semibold gap-1"
-          >Compañero:
+        <label class="flex text-lg font-roboto font-semibold gap-2"
+          >Rivales:
           <span class="font-normal"
-            >{{ match?.rivalTeam?.players }}
+            >{{ match?.rivalTeam?.players?.[0] ?? '' }} -
+            {{ match?.rivalTeam?.players?.[1] ?? '' }}
           </span></label
         >
       </div>
 
-      <div>
-        <h3 class="text-xl font-bold text-center mb-4">Datos del club</h3>
+      <h3 class="text-xl font-bold text-center mb-4">Datos del club</h3>
+      <div class="flex flex-row gap-4 justify-center mb-4">
+        <label class="flex text-lg font-roboto font-semibold gap-1"
+          >Nombre:
+          <span class="font-normal">{{ match?.club?.name }} </span></label
+        >
+        <label class="flex text-lg font-roboto font-semibold gap-1"
+          >Telefono:
+          <span class="font-normal">{{ match?.club?.cellNumber }} </span></label
+        >
       </div>
 
       <div>
         <h3 class="text-xl font-bold text-center mb-4">Datos del turno</h3>
+        <div class="flex flex-row gap-4 justify-center text-center mb-4">
+          <p class="font-medium">
+            El partido se jugara en la fecha {{ match?.turn?.date }} comenzando
+            a las {{ match?.turn?.startHour }} y finalizando a las
+            {{ match?.turn?.endHour }}
+          </p>
+        </div>
       </div>
     </div>
   </div>

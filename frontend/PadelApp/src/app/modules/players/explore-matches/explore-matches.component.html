@@ -64,7 +64,7 @@
 
             <div class="text-sm font-bold mt-2">
               <i class="fa-solid fa-calendar pr-1"></i>
-              {{ getFirstTimeSlotText(partido) }}
+              {{ getAllTimeSlotsText(partido) }}
             </div>
           </div>
         </div>
@@ -89,7 +89,7 @@
 
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
-            *ngFor="let partido of pendingMatches; trackBy: trackById"
+            *ngFor="let partido of pendingMatches"
             class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto"
             (click)="selectPendingMatch(partido)"
           >
@@ -103,7 +103,7 @@
 
             <div class="text-sm font-bold mt-2">
               <i class="fa-solid fa-calendar pr-1"></i>
-              {{ getFirstTimeSlotText(partido) }}
+              {{ getAllTimeSlotsText(partido) }}
             </div>
           </div>
         </div>
@@ -143,7 +143,7 @@
 
             <div class="text-sm font-bold mt-2">
               <i class="fa-solid fa-calendar pr-1"></i>
-              {{ getFirstTimeSlotText(partido) }}
+              {{ getAllTimeSlotsText(partido) }}
             </div>
           </div>
         </div>
