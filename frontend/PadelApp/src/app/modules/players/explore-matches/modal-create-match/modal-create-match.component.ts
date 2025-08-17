@@ -75,7 +75,6 @@ export class ModalCreateMatchComponent {
         endTime: '',
       })
     );
-    console.log(this.newTimeSlots);
   }
 
   handleRowChange(event: { index: number; key: keyof TimeSlots; value: any }) {

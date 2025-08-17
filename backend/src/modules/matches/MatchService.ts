@@ -234,7 +234,6 @@ export class MatchService {
       const preferences = await this.matchRepository.getMatchPreferences(
         matchId
       );
-      console.log(preferences);
 
       transaction.commit();
       const clubs = await this.clubService.getClubsForMatch(preferences);
@@ -260,7 +259,6 @@ export class MatchService {
         matchId
       );
 
-      console.log();
       const club = await this.clubService.getCourtsForMatch(
         preferences,
         clubId
@@ -311,7 +309,6 @@ export class MatchService {
     turnId: number,
     userId: number
   ): Promise<any> => {
-    console.log(userId);
     const player = await this.playerService.getPlayerByUserId(userId);
 
     const fullName =

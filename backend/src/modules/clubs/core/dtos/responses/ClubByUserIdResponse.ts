@@ -44,7 +44,7 @@ export class ClubByUserIdResponse {
         number: court.number,
         wallMaterial: court.wallMaterial?.name,
         floorMaterialName: court.floorMaterial?.name,
-        roofted: court.roofed===0?true:false,
+        roofted: court.roofed===1?true:false,
         availableTurns,
         reservedTurns,
         paidTurns,
