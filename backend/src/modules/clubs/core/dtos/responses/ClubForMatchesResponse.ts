@@ -19,10 +19,10 @@ export class ClubForMatch{
       this.admisionRules=data.admisionRules
       this.cancelationRules=data.cancelationRules
       this.cellNumber=data.cellNumber
-      this.closingTime=data.closingTime
+      this.closingTime=data.closingTime.slice(5)
       this.id=data.id
       this.name=data.name
-      this.openningTime= data.openningTime
+      this.openningTime= data.openningTime.slice(5)
       this.responsableFirstName=data.responsableFirstName
       this.responsableLastName= data.responsableLastName
       this.turnPrice =data.turnPrice
