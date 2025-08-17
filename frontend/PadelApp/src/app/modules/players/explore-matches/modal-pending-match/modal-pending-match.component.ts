@@ -16,7 +16,7 @@ import { TableTurn } from '../../../../components/turn-table/types/TableTurn';
 import { ConfirmationModalService } from '../../../../core/layouts/confirmation-modal/service/confirmationModalService';
 import { loadingScreenService } from '../../../../core/layouts/loading-screen/service/loadingService';
 import { ModalIconEnum } from '../../../../core/layouts/confirmation-modal/models/ModalProps';
-import { Match } from '../../../../model/Match';
+
 enum StepEnum {
   First = 'ViewData',
   Second = 'SelectClub',
@@ -47,7 +47,6 @@ export class ModalPendingMatchComponent implements OnChanges {
     private readonly loadingScreenService: loadingScreenService
   ) {}
 
-  ngOnInit() {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['match'] && this.match?.timeSlots) {
       this.generateSundays();
@@ -110,10 +109,6 @@ export class ModalPendingMatchComponent implements OnChanges {
   }
 
   columns: ViewColumnSettings<TimeSlots>[] = [
-    {
-      title: 'N°',
-      key: 'index',
-    },
     {
       title: 'Fecha',
       key: 'date',
@@ -290,6 +285,7 @@ export class ModalPendingMatchComponent implements OnChanges {
                   accept: {
                     title: 'Aceptar',
                     action: () => {
+                      this.onClose()
                       this.confirmationModalService.closeModal();
                     },
                   },
