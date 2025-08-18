@@ -1,4 +1,4 @@
-<div class="flex flex-col justify-center align-middle">
+<div class="flex flex-col justify-center w-full align-middle">
   <table class="w-full table-fixed overflow-auto">
     <thead>
       <tr class="bg-appPrimary">
@@ -12,7 +12,7 @@
         <!-- Otras columnas distribuidas uniformemente -->
         <td
           *ngFor="let column of columns"
-          class="text-center align-middle text-wrap text-appBlackText font-roboto font-bold"
+          class="text-center align-middle w-[25px] lg:w-fit text-wrap text-appBlackText font-roboto font-bold"
         >
           <span *ngIf="!column.includes(':30')">
             {{ column.replace(":00", "") }}

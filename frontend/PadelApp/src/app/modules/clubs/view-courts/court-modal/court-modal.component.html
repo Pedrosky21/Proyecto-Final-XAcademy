@@ -16,7 +16,7 @@
 
   </div>
 
-    <div class="w-full flex flex-row  items-center text-center justify-center gap-3">
+    <div class="w-full flex flex-col lg:flex-row  items-center text-center justify-center gap-3">
       <label class="flex text-xl font-roboto font-bold">Material piso: <span class="font-normal">{{court.floorMaterialName}}</span></label>
       <label class="flex text-xl font-roboto font-bold">Material pared:<span class="font-normal"> {{court.wallMaterialName}}</span></label>
       <label class="flex text-xl font-roboto font-bold">Techada: <span class="font-normal">{{court.roofted}}</span></label>
@@ -39,14 +39,17 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
       </svg>
     </div>
-    <app-turn-table
-      [columns]="columns"
-      [rows]="tableTurns"
-      [type]="'viewClub'"
-      (rowClick)="clickRow($event)"
-    >
+    <div class="w-full flex overflow-auto">
+      <app-turn-table
+        [columns]="columns"
+        [rows]="tableTurns"
+        [type]="'viewClub'"
+        (rowClick)="clickRow($event)"
+      >
 
-    </app-turn-table>
+      </app-turn-table>
+
+    </div>
   </div>
 </div>
 
@@ -87,7 +90,7 @@
           class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
       </div>
-    <div class="mt-6 flex justify-center gap-2">
+    <div class="mt-6 flex justify-center gap-4 lg:gap-2 flex flex-col lg:flex-row ">
       <button
         (click)="markAsReserved()"
         class="bg-transparent text-appWhiteText px-6 py-2 rounded-md font-semibold border border-appPrimary"
@@ -138,7 +141,7 @@
           class="w-full border border-[#EBFF00] bg-transparent text-appWhiteText rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
         />
       </div>
-    <div class="mt-6 flex justify-center gap-2">
+    <div class="mt-6 flex justify-center gap-4 lg:gap-2 flex flex-col lg:flex-row">
       <button
         (click)="cancelReservation()"
         class="bg-transparent text-appWhiteText px-6 py-2 rounded-md font-semibold border border-appPrimary"

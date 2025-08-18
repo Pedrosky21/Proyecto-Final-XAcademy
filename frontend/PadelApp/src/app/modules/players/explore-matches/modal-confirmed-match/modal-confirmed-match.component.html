@@ -3,7 +3,7 @@
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20 p-4"
 >
   <div
-    class="bg-appBackground text-appWhiteText rounded-xl w-full max-w-[45vw] p-6 relative"
+    class="bg-appBackground text-appWhiteText rounded-xl w-full lg:max-w-[45vw] p-6 relative"
   >
     <!-- Título centrado -->
     <h2 class="text-2xl font-bold text-center">Partido</h2>
@@ -17,7 +17,7 @@
 
     <div class="flex flex-col flex-wrap">
       <h3 class="text-xl font-bold text-center mb-2">Equipo seleccionado:</h3>
-      <div class="flex flex-row gap-4 justify-center mb-4">
+      <div class="flex flex-col lg:flex-row  gap-4 justify-center mb-4">
         <label class="flex text-lg font-roboto font-semibold gap-1"
           >Nombre:
           <span class="font-normal">{{ match?.ownTeam?.name }}</span></label
@@ -29,7 +29,7 @@
       </div>
 
       <h3 class="text-xl font-bold text-center mb-2">Equipo Rival:</h3>
-      <div class="flex flex-row gap-4 justify-center mb-4">
+      <div class="flex flex-col lg:flex-row gap-4 justify-center mb-4">
         <label class="flex text-lg font-roboto font-semibold gap-2"
           >Nombre:
           <span class="font-normal">{{ match?.rivalTeam?.name }}</span></label
@@ -44,14 +44,24 @@
       </div>
 
       <h3 class="text-xl font-bold text-center mb-4">Datos del club</h3>
-      <div class="flex flex-row gap-4 justify-center mb-4">
+      <div class="flex flex-col lg:flex-row gap-4 justify-center mb-4">
         <label class="flex text-lg font-roboto font-semibold gap-1"
           >Nombre:
           <span class="font-normal">{{ match?.club?.name }} </span></label
         >
         <label class="flex text-lg font-roboto font-semibold gap-1"
+          >Dirección:
+          <span class="font-normal">{{ match?.club?.address }} </span></label
+        >
+      </div>
+      <div class="flex flex-col lg:flex-row gap-4 justify-center mb-4">
+        <label class="flex text-lg font-roboto font-semibold gap-1"
           >Telefono:
           <span class="font-normal">{{ match?.club?.cellNumber }} </span></label
+        >
+        <label class="flex text-lg font-roboto font-semibold gap-1"
+          >Precio Turno:
+          <span class="font-normal"> ${{ match?.club?.turnPrice }} </span></label
         >
       </div>
 

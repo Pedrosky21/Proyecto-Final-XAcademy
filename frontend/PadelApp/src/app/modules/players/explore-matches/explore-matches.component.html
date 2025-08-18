@@ -32,10 +32,10 @@
   </section>
 
   <!-- 3-column container -->
-  <section class="flex justify-center p-4 h-full w-[1200px] mx-auto">
+  <section class="flex flex-row justify-center mt-4 h-full gap-10 w-full lg:w-[100vw] lg:pl-0 overflow-x-auto">
     <!-- Created -->
     <article
-      class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
+      class="flex-2 border border-appPrimary p-4 min-w-72 lg:min-w-72 text-appWhiteText bg-appBackground rounded-lg"
     >
       <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
         Creados
@@ -52,7 +52,7 @@
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
             *ngFor="let partido of createdMatches"
-            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto text-center"
+            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-60 h-32 mx-auto text-center"
             (click)="selectCreatedMatch(partido)"
           >
             <div class="gap-2 font-bold mb-1">
@@ -73,7 +73,7 @@
 
     <!-- Pending -->
     <article
-      class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
+      class="flex-2 border border-appPrimary p-4 min-w-72 lg:min-w-72  text-appWhiteText bg-appBackground rounded-lg"
     >
       <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
         Pendientes
@@ -90,7 +90,7 @@
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
             *ngFor="let partido of pendingMatches"
-            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto"
+            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary  w-60 h-32 mx-auto"
             (click)="selectPendingMatch(partido)"
           >
             <div class="gap-2 font-bold mb-1">
@@ -112,7 +112,7 @@
 
     <!-- Confirmed -->
     <article
-      class="flex-2 border border-appPrimary p-4 text-appWhiteText bg-appBackground rounded-lg mr-10"
+      class="flex-2 border border-appPrimary p-4 min-w-72 lg:min-w-72 text-appWhiteText bg-appBackground rounded-lg"
     >
       <h2 class="text-xl font-bold mb-2 text-appWhiteText text-center">
         Confirmados
@@ -129,7 +129,7 @@
         <div class="grid grid-cols-1 gap-4 mt-4">
           <div
             *ngFor="let partido of confirmedMatches"
-            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary w-56 h-32 mx-auto text-center"
+            class="p-4 rounded-lg cursor-pointer text-appWhiteText transition hover:scale-105 bg-appBackground border border-appPrimary  w-60 h-32 mx-auto text-center"
             (click)="selectConfirmedMatch(partido)"
           >
             <div class="gap-2 font-bold mb-1">

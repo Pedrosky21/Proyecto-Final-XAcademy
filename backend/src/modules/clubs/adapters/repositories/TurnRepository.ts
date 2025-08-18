@@ -27,8 +27,8 @@ export class TurnRepository {
     endDate: Date,
     preferences?: MatchPreferences
   ): Promise<Turn[]> => {
+    console.log(preferences)
 
-    console.log()
     const preferencesConditions = preferences
   ? {
       [Op.or]: preferences.timeSlots?.map((slot) => ({
@@ -43,12 +43,11 @@ export class TurnRepository {
     const turnsByWeek = await Turn.findAll({
       where: {
         courtId: courtId,
-        turnStateId:1,
         startDateTime: {
           [Op.gte]: startDate,
           [Op.lte]: endDate,
         },
-      ...(preferences ? { turnStateId: 1 } : {}),
+      ...(preferences!==undefined ? { turnStateId: 1 } : {}),
         ...preferencesConditions
       },
       include: [

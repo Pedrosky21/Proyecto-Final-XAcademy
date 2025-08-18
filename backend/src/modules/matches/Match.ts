@@ -59,8 +59,8 @@ export class Match {
     };
     this.turn=data.turn?{
       date:new Date(data.turn.startDateTime).toISOString().split("T")[0],
-      startHour:new Date(data.turn.startDateTime).toISOString().substring(11, 16),
-      endHour: new Date(data.turn.endDateTime).toISOString().substring(11, 16)
+      startHour:new Date(data.turn.startDateTime).getHours()+":"+new Date(data.turn.startDateTime).getMinutes().toString().padStart(2,"0"),
+      endHour: new Date(data.turn.endDateTime).getHours()+":"+new Date(data.turn.endDateTime).getMinutes().toString().padStart(2,"0"),
     }:undefined
     this.club=data.turn?.court?.club?{
       address:data.turn.court.club.address,

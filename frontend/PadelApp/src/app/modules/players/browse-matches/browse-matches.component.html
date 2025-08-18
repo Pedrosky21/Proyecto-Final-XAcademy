@@ -10,7 +10,7 @@
   <div
     class="flex flex-col justify-center items-center gap-4 mt-6 mb-6 font-roboto font-bold"
   >
-    <div class="flex flex-wrap justify-center items-center gap-4">
+    <div class="flex flex-wrap flex-col lg:flex-row justify-center items-center gap-4">
       <div class="flex flex-col">
         <label class="mb-1 text-sm font-normal text-appWhiteText"
           >Material Piso</label
@@ -59,7 +59,7 @@
     </div>
 
     <!-- Buttons Row -->
-    <div class="flex gap-4">
+    <div class="flex flex-col lg:flex-row gap-4">
       <button
         (click)="buscar()"
         class="h-10 px-5 rounded-lg font-bold bg-appPrimary text-black hover:opacity-90 transition hover:bg-transparent hover:text-appWhiteText transition hover:border border-appPrimary"
